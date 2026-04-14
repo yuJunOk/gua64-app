@@ -42,12 +42,16 @@ Gua64（六十四 / G64）是一款专注于卦象解析的移动端应用，提
 gua64-app/
 ├── src/
 │   ├── assets/           # 静态资源
+│   │   └── unDraw/       # unDraw 插图素材
 │   ├── components/       # 公共组件
 │   ├── composables/      # 组合式函数
 │   ├── router/           # 路由配置
 │   ├── views/            # 页面组件
 │   ├── App.vue
 │   └── main.ts
+├── scripts/              # 工具脚本
+│   ├── download-undraw.mjs  # unDraw 插图下载脚本
+│   └── download-undraw.js   # unDraw 插图下载脚本 (CommonJS 版本)
 ├── android/              # Android 原生项目（Capacitor 生成）
 ├── docs/                 # 项目文档
 │   ├── AGENT.md          # AI 开发指南
@@ -118,6 +122,38 @@ npx cap open android
 - 优先使用 Vant UI 组件
 - 样式优先使用 UnoCSS 原子类
 - 自定义样式使用 Sass，优先使用 vw/vh 相对单位
+
+### 外部资源引用
+
+本项目使用 **unDraw** 提供的开源插图素材：
+
+- **来源**: https://undraw.co/illustrations
+- **协议**: 开源免费，可商用
+- **主色调**: 与项目主色调保持一致（参见 AGENT.md 0.2 主色调规范）
+
+**自动下载脚本** (`scripts/download-undraw.mjs`):
+
+```bash
+# 下载插图（使用默认主色调 blue-600 #2563EB）
+node scripts/download-undraw.mjs <关键词> [文件名]
+
+# 示例
+node scripts/download-undraw.mjs meditation meditation-illustration
+node scripts/download-undraw.mjs success success-illustration
+```
+
+**主色调：** 从 AGENT.md 0.2 主色调规范获取，默认为 `#2563EB` (blue-600)
+
+**在代码中引用**:
+
+```vue
+<template>
+  <img 
+    src="@/assets/unDraw/meditation-illustration.svg" 
+    alt="Meditation"
+  />
+</template>
+```
 
 ---
 
