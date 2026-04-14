@@ -32,9 +32,4 @@ onMounted(async () => {
     width: 100vw;
     height: 100vh;
 }
-
-/* 给页面内容添加底部内边距，避免被 TabBar 遮挡 */
-#app > :first-child {
-    padding-bottom: 50px;  /* TabBar 的高度 */
-}
 </style>
