@@ -83,28 +83,19 @@
       </div>
 
       <!-- 清空确认弹窗 -->
-      <div v-if="showConfirmDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
-          <h3 class="text-lg font-bold text-gray-800 mb-4">确认清空</h3>
-          <p class="text-sm text-gray-600 mb-6">
-            确定要清空所有历史记录吗？此操作不可恢复。
-          </p>
-          <div class="flex gap-4">
-            <button 
-              @click="showConfirmDialog = false"
-              class="flex-1 bg-gray-100 text-gray-800 font-bold py-3 px-6 rounded-full text-sm hover:bg-gray-200 transition-colors"
-            >
-              取消
-            </button>
-            <button 
-              @click="handleClearHistory"
-              class="flex-1 bg-red-600 text-white font-bold py-3 px-6 rounded-full text-sm hover:bg-red-700 transition-colors"
-            >
-              确认清空
-            </button>
-          </div>
-        </div>
-      </div>
+      <van-dialog
+        v-model:show="showConfirmDialog"
+        title="确认清空"
+        show-cancel-button
+        confirm-button-text="确认清空"
+        cancel-button-text="取消"
+        confirm-button-color="#dc2626"
+        @confirm="handleClearHistory"
+      >
+        <p class="text-sm text-gray-600 text-center py-4">
+          确定要清空所有历史记录吗？此操作不可恢复。
+        </p>
+      </van-dialog>
     </main>
   </div>
 </template>
@@ -174,6 +165,6 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 </style>
