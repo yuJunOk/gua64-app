@@ -1,0 +1,30 @@
+{
+  "name": "@gua64/undraw-downloader",
+  "version": "1.0.0",
+  "description": "unDraw 插图下载工具，支持自定义主色调",
+  "main": "index.js",
+  "bin": {
+    "undraw-download": "./bin/cli.js",
+    "undraw-dl": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "undraw",
+    "illustrations",
+    "svg",
+    "download",
+    "cli"
+  ],
+  "author": "Gua64",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "README.md"
+  ]
+}
