@@ -2,16 +2,19 @@
 
 /**
  * unDraw 插图自动下载脚本
- * 使用方法: node download-undraw.js <关键词> [文件名]
- * 示例: node download-undraw.js meditation meditation-illustration
+ * 使用方法: node download-undraw.js <关键词> [文件名] [主色调]
+ * 示例: node download-undraw.js meditation meditation-illustration #2563EB
+ *
+ * 主色调从 AGENT.md 0.2 主色调规范获取，默认为 #2563EB (blue-600)
  */
 
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-// 项目主色调
-const PRIMARY_COLOR = '2563EB'; // blue-600
+// 项目主色调（从 AGENT.md 0.2 主色调规范获取）
+// 默认: #2563EB (blue-600)
+const PRIMARY_COLOR = process.argv[4] || '#2563EB';
 
 // 输出目录
 const OUTPUT_DIR = path.join(__dirname, '..', 'src', 'assets', 'unDraw');
@@ -51,27 +54,24 @@ function searchIllustrations(keyword) {
 // 下载 SVG 文件
 function downloadSVG(url, filename) {
     return new Promise((resolve, reject) => {
-        // 添加主色调参数
-        const downloadUrl = url.includes('?') ? `${url}&color=${PRIMARY_COLOR}` : `${url}?color=${PRIMARY_COLOR}`;
-        
-        https.get(downloadUrl, (res) => {
+        https.get(url, (res) => {
             if (res.statusCode !== 200) {
                 reject(new Error(`下载失败，状态码: ${res.statusCode}`));
                 return;
             }
             
-            const filepath = path.join(OUTPUT_DIR, `${filename}.svg`);
-            const fileStream = fs.createWriteStream(filepath);
-            
-            res.pipe(fileStream);
-            
-            fileStream.on('finish', () => {
-                fileStream.close();
-                resolve(filepath);
+            let svgData = '';
+            res.on('data', (chunk) => {
+                svgData += chunk;
             });
             
-            fileStream.on('error', (error) => {
-                reject(error);
+            res.on('end', () => {
+                // 替换默认紫色 (#6c63ff) 为项目主色调
+                const coloredSvg = svgData.replace(/#6c63ff/g, PRIMARY_COLOR);
+                
+                const filepath = path.join(OUTPUT_DIR, `${filename}.svg`);
+                fs.writeFileSync(filepath, coloredSvg);
+                resolve(filepath);
             });
         }).on('error', (error) => {
             reject(error);
@@ -86,8 +86,8 @@ async function main() {
     
     if (!keyword) {
         console.log('❌ 请提供搜索关键词');
-        console.log('用法: node download-undraw.js <关键词> [文件名]');
-        console.log('示例: node download-undraw.js meditation meditation-illustration');
+        console.log('用法: node download-undraw.js <关键词> [文件名] [主色调]');
+        console.log('示例: node download-undraw.js meditation meditation-illustration #2563EB');
         process.exit(1);
     }
     
