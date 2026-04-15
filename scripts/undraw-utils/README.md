@@ -178,6 +178,11 @@ A: 确保使用正确的 HEX 格式，如 `#2563EB`
 ### Q: Vue 组件不显示？
 A: 检查是否正确注册了插件，以及插图文件是否存在
 
+### Q: 如何更新到最新的 unDraw 插图？
+A: 可以通过以下方式更新：
+1. 删除 `src/assets/undraw-illustrations/.downloaded` 文件，然后重新运行 `npm install`
+2. 或者手动执行：`undraw --all #2563EB`
+
 ## License
 
 MIT

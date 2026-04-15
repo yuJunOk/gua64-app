@@ -144,6 +144,10 @@ npx undraw --all #2563EB
 npx undraw --theme #2563EB
 ```
 
+> **更新素材图：** 如果需要更新到最新的 unDraw 插图，可以：
+> 1. 删除 `src/assets/undraw-illustrations/.downloaded` 文件，然后重新运行 `npm install`
+> 2. 或者手动执行：`npx undraw --all #2563EB`
+
 **在 Vue 中使用（推荐）**:
 
 ```javascript
