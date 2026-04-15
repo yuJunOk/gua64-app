@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * unDraw 下载器 CLI
- * 使用方法: undraw-download <关键词> [文件名] [主色调]
- * 示例: undraw-download meditation meditation-illustration #2563EB
+ * unDraw 工具集 CLI
+ * 使用方法: undraw <关键词> [文件名] [主色调]
+ * 示例: undraw meditation meditation-illustration #2563EB
  */
 
 const path = require('path');
@@ -16,12 +16,13 @@ const command = args[0];
 // 帮助信息
 function showHelp() {
     console.log(`
-🎨 unDraw 插图下载器
+🎨 unDraw 工具集
 
 使用方法:
-  undraw-download <关键词> [文件名] [主色调]     搜索并下载单张插图
-  undraw-download --all [主色调]                  下载所有插图
-  undraw-download --help                          显示帮助信息
+  undraw <关键词> [文件名] [主色调]     搜索并下载单张插图
+  undraw --all [主色调]                  下载所有插图
+  undraw --theme <主色调>                替换所有插图的主题色
+  undraw --help                          显示帮助信息
 
 参数:
   <关键词>     搜索关键词，如: meditation, success, empty
@@ -33,6 +34,7 @@ function showHelp() {
   undraw-download meditation my-illustration        自定义文件名
   undraw-download meditation my-illustration #2563EB 自定义颜色和文件名
   undraw-download --all #2563EB                     下载所有插图并应用蓝色
+  undraw-download --theme #2563EB                   将所有插图改为蓝色
 
 主色调参考:
   #2563EB - 蓝色 (blue-600)
@@ -112,24 +114,45 @@ async function downloadAll(primaryColor) {
     }
 }
 
+// 应用主题色
+async function applyColor(primaryColor) {
+    const { applyThemeColor } = require('../index');
+    try {
+        await applyThemeColor(primaryColor);
+    } catch (error) {
+        console.error('❌ 错误:', error.message);
+        process.exit(1);
+    }
+}
+
 // 主函数
 async function main() {
     if (!command || command === '--help' || command === '-h') {
         showHelp();
         return;
     }
-    
+
     if (command === '--all' || command === '-a') {
         const primaryColor = args[1] || '#6c63ff';
         await downloadAll(primaryColor);
         return;
     }
-    
+
+    if (command === '--theme' || command === '-t') {
+        const primaryColor = args[1];
+        if (!primaryColor) {
+            console.log('❌ 请提供主题色，例如: undraw-download --theme #2563EB');
+            process.exit(1);
+        }
+        await applyColor(primaryColor);
+        return;
+    }
+
     // 单张下载
     const keyword = command;
     const customFilename = args[1];
     const primaryColor = args[2] || '#6c63ff';
-    
+
     await downloadSingle(keyword, customFilename, primaryColor);
 }
 

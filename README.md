@@ -50,8 +50,7 @@ gua64-app/
 │   ├── App.vue
 │   └── main.ts
 ├── scripts/              # 工具脚本
-│   ├── download-undraw.mjs  # unDraw 插图下载脚本
-│   └── download-undraw.js   # unDraw 插图下载脚本 (CommonJS 版本)
+│   └── undraw-utils/  # unDraw 插图工具集
 ├── android/              # Android 原生项目（Capacitor 生成）
 ├── docs/                 # 项目文档
 │   ├── AGENT.md          # AI 开发指南
@@ -131,25 +130,44 @@ npx cap open android
 - **协议**: 开源免费，可商用
 - **主色调**: 与项目主色调保持一致（参见 AGENT.md 0.2 主色调规范）
 
-**自动下载脚本** (`scripts/download-undraw.mjs`):
+**自动下载工具** (`@gua64/undraw-utils`):
+
+项目集成了自定义的 unDraw 插图工具集，**安装时会自动下载所有 unDraw 插图**到 `src/assets/undraw-illustrations/` 目录。
+
+> **提示：** 通常不需要手动执行以下命令，npm install 时会自动完成。仅在网络问题等特殊情况下使用：
 
 ```bash
-# 下载插图（使用默认主色调 blue-600 #2563EB）
-node scripts/download-undraw.mjs <关键词> [文件名]
+# 手动下载所有插图（特殊情况）
+npx undraw --all #2563EB
 
-# 示例
-node scripts/download-undraw.mjs meditation meditation-illustration
-node scripts/download-undraw.mjs success success-illustration
+# 替换所有插图主题色
+npx undraw --theme #2563EB
 ```
 
-**主色调：** 从 AGENT.md 0.2 主色调规范获取，默认为 `#2563EB` (blue-600)
+**在 Vue 中使用（推荐）**:
 
-**在代码中引用**:
+```javascript
+// main.js
+import UndrawPlugin from '@gua64/undraw-utils/vue-plugin'
+app.use(UndrawPlugin, { color: '#2563EB' })
+```
+
+```vue
+<template>
+  <!-- 使用全局主题色 -->
+  <UndrawIllustration name="meditation" />
+  
+  <!-- 单独设置颜色 -->
+  <UndrawIllustration name="success" color="#10B981" />
+</template>
+```
+
+**传统方式引用**:
 
 ```vue
 <template>
   <img 
-    src="@/assets/unDraw/meditation-illustration.svg" 
+    src="@/assets/undraw-illustrations/meditation.svg" 
     alt="Meditation"
   />
 </template>
