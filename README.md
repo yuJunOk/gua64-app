@@ -33,6 +33,9 @@ Gua64（六十四 / G64）是一款专注于卦象解析的移动端应用，提
 | 路由 | Vue Router |
 | 移动端 | Capacitor |
 | 本地存储 | SQLite (via @capacitor-community/sqlite) |
+| 插图素材 | unDraw (开源免费) |
+
+> **注：** 关于 unDraw 插图的详细使用说明，请参考 [外部资源引用](#外部资源引用) 部分。
 
 ---
 
