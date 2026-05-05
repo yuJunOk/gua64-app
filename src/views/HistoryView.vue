@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-white pb-20">
+  <div class="min-h-full bg-gradient-to-b from-blue-50 to-white pb-6">
     <!-- 顶部导航 -->
     <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-sm shadow-sm px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">

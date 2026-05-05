@@ -8,8 +8,25 @@
 
 | 日期 | 类型 | 描述 | 文件 |
 |------|------|------|------|
+| 2026-05-06 | 文档/依赖 | README「界面预览」手工配图路径；Playwright `readme:capture` 曾接入后移除（脚本、`preview:readme`、依赖已删） | `README.md`、`assets/readme/`、`scripts/`、`src/App.vue`、`src/router/`、`package.json`、`package-lock.json`、`docs/AGENT.md`、`docs/DEVELOP_DEPLOY.md`、`docs/AI_CHANGE_LOG.md`、`assets/readme/.gitkeep` |
 | 2026-05-05 | 依赖/文档/修复 | 移除 `undraw-utils`；引入 `draw-empty` 及文档同步；`npm run build` 修复：`tsconfig.json` 改为 solution 引用、`vue-tsc` 改用 `tsconfig.app.json --noEmit`；`DivinationView` 手动爻位改为 `YaoType \| null` 与 `calculateYao` 窄化返回类型 | `tsconfig.json`、`package.json`、`src/views/DivinationView.vue`、及其他同日已列文件 |
 | 2026-04-14 | 文档 | 初始化 AI 开发日志 | `AI_CHANGE_LOG.md` |
+
+---
+
+## 2026-05-06
+
+### 新增
+1. 曾新增 `scripts/capture-readme-screenshots.mjs`、`npm run readme:capture`（产出 `assets/readme/*.png`，已删除脚本）
+2. README「界面预览」表格引用配图（现为手工路径说明）
+
+### 修改
+1. `package.json` 曾增加 `playwright`、`preview:readme`，后已移除
+2. `readme:capture` 曾改为截取 **`/`、`/divination`、`/history`** 真实视口；删除 `ReadmeCaptureView.vue` 与 `/readme-capture`；`App.vue` 恢复全局 TabBar + `fade`
+3. 删除 `scripts/capture-readme-screenshots.mjs`；移除 `readme:capture`、`preview:readme`；README 保留手工配图说明；`docs/AGENT.md` 用语改为「文档截图」；`assets/readme/.gitkeep` 占位目录
+
+### 修复
+- 无
 
 ---
 

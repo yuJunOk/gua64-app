@@ -37,9 +37,11 @@
 
 ### 0.1 页面结构
 
+根布局由 **`App.vue`** 提供：`TabBar` 使用 **`fixed={false}`** 置于底部文档流，中间 **`flex-1 overflow-y-auto`** 承载各页；各 **`View`** 根节点用 **`min-h-full`**（不再用 `min-h-screen`），避免整页高度把底栏挤出视口（影响文档截图与真机观感）。
+
 ```vue
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-white pb-24">
+  <div class="min-h-full bg-gradient-to-b from-blue-50 to-white pb-6">
     <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-sm shadow-sm px-4 py-3">
       <!-- 导航内容 -->
     </header>
@@ -255,6 +257,8 @@ const fetchData = async () => {
 ## 5. 资源与外部工具
 
 当前仅约定占位 / 空状态插图：**见 0.4**（`draw-empty`）。其它第三方资源接入时再补充本节。
+
+**README 配图：** 根目录 **`README.md`**「界面预览」引用 **`assets/readme/*.png`**，由维护者**手工截图**后放入对应路径（文件名见 README 表格）；无需自动化脚本约定。
 
 ---
 

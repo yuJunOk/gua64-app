@@ -10,12 +10,14 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div id="app">
-        <router-view v-slot="{ Component }">
-            <transition name="fade" mode="out-in">
-                <component :is="Component" />
-            </transition>
-        </router-view>
+    <div id="app" class="app-shell flex flex-col h-[100dvh] max-h-[100dvh] overflow-hidden bg-gray-50">
+        <div class="app-main flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
+            <router-view v-slot="{ Component, route }">
+                <transition name="fade" mode="out-in">
+                    <component :is="Component" :key="route.path" />
+                </transition>
+            </router-view>
+        </div>
         <TabBar />
     </div>
 </template>
@@ -30,6 +32,5 @@ onMounted(async () => {
 
 #app {
     width: 100vw;
-    height: 100vh;
 }
 </style>

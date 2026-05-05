@@ -19,6 +19,20 @@ Gua64（六十四 / G64）是一款专注于卦象解析的移动端应用，提
 - **卦象解析**：展示本卦、变卦及卦辞爻辞
 - **历史记录**：本地存储算卦历史，方便回顾
 
+### 界面预览
+
+以下预留 **README 配图位置**。请将截图放入 **`assets/readme/`**，文件名与下表路径一致（或改名后同步修改 Markdown）。
+
+| 含义 | 文件路径 |
+|------|----------|
+| 首页 | `assets/readme/readme-home.png` |
+| 算卦入口 | `assets/readme/readme-divination.png` |
+| 历史（空状态） | `assets/readme/readme-history-empty.png` |
+
+| 首页 | 算卦入口 | 历史（空状态） |
+|------|----------|----------------|
+| ![首页](./assets/readme/readme-home.png) | ![算卦](./assets/readme/readme-divination.png) | ![历史空状态](./assets/readme/readme-history-empty.png) |
+
 ---
 
 ## 技术栈
@@ -53,10 +67,13 @@ gua64-app/
 │   ├── App.vue
 │   └── main.ts
 ├── android/              # Android 原生项目（Capacitor 生成）
+├── assets/               # README 界面截图（手工放入，见「界面预览」）
+│   └── readme/
 ├── docs/                 # 项目文档
 │   ├── AGENT.md          # AI 开发指南
 │   ├── AI_CHANGE_LOG.md  # AI 开发日志
 │   └── DEVELOP_DEPLOY.md # 开发部署文档
+├── scripts/              # 工具脚本（如图标生成）
 ├── package.json
 ├── vite.config.ts
 └── README.md
