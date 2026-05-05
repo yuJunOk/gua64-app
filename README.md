@@ -33,9 +33,9 @@ Gua64（六十四 / G64）是一款专注于卦象解析的移动端应用，提
 | 路由 | Vue Router |
 | 移动端 | Capacitor |
 | 本地存储 | SQLite (via @capacitor-community/sqlite) |
-| 插图素材 | unDraw (开源免费) |
+| 占位/空状态插图 | [draw-empty](https://github.com/yuJunOk/draw-empty)（unDraw 风格 SVG + `DrawEmpty` / `UndrawImg`） |
 
-> **注：** 关于 unDraw 插图的详细使用说明，请参考 [外部资源引用](#外部资源引用) 部分。
+> **注：** 依赖与用法见 [外部资源引用](#外部资源引用)；组件文档与 API 以上游仓库 [draw-empty](https://github.com/yuJunOk/draw-empty) 为准。
 
 ---
 
@@ -52,8 +52,6 @@ gua64-app/
 │   ├── views/            # 页面组件
 │   ├── App.vue
 │   └── main.ts
-├── scripts/              # 工具脚本
-│   └── undraw-utils/  # unDraw 插图工具集
 ├── android/              # Android 原生项目（Capacitor 生成）
 ├── docs/                 # 项目文档
 │   ├── AGENT.md          # AI 开发指南
@@ -127,58 +125,30 @@ npx cap open android
 
 ### 外部资源引用
 
-本项目使用 **unDraw** 提供的开源插图素材：
+**占位图 / 空状态**：使用 **[draw-empty](https://github.com/yuJunOk/draw-empty)**（npm 包名 `draw-empty`）。插图著作权遵循 [unDraw](https://undraw.co/illustrations) 许可；包内自带一批 SVG，组件通过 `illustration` / `name` 选用（文件名与官网英文标题一致，可含空格，例如 `Empty`、`Empty Mailbox`）。
 
-- **来源**: https://undraw.co/illustrations
-- **协议**: 开源免费，可商用
-- **主色调**: 与项目主色调保持一致（参见 AGENT.md 0.2 主色调规范）
-
-**自动下载工具** (`@gua64/undraw-utils`):
-
-项目集成了自定义的 unDraw 插图工具集，**安装时会自动下载所有 unDraw 插图**到 `src/assets/undraw-illustrations/` 目录。
-
-> **提示：** 通常不需要手动执行以下命令，npm install 时会自动完成。仅在网络问题等特殊情况下使用：
+**安装：** 上游若已发布 npm，可执行 `npm install draw-empty`。当前仓库默认使用 **GitHub Release 附件**（版本号随 Release 更新）：
 
 ```bash
-# 手动下载所有插图（特殊情况）
-npx undraw --all #2563EB
-
-# 替换所有插图主题色
-npx undraw --theme #2563EB
+npm install https://github.com/yuJunOk/draw-empty/releases/download/v0.1.0/draw-empty-0.1.0.tgz
 ```
 
-> **更新素材图：** 如果需要更新到最新的 unDraw 插图，可以：
-> 1. 删除 `src/assets/undraw-illustrations/.downloaded` 文件，然后重新运行 `npm install`
-> 2. 或者手动执行：`npx undraw --all #2563EB`
-
-**在 Vue 中使用（推荐）**:
-
-```javascript
-// main.js
-import UndrawPlugin from '@gua64/undraw-utils/vue-plugin'
-app.use(UndrawPlugin, { color: '#2563EB' })
-```
+**接入：** 已在 `src/main.ts` 中注册 `createDrawEmptyPlugin`，全局默认主色 `#2563EB`（与 AGENT.md 主色一致）。模板中可直接使用：
 
 ```vue
 <template>
-  <!-- 使用全局主题色 -->
-  <UndrawIllustration name="meditation" />
-  
-  <!-- 单独设置颜色 -->
-  <UndrawIllustration name="success" color="#10B981" />
-</template>
-```
-
-**传统方式引用**:
-
-```vue
-<template>
-  <img 
-    src="@/assets/undraw-illustrations/meditation.svg" 
-    alt="Meditation"
+  <DrawEmpty
+    title="暂无数据"
+    description="请稍后再试"
+    illustration="Empty"
   />
+  <UndrawImg name="Meditation" width="180" />
 </template>
 ```
+
+按需覆盖主色：`accent-color="#059669"`（或 `accentColor`）。
+
+**可选：** 自有 SVG 仍可放在 `src/assets/unDraw/`，用 `<img src="@/assets/unDraw/xxx.svg" />` 引用，与 draw-empty 并存。
 
 ---
 

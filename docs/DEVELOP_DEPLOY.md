@@ -64,6 +64,7 @@ npm install
 | Sass | CSS 预处理器 | `npm install -D sass` |
 | Vue Router | 路由管理 | `npm install vue-router` |
 | Pinia | 状态管理 | `npm install pinia` |
+| draw-empty | 空状态 / unDraw 风格插图组件 | 见 `package.json`（常用 Release：`npm install https://github.com/yuJunOk/draw-empty/releases/download/v0.1.0/draw-empty-0.1.0.tgz`） |
 
 ### 移动端依赖
 

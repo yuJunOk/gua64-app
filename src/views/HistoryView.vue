@@ -23,19 +23,23 @@
         <p class="text-sm text-gray-600">加载历史记录中...</p>
       </div>
 
-      <!-- 空状态 -->
-      <div v-else-if="historyRecords.length === 0" class="flex flex-col items-center justify-center py-12">
-        <div class="text-5xl mb-6">📋</div>
-        <h3 class="text-lg font-bold text-gray-800 mb-4">暂无历史记录</h3>
-        <p class="text-sm text-gray-600 mb-8 text-center">
-          开始算卦，记录将会保存在这里
-        </p>
-        <button 
-          @click="goToDivination" 
-          class="bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 px-10 rounded-full text-sm shadow-lg hover:shadow-xl transition-all duration-300 active:scale-95"
+      <!-- 空状态（draw-empty） -->
+      <div v-else-if="historyRecords.length === 0" class="py-6">
+        <DrawEmpty
+          title="暂无历史记录"
+          description="开始算卦，记录将会保存在这里"
+          illustration="Taking Notes"
+          image-width="200px"
+          class="history-empty"
         >
-          去算卦
-        </button>
+          <button
+            type="button"
+            @click="goToDivination"
+            class="bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 px-10 rounded-full text-sm shadow-lg hover:shadow-xl transition-all duration-300 active:scale-95"
+          >
+            去算卦
+          </button>
+        </DrawEmpty>
       </div>
 
       <!-- 历史记录列表 -->
@@ -166,5 +170,11 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.history-empty :deep(.draw-empty__title) {
+  color: #1f2937;
+}
 
+.history-empty :deep(.draw-empty__description) {
+  color: #6b7280;
+}
 </style>

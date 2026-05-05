@@ -97,24 +97,18 @@
 
 ### 0.4 占位图/插图处理
 
-**流程：**
-1. **自动下载**：安装 `@gua64/undraw-utils` 依赖时会自动下载所有 unDraw 插图到 `src/assets/undraw-illustrations/`
-2. **检查资源**：查看 `src/assets/undraw-illustrations/` 目录中是否有合适的插图
-3. **使用方式**：在页面中引用本地 SVG 或使用 Vue 组件
+**约定（与当前仓库一致）：** 已移除旧版 `scripts/undraw-utils`；占位与空状态统一用 **[draw-empty](https://github.com/yuJunOk/draw-empty)**（包名 `draw-empty`，多为 GitHub Release `.tgz` 安装，见 `package.json`）。`main.ts` 已 `app.use(createDrawEmptyPlugin({ accentColor: '#2563EB' }))` 全局注册 **`DrawEmpty`**、**`UndrawImg`**；`vite.config.ts` 已将该依赖列入 `optimizeDeps.include`。
 
-> **提示：** 通常不需要手动下载，npm install 时会自动完成。仅在网络问题等特殊情况下，才需要手动执行：
-> ```bash
-> # 手动下载所有插图
-> npx undraw --all #2563EB
-> 
-> # 替换所有插图主题色
-> npx undraw --theme #2563EB
-> ```
+- **组件**：`DrawEmpty`（插图 + 标题 + 说明 + 默认槽放操作区）；`UndrawImg` 仅插图。`illustration` / `name` = 包内 `undraw-illustrations/*.svg` 的文件名（不含扩展名），与 unDraw 英文标题一致（可含空格）。示例：`HistoryView` 空列表。
+- **主色**：默认跟插件；单组件可用 `accent-color` 覆盖。
+- **构建**：包内插图会打进主 chunk，体积偏大；移动端若敏感可减少使用或改 `src/assets/unDraw/` + `<img>`。
+- **兜底 / 版权**：自选 SVG 放 `src/assets/unDraw/`；包内图遵循 [unDraw](https://undraw.co/illustrations) 许可。
+- **按需**：可 `import { DrawEmpty, UndrawImg } from 'draw-empty'` 局部注册；未挂插件时需自行 `provide` 默认色（见上游文档）。
 
-**示例场景：**
-- 空状态 → `empty`
-- 成功提示 → `success`
-- 冥想静心 → `meditation`
+```vue
+<DrawEmpty title="暂无数据" description="说明文案" illustration="Empty">...</DrawEmpty>
+<UndrawImg name="Meditation" width="160" />
+```
 
 ---
 
@@ -260,55 +254,16 @@ const fetchData = async () => {
 
 ## 5. 资源与外部工具
 
-### 5.1 unDraw 插图下载
-
-**工具：** `@gua64/undraw-utils`
-
-**自动下载：** 安装依赖时会自动下载所有 unDraw 插图到 `src/assets/undraw-illustrations/` 目录。
-
-**主色调：** 从 0.2 主色调规范获取，默认为 `#2563EB` (blue-600)
-
-**Vue 组件引用（推荐）：**
-```javascript
-// main.js
-import UndrawPlugin from '@gua64/undraw-utils/vue-plugin'
-app.use(UndrawPlugin, { color: '#2563EB' })
-```
-
-```vue
-<template>
-  <UndrawIllustration name="meditation" />
-  <UndrawIllustration name="success" color="#10B981" />
-</template>
-```
-
-**传统方式引用：**
-```vue
-<template>
-  <img src="@/assets/undraw-illustrations/meditation.svg" alt="Meditation" />
-</template>
-```
-
-**特殊情况处理：**
-仅在网络问题等特殊情况下，才需要手动执行：
-```bash
-# 手动下载所有插图
-npx undraw --all #2563EB
-
-# 替换所有插图主题色
-npx undraw --theme #2563EB
-```
-
-**来源：** https://undraw.co/illustrations（开源协议）
+当前仅约定占位 / 空状态插图：**见 0.4**（`draw-empty`、可选 `src/assets/unDraw/`）。其它第三方资源接入时再补充本节。
 
 ---
 
 ## 6. 开发日志
 
-每次修改同步到 `AI_CHANGE_LOG.md`，包含：
-- 变更概览表格
-- 新增/修改/修复分类
-- 涉及文件路径
+每次修改同步 **`docs/AI_CHANGE_LOG.md`**：
+
+1. **变更概览表**：同一自然日有多项改动时，**合并为一行**（类型可用「依赖/文档」等概括）。
+2. **按日正文**：仍分 **新增 / 修改 / 修复** 简述，并写明涉及文件路径。
 
 ---
 
