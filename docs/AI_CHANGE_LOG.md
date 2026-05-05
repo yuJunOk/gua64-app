@@ -8,7 +8,7 @@
 
 | 日期 | 类型 | 描述 | 文件 |
 |------|------|------|------|
-| 2026-05-05 | 依赖/文档 | 移除 `undraw-utils`；引入 `draw-empty`（GitHub Release `.tgz`）、`main.ts` 全局插件与 `vite` 预构建；文档同步占位插图说明（README / AGENT / DEVELOP_DEPLOY / 本日志）；可选本地 `src/assets/unDraw/`；历史页空状态使用 `DrawEmpty` | `package.json`、`package-lock.json`、`src/main.ts`、`vite.config.ts`、`src/views/HistoryView.vue`、`README.md`、`docs/AGENT.md`、`docs/DEVELOP_DEPLOY.md`、`docs/AI_CHANGE_LOG.md`、`scripts/`（已删除） |
+| 2026-05-05 | 依赖/文档/修复 | 移除 `undraw-utils`；引入 `draw-empty` 及文档同步；`npm run build` 修复：`tsconfig.json` 改为 solution 引用、`vue-tsc` 改用 `tsconfig.app.json --noEmit`；`DivinationView` 手动爻位改为 `YaoType \| null` 与 `calculateYao` 窄化返回类型 | `tsconfig.json`、`package.json`、`src/views/DivinationView.vue`、及其他同日已列文件 |
 | 2026-04-14 | 文档 | 初始化 AI 开发日志 | `AI_CHANGE_LOG.md` |
 
 ---
@@ -25,7 +25,8 @@
 3. `README.md`、`docs/AGENT.md`、`docs/DEVELOP_DEPLOY.md`、`docs/AI_CHANGE_LOG.md`：占位插图改为 draw-empty 流程、安装方式及构建体积提示；保留 `src/assets/unDraw/` 作自选兜底
 
 ### 修复
-- 无
+1. `vue-tsc -b` 与 project references、`noEmit` 冲突导致构建失败 → 根 `tsconfig.json` 仅保留 `references`，`build` 使用 `vue-tsc -p tsconfig.app.json --noEmit`
+2. `DivinationView`：`YaoType` 与 `number`/`0` 占位不一致 → 手动六爻用 `null` 占位，`calculateYao` 显式返回 `YaoType`，选项数组标注为 `YaoType[]`
 
 ---
 

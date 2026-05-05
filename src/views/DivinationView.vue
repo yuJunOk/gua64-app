@@ -169,7 +169,7 @@
                         <div v-for="(_, index) in manualYaoValues" :key="index" class="flex items-center gap-3">
                             <span class="text-sm font-semibold text-gray-700 w-12">第{{ 6 - index }}爻</span>
                             <div class="flex-1 grid grid-cols-4 gap-2">
-                                <button v-for="option in [6, 7, 8, 9]" :key="option"
+                                <button v-for="option in manualYaoOptions" :key="option"
                                     :class="['py-2 px-3 rounded-lg font-bold text-sm transition-all', manualYaoValues[index] === option ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
                                     @click="manualYaoValues[index] = option">
                                     {{ option }}
@@ -195,6 +195,8 @@ import { useDivination } from '../useDivination';
 import { saveResult } from '../db';
 import type { YaoType } from '../types';
 
+const manualYaoOptions: YaoType[] = [6, 7, 8, 9];
+
 const router = useRouter();
 const { getDivinationResult } = useDivination();
 
@@ -209,7 +211,7 @@ const coins = ref<Array<{ value: number; isFlipping: boolean }>>([
 ]);
 const yaoValues = ref<YaoType[]>([]);
 const divinationResult = ref<any>(null);
-const manualYaoValues = ref<YaoType[]>([0, 0, 0, 0, 0, 0]);
+const manualYaoValues = ref<(YaoType | null)[]>([null, null, null, null, null, null]);
 const isManualMode = ref(false);
 
 // 计算属性
@@ -247,8 +249,12 @@ const flipCoins = async () => {
     });
 };
 
-const calculateYao = () => {
-    return coins.value.reduce((acc, coin) => acc + coin.value, 0);
+const calculateYao = (): YaoType => {
+    const sum = coins.value.reduce((acc, coin) => acc + coin.value, 0);
+    if (sum === 6 || sum === 7 || sum === 8 || sum === 9) {
+        return sum;
+    }
+    return 7;
 };
 
 const completeDivination = async (type: string) => {
@@ -280,16 +286,19 @@ const switchToManualMode = () => {
 const switchToAutoMode = () => {
     isManualMode.value = false;
     resetDivination();
-    manualYaoValues.value = [0, 0, 0, 0, 0, 0];
+    manualYaoValues.value = [null, null, null, null, null, null];
 };
 
 const submitManualInput = async () => {
-    const validInput = manualYaoValues.value.every(value => [6, 7, 8, 9].includes(value));
+    const slots = manualYaoValues.value;
+    const validInput = slots.every(
+        (value): value is YaoType => value !== null && [6, 7, 8, 9].includes(value),
+    );
     if (!validInput) {
-        alert('请输入有效的爻值（6、7、8、9）');
+        alert('请为六爻各选一爻值（6、7、8、9）');
         return;
     }
-    yaoValues.value = manualYaoValues.value;
+    yaoValues.value = slots.slice() as YaoType[];
     await completeDivination('manual');
 };
 
