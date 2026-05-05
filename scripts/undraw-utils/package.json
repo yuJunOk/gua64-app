@@ -1,0 +1,31 @@
+{
+  "name": "@gua64/undraw-utils",
+  "version": "1.0.0",
+  "description": "unDraw 插图工具集，支持自动下载和主题色替换",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./vue-plugin": "./vue-plugin.js"
+  },
+  "bin": {
+    "undraw": "./bin/cli.js",
+    "undraw-utils": "./bin/cli.js"
+  },
+  "scripts": {
+    "postinstall": "node scripts/install.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gua64",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "scripts/",
+    "index.js",
+    "vue-plugin.js",
+    "README.md"
+  ]
+}

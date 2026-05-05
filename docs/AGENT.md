@@ -28,7 +28,7 @@
 | 组件代码组织 | [4.2 代码组织](#42-代码组织) |
 | 路由、状态管理 | [4.3-4.4](#4-代码规范) |
 | 文件命名 | [4.5 文件命名](#45-文件命名) |
-| 占位图/插图 | [5.1 unDraw](#51-undraw-插图下载) |
+| 占位图/插图 | [0.4 占位图/插图处理](#04-占位图插图处理) |
 | 检查代码规范 | [7. 自检清单](#7-自检清单) |
 
 ---
@@ -98,14 +98,18 @@
 ### 0.4 占位图/插图处理
 
 **流程：**
-1. 检查 `src/assets/` 现有资源
-2. 无合适资源时，使用脚本下载：
-   ```bash
-   node scripts/download-undraw.mjs <关键词> <文件名> [主色调]
-   ```
-   - 主色调从本规范 0.2 主色调获取，默认为 `#2563EB`
-   - 支持格式：`2563EB` 或 `#2563EB`
-3. 在页面中引用本地 SVG
+1. **自动下载**：安装 `@gua64/undraw-utils` 依赖时会自动下载所有 unDraw 插图到 `src/assets/undraw-illustrations/`
+2. **检查资源**：查看 `src/assets/undraw-illustrations/` 目录中是否有合适的插图
+3. **使用方式**：在页面中引用本地 SVG 或使用 Vue 组件
+
+> **提示：** 通常不需要手动下载，npm install 时会自动完成。仅在网络问题等特殊情况下，才需要手动执行：
+> ```bash
+> # 手动下载所有插图
+> npx undraw --all #2563EB
+> 
+> # 替换所有插图主题色
+> npx undraw --theme #2563EB
+> ```
 
 **示例场景：**
 - 空状态 → `empty`
@@ -258,23 +262,41 @@ const fetchData = async () => {
 
 ### 5.1 unDraw 插图下载
 
-**脚本：** `scripts/download-undraw.mjs`
+**工具：** `@gua64/undraw-utils`
 
-```bash
-node scripts/download-undraw.mjs <关键词> [文件名] [主色调]
+**自动下载：** 安装依赖时会自动下载所有 unDraw 插图到 `src/assets/undraw-illustrations/` 目录。
 
-# 示例（使用默认主色调 blue-600 #2563EB）
-node scripts/download-undraw.mjs meditation meditation-illustration
+**主色调：** 从 0.2 主色调规范获取，默认为 `#2563EB` (blue-600)
 
-# 示例（指定主色调）
-node scripts/download-undraw.mjs meditation meditation-illustration 2563EB
+**Vue 组件引用（推荐）：**
+```javascript
+// main.js
+import UndrawPlugin from '@gua64/undraw-utils/vue-plugin'
+app.use(UndrawPlugin, { color: '#2563EB' })
 ```
 
-**主色调：** 从 0.2 主色调规范获取，默认为 `2563EB` (blue-600)
-
-**引用：**
 ```vue
-<img src="@/assets/unDraw/meditation-illustration.svg" alt="Meditation" />
+<template>
+  <UndrawIllustration name="meditation" />
+  <UndrawIllustration name="success" color="#10B981" />
+</template>
+```
+
+**传统方式引用：**
+```vue
+<template>
+  <img src="@/assets/undraw-illustrations/meditation.svg" alt="Meditation" />
+</template>
+```
+
+**特殊情况处理：**
+仅在网络问题等特殊情况下，才需要手动执行：
+```bash
+# 手动下载所有插图
+npx undraw --all #2563EB
+
+# 替换所有插图主题色
+npx undraw --theme #2563EB
 ```
 
 **来源：** https://undraw.co/illustrations（开源协议）
