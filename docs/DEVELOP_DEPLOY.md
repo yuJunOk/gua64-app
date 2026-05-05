@@ -182,6 +182,8 @@ npx cap sync android
 npx cap open android
 ```
 
+> **说明：** `npx cap open android` 只是用默认方式打开仓库下的 **`android/`** 工程。你也可以自行启动 Android Studio，通过 **File → Open** 选中项目根目录里的 **`android`** 文件夹，效果相同；注意打开的是 **`android/`**，不要误选仓库根目录。
+
 #### 4. Android Studio 打包
 
 1. 等待 Gradle 同步完成

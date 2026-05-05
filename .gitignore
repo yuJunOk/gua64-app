@@ -15,6 +15,7 @@ dist-ssr
 
 # Capacitor
 android/app/build/
+android/app/release/
 android/build/
 android/capacitor-cordova-android-plugins/
 android/.gradle/
