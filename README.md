@@ -45,8 +45,8 @@ Gua64（六十四 / G64）是一款专注于卦象解析的移动端应用，提
 gua64-app/
 ├── src/
 │   ├── assets/           # 静态资源
-│   │   └── unDraw/       # unDraw 插图素材
-│   ├── components/       # 公共组件
+│   │   └── logo.svg      # 应用 Logo（导航等）
+│   ├── components/       # 公共组件（含 AppLogo）
 │   ├── composables/      # 组合式函数
 │   ├── router/           # 路由配置
 │   ├── views/            # 页面组件
@@ -147,8 +147,6 @@ npm install https://github.com/yuJunOk/draw-empty/releases/download/v0.1.0/draw-
 ```
 
 按需覆盖主色：`accent-color="#059669"`（或 `accentColor`）。
-
-**可选：** 自有 SVG 仍可放在 `src/assets/unDraw/`，用 `<img src="@/assets/unDraw/xxx.svg" />` 引用，与 draw-empty 并存。
 
 ---
 

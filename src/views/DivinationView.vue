@@ -3,7 +3,7 @@
         <!-- 顶部导航 -->
         <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-sm shadow-sm px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="text-3xl">☯</div>
+                <AppLogo size="2.25rem" />
                 <h1 class="text-lg font-bold text-gray-800">易经算卦</h1>
             </div>
             <button @click="goToHistory"
@@ -36,8 +36,8 @@
             <div v-if="!isManualMode" class="space-y-6">
                 <!-- 初始状态 -->
                 <div v-if="!isDivining && !isComplete" class="text-center py-8">
-                    <div class="w-24 h-24 mx-auto rounded-full bg-blue-100 flex items-center justify-center mb-6">
-                        <span class="text-5xl">☯</span>
+                    <div class="w-24 h-24 mx-auto rounded-full bg-blue-100 flex items-center justify-center mb-6 p-3">
+                        <AppLogo size="4.5rem" radius="full" />
                     </div>
                     <h2 class="text-xl font-bold text-gray-800 mb-2">诚心问卜</h2>
                     <p class="text-gray-600 text-sm mb-8">静心凝神，默念所求之事</p>

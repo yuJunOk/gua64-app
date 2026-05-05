@@ -101,8 +101,8 @@
 
 - **组件**：`DrawEmpty`（插图 + 标题 + 说明 + 默认槽放操作区）；`UndrawImg` 仅插图。`illustration` / `name` = 包内 `undraw-illustrations/*.svg` 的文件名（不含扩展名），与 unDraw 英文标题一致（可含空格）。示例：`HistoryView` 空列表。
 - **主色**：默认跟插件；单组件可用 `accent-color` 覆盖。
-- **构建**：包内插图会打进主 chunk，体积偏大；移动端若敏感可减少使用或改 `src/assets/unDraw/` + `<img>`。
-- **兜底 / 版权**：自选 SVG 放 `src/assets/unDraw/`；包内图遵循 [unDraw](https://undraw.co/illustrations) 许可。
+- **构建**：包内插图会打进主 chunk，体积偏大；移动端若敏感可减少 `draw-empty` 使用或改用少量本地 SVG（放入 `src/assets/` 后 `<img src="@/assets/xxx.svg" />`）。
+- **版权**：包内图遵循 [unDraw](https://undraw.co/illustrations) 许可。
 - **按需**：可 `import { DrawEmpty, UndrawImg } from 'draw-empty'` 局部注册；未挂插件时需自行 `provide` 默认色（见上游文档）。
 
 ```vue
@@ -254,7 +254,7 @@ const fetchData = async () => {
 
 ## 5. 资源与外部工具
 
-当前仅约定占位 / 空状态插图：**见 0.4**（`draw-empty`、可选 `src/assets/unDraw/`）。其它第三方资源接入时再补充本节。
+当前仅约定占位 / 空状态插图：**见 0.4**（`draw-empty`）。其它第三方资源接入时再补充本节。
 
 ---
 

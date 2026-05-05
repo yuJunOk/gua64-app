@@ -4,7 +4,7 @@
         <header
             class="sticky top-0 z-10 bg-white/80 backdrop-blur-sm shadow-sm px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="text-3xl">☯</div>
+                <AppLogo size="2.25rem" />
                 <h1 class="text-lg font-bold text-gray-800">易经算卦</h1>
             </div>
             <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">

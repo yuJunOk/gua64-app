@@ -22,7 +22,8 @@
 ### 修改
 1. 删除 `scripts/undraw-utils/`（原 `@gua64/undraw-utils`）
 2. `vite.config.ts`：`optimizeDeps.include` 增加 `draw-empty`
-3. `README.md`、`docs/AGENT.md`、`docs/DEVELOP_DEPLOY.md`、`docs/AI_CHANGE_LOG.md`：占位插图改为 draw-empty 流程、安装方式及构建体积提示；保留 `src/assets/unDraw/` 作自选兜底
+3. `README.md`、`docs/AGENT.md`、`docs/DEVELOP_DEPLOY.md`、`docs/AI_CHANGE_LOG.md`：占位插图改为 draw-empty 流程、安装方式及构建体积提示
+4. 移除未引用的 `src/assets/unDraw/`；README / AGENT 同步去掉该目录说明
 
 ### 修复
 1. `vue-tsc -b` 与 project references、`noEmit` 冲突导致构建失败 → 根 `tsconfig.json` 仅保留 `references`，`build` 使用 `vue-tsc -p tsconfig.app.json --noEmit`

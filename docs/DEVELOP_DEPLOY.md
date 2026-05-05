@@ -134,6 +134,7 @@ npm run dev
 | `npm run dev` | 启动开发服务器 |
 | `npm run build` | 构建生产版本 |
 | `npm run preview` | 预览生产构建 |
+| `npm run icons:android` | 根据 `src/assets/logo.svg` 生成安卓各密度启动图标（修改 Logo 后执行） |
 
 ---
 
@@ -149,6 +150,11 @@ npm run build
 ```
 
 ### Android 构建
+
+#### 应用图标（与 Web Logo 一致）
+
+- **矢量（Android 8+ adaptive）**：`android/app/src/main/res/drawable/ic_launcher_foreground.xml` 与 `src/assets/logo.svg` 图形一致；改 SVG 后请同步改该 XML（文件头注释已说明）。
+- **各密度 PNG（旧版系统）**：修改 `src/assets/logo.svg` 后执行 `npm run icons:android`，会重写 `mipmap-*dpi` 下的 `ic_launcher*.png`。
 
 #### 1. 环境准备
 

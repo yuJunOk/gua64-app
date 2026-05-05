@@ -13,12 +13,11 @@ import 'vant/lib/index.css';
 
 const app = createApp(App);
 const pinia = createPinia();
-const drawE = createDrawEmptyPlugin({ accentColor: '#2563EB' });
 
 // 使用插件
 app.use(pinia);
 app.use(router);
 app.use(Vant);
-app.use(drawE);
+app.use(createDrawEmptyPlugin({ accentColor: '#2563EB' }));
 
 app.mount('#app');

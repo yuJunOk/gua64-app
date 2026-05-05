@@ -3,7 +3,7 @@
     <!-- 顶部导航 -->
     <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-sm shadow-sm px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="text-3xl">☯</div>
+        <AppLogo size="2.25rem" />
         <h1 class="text-lg font-bold text-gray-800">历史记录</h1>
       </div>
       <button 
