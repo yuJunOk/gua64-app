@@ -1,0 +1,20 @@
+<!-- 安卓桌面图标同源：drawable/ic_launcher_foreground.xml；改图标后执行 npm run icons:android -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="gua64-bg" x1="24" y1="16" x2="104" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#gua64-bg)"/>
+  <g fill="#fff" fill-opacity=".95">
+    <rect x="36" y="34" width="56" height="8" rx="2"/>
+    <rect x="36" y="52" width="36" height="8" rx="2"/>
+    <rect x="56" y="52" width="16" height="8" rx="2"/>
+    <rect x="36" y="70" width="56" height="8" rx="2"/>
+    <rect x="36" y="88" width="28" height="8" rx="2"/>
+    <rect x="72" y="88" width="20" height="8" rx="2"/>
+  </g>
+  <circle cx="92" cy="42" r="10" fill="#BFDBFE" fill-opacity=".9"/>
+  <circle cx="92" cy="42" r="5" fill="#2563EB"/>
+</svg>
