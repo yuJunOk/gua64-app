@@ -13,11 +13,13 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppLogo: typeof import('./src/components/AppLogo.vue')['default']
     CoinFlip: typeof import('./src/components/CoinFlip.vue')['default']
+    HexagramFigure: typeof import('./src/components/HexagramFigure.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TabBar: typeof import('./src/components/TabBar.vue')['default']
     VanDialog: typeof import('vant/es')['Dialog']
     VanTabbar: typeof import('vant/es')['Tabbar']
     VanTabbarItem: typeof import('vant/es')['TabbarItem']
+    YaoLine: typeof import('./src/components/YaoLine.vue')['default']
   }
 }

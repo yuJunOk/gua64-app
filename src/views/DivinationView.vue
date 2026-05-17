@@ -119,39 +119,46 @@
                         <!-- 本卦 -->
                         <div class="bg-white rounded-xl p-5 shadow-md">
                             <h4 class="text-sm font-bold text-blue-700 mb-3">本卦：{{ divinationResult.originalHexagram.name }}</h4>
-                            <div class="flex flex-col items-center gap-1 mb-3">
-                                <div v-for="(yao, index) in divinationResult.originalHexagram.code.split('').reverse()" :key="index"
-                                    :class="['h-2 rounded-full', yao === '1' ? 'w-14 bg-gray-800' : 'w-14 bg-gray-800 relative']">
-                                    <div v-if="yao === '0'" class="absolute left-1/2 top-0 w-3 h-2 bg-white transform -translate-x-1/2"></div>
-                                </div>
-                            </div>
-                            <p class="text-gray-600 text-xs leading-relaxed text-center">{{ divinationResult.originalHexagram.desc }}</p>
+                            <HexagramFigure
+                                class="mb-2"
+                                :code="divinationResult.originalHexagram.code"
+                                :yao-data="yaoValues"
+                                highlight-moving
+                            />
+                            <p class="text-gray-600 text-xs leading-relaxed text-center mt-2">{{ divinationResult.originalHexagram.desc }}</p>
                         </div>
 
                         <!-- 变卦 -->
                         <div class="bg-white rounded-xl p-5 shadow-md">
                             <h4 class="text-sm font-bold text-orange-600 mb-3">变卦：{{ divinationResult.changedHexagram.name }}</h4>
-                            <div class="flex flex-col items-center gap-1 mb-3">
-                                <div v-for="(yao, index) in divinationResult.changedHexagram.code.split('').reverse()" :key="index"
-                                    :class="['h-2 rounded-full', yao === '1' ? 'w-14 bg-orange-600' : 'w-14 bg-orange-600 relative']">
-                                    <div v-if="yao === '0'" class="absolute left-1/2 top-0 w-3 h-2 bg-white transform -translate-x-1/2"></div>
-                                </div>
-                            </div>
+                            <HexagramFigure
+                                class="mb-3"
+                                :code="divinationResult.changedHexagram.code"
+                                :highlight-moving="false"
+                            />
                             <p class="text-gray-600 text-xs leading-relaxed text-center">{{ divinationResult.changedHexagram.desc }}</p>
                         </div>
                     </div>
 
-                    <!-- 爻值详情 -->
+                    <!-- 六爻详情 -->
                     <div class="bg-white rounded-xl p-5 shadow-md">
                         <h4 class="text-sm font-bold text-gray-800 mb-3">六爻详情</h4>
                         <div class="space-y-2">
-                            <div v-for="(yao, index) in yaoValues" :key="index" :class="['flex items-center justify-between p-3 rounded-lg text-sm',
-                                (yao === 6 || yao === 9) ? 'bg-orange-50 border-l-4 border-orange-400' : 'bg-gray-50']">
-                                <div class="flex items-center gap-2">
-                                    <span class="font-semibold text-gray-700">第{{ 6 - index }}爻</span>
-                                    <span class="text-gray-500 text-xs">{{ yao === 9 ? '老阳' : yao === 6 ? '老阴' : yao === 7 ? '少阳' : '少阴' }}</span>
+                            <div
+                                v-for="row in originalYaoRows"
+                                :key="row.indexFromBottom"
+                                :class="['flex items-center justify-between gap-4 rounded-lg px-3 py-2.5 text-sm', row.yaoType && (row.yaoType === 6 || row.yaoType === 9) ? 'bg-orange-50' : 'bg-gray-50']"
+                            >
+                                <div class="min-w-0">
+                                    <span class="font-semibold text-gray-700">{{ row.positionName }}</span>
+                                    <span v-if="row.yaoType != null" class="ml-2 text-xs text-gray-500">{{ getYaoKindLabel(row.yaoType) }}</span>
                                 </div>
-                                <span class="font-bold" :class="yao % 2 === 1 ? 'text-blue-600' : 'text-gray-600'">{{ yao }}</span>
+                                <YaoLine
+                                    compact
+                                    :bit="row.bit"
+                                    :yao-type="row.yaoType"
+                                    highlight-moving
+                                />
                             </div>
                         </div>
                     </div>
@@ -207,8 +214,11 @@
 import { ref, computed, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import CoinFlip from '../components/CoinFlip.vue';
+import HexagramFigure from '../components/HexagramFigure.vue';
+import YaoLine from '../components/YaoLine.vue';
+import { buildHexagramRows, getYaoKindLabel } from '../utils/yaoUtils';
 import { DEFAULT_COIN_SET_ID } from '../assets/coins/coinSets';
-import { useDivination } from '../useDivination';
+import { useDivination } from '../composables/useDivination';
 import { saveResult } from '../db';
 import type { YaoType } from '../types';
 
@@ -258,6 +268,12 @@ const waitForCoinFlipRefs = async () => {
 // 计算属性
 const isComplete = computed(() => currentStep.value === totalSteps);
 const steps = computed(() => Array.from({ length: totalSteps }, (_, i) => i + 1));
+
+const originalYaoRows = computed(() => {
+    if (!divinationResult.value) return [];
+    const { originalHexagram } = divinationResult.value;
+    return buildHexagramRows(originalHexagram.code, yaoValues.value);
+});
 
 // 方法
 const startDivination = async () => {
