@@ -4,7 +4,7 @@
 
 <h1 align="center">Gua64 · 六十四</h1>
 
-基于 **Vue 3** + **Capacitor** 的移动端易学应用：通过 **三枚硬币** 自动起卦，也支持线下抛掷后 **手动录入**；生成结果后展示 **本卦 / 变卦 / 卦辞 / 爻辞**，并用 **SQLite** 在本地保存历史。界面使用 **Vant 4** 与 **UnoCSS**，空状态插图接入 **`DrawEmpty`** / **`UndrawImg`**（[draw-empty](https://github.com/yuJunOk/draw-empty)），主色统一为 **`#2563EB`**。
+基于 **Vue 3** + **Capacitor** 的移动端易学应用：通过 **三枚硬币** 自动起卦，也支持线下抛掷后 **手动录入**；生成结果后展示 **本卦 / 变卦 / 卦辞 / 爻辞**，并用 **SQLite** 在本地保存历史。界面使用 **Vant 4** 与 **UnoCSS**，按移动端体验设计与打包。
 
 > 六十四卦，四千零九十六变。变的是象，定的是心。
 
@@ -17,8 +17,8 @@
 [![License MIT](https://img.shields.io/badge/License-MIT-9cf?style=flat-square)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-0.0.0-666?style=flat-square)](./package.json)
 
-| [开发部署](./docs/DEVELOP_DEPLOY.md) | [AI 开发指南](./docs/AGENT.md) | [AI 变更日志](./docs/AI_CHANGE_LOG.md) | [draw-empty 文档](https://yujunok.github.io/draw-empty/) | [draw-empty 仓库](https://github.com/yuJunOk/draw-empty) |
-| :--: | :--: | :--: | :--: | :--: |
+| [开发部署](./docs/DEVELOP_DEPLOY.md) | [AI 开发指南](./docs/AGENT.md) | [AI 变更日志](./docs/AI_CHANGE_LOG.md) | [项目配置](./package.json) |
+| :--: | :--: | :--: | :--: |
 
 ---
 
@@ -29,7 +29,6 @@
 - **卦象解读**：集中展示本卦、变卦、卦辞与爻辞信息
 - **历史记录**：使用 `@capacitor-community/sqlite` 在本地保存算卦结果
 - **移动优先**：Vant 4 + UnoCSS + Capacitor，适合 Android 打包与真机使用
-- **统一空状态**：通过 [draw-empty](https://github.com/yuJunOk/draw-empty) 使用 unDraw 风格插图，并支持品牌主色换色
 
 ---
 
@@ -58,39 +57,19 @@ npm run preview
 
 ---
 
-## 用法示例
+## 技术栈
 
-项目已在 **`src/main.ts`** 中注册 `createDrawEmptyPlugin`，全局默认插图主色为 `#2563EB`：
-
-```ts
-import { createApp } from 'vue';
-import App from './App.vue';
-import { createDrawEmptyPlugin } from 'draw-empty';
-
-const app = createApp(App);
-
-app.use(
-  createDrawEmptyPlugin({
-    accentColor: '#2563EB',
-  }),
-);
-
-app.mount('#app');
-```
-
-在页面模板中可直接使用：
-
-```vue
-<template>
-  <DrawEmpty
-    title="暂无记录"
-    description="完成一次算卦后会显示在这里"
-    illustration="Empty"
-  />
-</template>
-```
-
-更多插图名称与组件能力见 [draw-empty](https://github.com/yuJunOk/draw-empty)。
+| 类别 | 技术 |
+|------|------|
+| 前端框架 | Vue 3 + TypeScript |
+| 构建工具 | Vite |
+| UI 组件库 | Vant 4 |
+| 样式方案 | UnoCSS + Sass |
+| 状态管理 | Pinia |
+| 路由 | Vue Router |
+| 移动端 | Capacitor |
+| 本地存储 | SQLite（`@capacitor-community/sqlite`） |
+| 辅助组件 | `draw-empty` |
 
 ---
 
