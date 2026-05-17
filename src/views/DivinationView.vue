@@ -67,11 +67,26 @@
 
                     <!-- 硬币动画 -->
                     <div class="bg-white rounded-xl p-6 shadow-md">
-                        <div class="flex justify-center gap-4">
-                            <div v-for="(coin, index) in coins" :key="index" :class="['w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold border-2 transition-all',
-                                coin.isFlipping ? 'animate-spin border-blue-400 bg-blue-50' :
-                                    coin.value === 3 ? 'bg-blue-50 border-blue-500 text-blue-600' : 'bg-gray-100 border-gray-400 text-gray-600']">
-                                {{ coin.isFlipping ? '?' : coin.value === 3 ? '阳' : '阴' }}
+                        <div class="flex justify-center gap-5">
+                            <div
+                                v-for="(coin, index) in coins"
+                                :key="index"
+                                class="flex flex-col items-center gap-2"
+                            >
+                                <CoinFlip
+                                    :ref="(el) => setCoinFlipRef(el, index)"
+                                    :coin-set-id="activeCoinSetId"
+                                    size="4rem"
+                                />
+                                <span
+                                    v-if="coin.isFlipping"
+                                    class="text-xs font-medium text-gray-400"
+                                >抛掷中</span>
+                                <span
+                                    v-else-if="coin.value"
+                                    class="text-sm font-bold"
+                                    :class="coin.value === 3 ? 'text-blue-600' : 'text-gray-600'"
+                                >{{ coin.value === 3 ? '阳' : '阴' }}</span>
                             </div>
                         </div>
                     </div>
@@ -189,8 +204,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
+import CoinFlip from '../components/CoinFlip.vue';
+import { DEFAULT_COIN_SET_ID } from '../assets/coins/coinSets';
 import { useDivination } from '../useDivination';
 import { saveResult } from '../db';
 import type { YaoType } from '../types';
@@ -214,6 +231,30 @@ const divinationResult = ref<any>(null);
 const manualYaoValues = ref<(YaoType | null)[]>([null, null, null, null, null, null]);
 const isManualMode = ref(false);
 
+/** 当前算卦使用的硬币套装（后续可接用户设置） */
+const activeCoinSetId = ref(DEFAULT_COIN_SET_ID);
+
+const coinFlipRefs: InstanceType<typeof CoinFlip>[] = [];
+
+const setCoinFlipRef = (el: unknown, index: number) => {
+    if (el) {
+        coinFlipRefs[index] = el as InstanceType<typeof CoinFlip>;
+    } else {
+        delete coinFlipRefs[index];
+    }
+};
+
+const coinFlipRefsReady = () =>
+    coins.value.every((_, i) => coinFlipRefs[i] != null);
+
+/** 等铜钱组件挂载完成（首轮 isDivining 刚打开时 ref 会晚一拍） */
+const waitForCoinFlipRefs = async () => {
+    for (let i = 0; i < 20; i++) {
+        if (coinFlipRefsReady()) return;
+        await nextTick();
+    }
+};
+
 // 计算属性
 const isComplete = computed(() => currentStep.value === totalSteps);
 const steps = computed(() => Array.from({ length: totalSteps }, (_, i) => i + 1));
@@ -226,6 +267,8 @@ const startDivination = async () => {
     divinationResult.value = null;
 
     try {
+        await nextTick();
+        await waitForCoinFlipRefs();
         for (let i = 0; i < totalSteps; i++) {
             currentStep.value = i + 1;
             await flipCoins();
@@ -241,10 +284,24 @@ const startDivination = async () => {
 };
 
 const flipCoins = async () => {
-    coins.value.forEach(coin => coin.isFlipping = true);
-    await new Promise(resolve => setTimeout(resolve, 1200));
-    coins.value.forEach(coin => {
-        coin.value = Math.random() > 0.5 ? 3 : 2;
+    coins.value.forEach((coin) => {
+        coin.isFlipping = true;
+        coin.value = 0;
+    });
+
+    const results = coins.value.map(() => (Math.random() > 0.5 ? 3 : 2));
+
+    await waitForCoinFlipRefs();
+
+    await Promise.all(
+        coins.value.map((_, i) => {
+            const yang = results[i] === 3;
+            return coinFlipRefs[i]?.flip(yang) ?? Promise.resolve();
+        }),
+    );
+
+    coins.value.forEach((coin, i) => {
+        coin.value = results[i]!;
         coin.isFlipping = false;
     });
 };
@@ -306,16 +363,4 @@ const goToHistory = () => {
     router.push('/history');
 };
 
-onMounted(() => { });
 </script>
-
-<style scoped>
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-.animate-spin {
-    animation: spin 0.4s linear infinite;
-}
-</style>
