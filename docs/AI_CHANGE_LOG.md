@@ -8,9 +8,24 @@
 
 | 日期 | 类型 | 描述 | 文件 |
 |------|------|------|------|
+| 2026-05-17 | 文档 | README 参考 draw-empty 仓库样式重排：首页说明、徽章导航、安装使用、预览与脚本说明 | `README.md`、`docs/AI_CHANGE_LOG.md` |
 | 2026-05-06 | 文档/依赖 | README「界面预览」手工配图路径；Playwright `readme:capture` 曾接入后移除（脚本、`preview:readme`、依赖已删） | `README.md`、`assets/readme/`、`scripts/`、`src/App.vue`、`src/router/`、`package.json`、`package-lock.json`、`docs/AGENT.md`、`docs/DEVELOP_DEPLOY.md`、`docs/AI_CHANGE_LOG.md`、`assets/readme/.gitkeep` |
 | 2026-05-05 | 依赖/文档/修复 | 移除 `undraw-utils`；引入 `draw-empty` 及文档同步；`npm run build` 修复：`tsconfig.json` 改为 solution 引用、`vue-tsc` 改用 `tsconfig.app.json --noEmit`；`DivinationView` 手动爻位改为 `YaoType \| null` 与 `calculateYao` 窄化返回类型 | `tsconfig.json`、`package.json`、`src/views/DivinationView.vue`、及其他同日已列文件 |
 | 2026-04-14 | 文档 | 初始化 AI 开发日志 | `AI_CHANGE_LOG.md` |
+
+---
+
+## 2026-05-17
+
+### 新增
+- 无
+
+### 修改
+1. `README.md`：参考 [draw-empty](https://github.com/yuJunOk/draw-empty) 的 README 样式，重排为 Logo、项目简介、徽章、导航表、特性、安装、用法示例、预览、Android 构建、常用脚本与许可。
+2. `docs/AI_CHANGE_LOG.md`：记录本次 README 文档改造。
+
+### 修复
+- 无
 
 ---
 

@@ -1,183 +1,136 @@
-# Gua64 (六十四)
+<p align="center">
+  <img src="./public/logo.svg" alt="Gua64 logo" height="72" />
+</p>
 
-> **简称：G64**
->
-> *六十四卦，四千零九十六变。变的是象，定的是心。*
+<h1 align="center">Gua64 · 六十四</h1>
 
-基于 Vue 3 + Capacitor 的移动端玄学应用。
+基于 **Vue 3** + **Capacitor** 的移动端易学应用：通过 **三枚硬币** 自动起卦，也支持线下抛掷后 **手动录入**；生成结果后展示 **本卦 / 变卦 / 卦辞 / 爻辞**，并用 **SQLite** 在本地保存历史。界面使用 **Vant 4** 与 **UnoCSS**，空状态插图接入 **`DrawEmpty`** / **`UndrawImg`**（[draw-empty](https://github.com/yuJunOk/draw-empty)），主色统一为 **`#2563EB`**。
 
----
+> 六十四卦，四千零九十六变。变的是象，定的是心。
 
-## 项目简介
+[![Vue 3](https://img.shields.io/badge/Vue-3-42b883?style=flat-square)](https://vuejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev/)
+[![Capacitor](https://img.shields.io/badge/Capacitor-8-119EFF?style=flat-square&logo=capacitor&logoColor=white)](https://capacitorjs.com/)
+[![Vant](https://img.shields.io/badge/Vant-4-1989fa?style=flat-square)](https://vant-ui.github.io/vant/)
+[![Node](https://img.shields.io/badge/Node-%3E%3D18-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![License MIT](https://img.shields.io/badge/License-MIT-9cf?style=flat-square)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-0.0.0-666?style=flat-square)](./package.json)
 
-Gua64（六十四 / G64）是一款专注于卦象解析的移动端应用，提供自动算卦、手动输入、卦象解读和历史记录等功能。
-
-### 核心功能
-
-- **自动算卦**：模拟三枚硬币抛掷，自动生成卦象
-- **手动输入**：支持线下抛掷后手动录入结果
-- **卦象解析**：展示本卦、变卦及卦辞爻辞
-- **历史记录**：本地存储算卦历史，方便回顾
-
-### 界面预览
-
-以下预留 **README 配图位置**。请将截图放入 **`assets/readme/`**，文件名与下表路径一致（或改名后同步修改 Markdown）。
-
-| 含义 | 文件路径 |
-|------|----------|
-| 首页 | `assets/readme/readme-home.png` |
-| 算卦入口 | `assets/readme/readme-divination.png` |
-| 历史（空状态） | `assets/readme/readme-history-empty.png` |
-
-| 首页 | 算卦入口 | 历史（空状态） |
-|------|----------|----------------|
-| ![首页](./assets/readme/readme-home.png) | ![算卦](./assets/readme/readme-divination.png) | ![历史空状态](./assets/readme/readme-history-empty.png) |
+| [开发部署](./docs/DEVELOP_DEPLOY.md) | [AI 开发指南](./docs/AGENT.md) | [AI 变更日志](./docs/AI_CHANGE_LOG.md) | [draw-empty 文档](https://yujunok.github.io/draw-empty/) | [draw-empty 仓库](https://github.com/yuJunOk/draw-empty) |
+| :--: | :--: | :--: | :--: | :--: |
 
 ---
 
-## 技术栈
+## 特性
 
-| 类别 | 技术 |
-|------|------|
-| 前端框架 | Vue 3 + TypeScript |
-| 构建工具 | Vite |
-| UI 组件库 | Vant 4 |
-| 样式方案 | UnoCSS + Sass |
-| 状态管理 | Pinia |
-| 路由 | Vue Router |
-| 移动端 | Capacitor |
-| 本地存储 | SQLite (via @capacitor-community/sqlite) |
-| 占位/空状态插图 | [draw-empty](https://github.com/yuJunOk/draw-empty)（unDraw 风格 SVG + `DrawEmpty` / `UndrawImg`） |
-
-> **注：** 依赖与用法见 [外部资源引用](#外部资源引用)；组件文档与 API 以上游仓库 [draw-empty](https://github.com/yuJunOk/draw-empty) 为准。
+- **自动算卦**：模拟三枚硬币抛掷，自动生成六爻与卦象
+- **手动录入**：支持线下抛掷后逐爻录入，适配真实起卦流程
+- **卦象解读**：集中展示本卦、变卦、卦辞与爻辞信息
+- **历史记录**：使用 `@capacitor-community/sqlite` 在本地保存算卦结果
+- **移动优先**：Vant 4 + UnoCSS + Capacitor，适合 Android 打包与真机使用
+- **统一空状态**：通过 [draw-empty](https://github.com/yuJunOk/draw-empty) 使用 unDraw 风格插图，并支持品牌主色换色
 
 ---
 
-## 项目结构
+## 安装
 
-```
-gua64-app/
-├── public/
-│   └── logo.svg          # 应用 Logo（导航、favicon、安卓图标源）
-├── src/
-│   ├── assets/           # 静态资源
-│   ├── components/       # 公共组件（含 AppLogo）
-│   ├── composables/      # 组合式函数
-│   ├── router/           # 路由配置
-│   ├── views/            # 页面组件
-│   ├── App.vue
-│   └── main.ts
-├── android/              # Android 原生项目（Capacitor 生成）
-├── assets/               # README 界面截图（手工放入，见「界面预览」）
-│   └── readme/
-├── docs/                 # 项目文档
-│   ├── AGENT.md          # AI 开发指南
-│   ├── AI_CHANGE_LOG.md  # AI 开发日志
-│   └── DEVELOP_DEPLOY.md # 开发部署文档
-├── scripts/              # 工具脚本（如图标生成）
-├── package.json
-├── vite.config.ts
-└── README.md
-```
-
----
-
-## 快速开始
-
-### 环境要求
-
-- Node.js 18+
-- npm 或 yarn
-- Android Studio（如需构建 Android 应用）
-
-### 安装依赖
+需要 **Node.js 18+**；如需构建 Android 应用，还需要 **Android Studio**。
 
 ```bash
+git clone <你的仓库地址>
+cd gua64-app
 npm install
 ```
 
-### 开发模式
+开发模式：
 
 ```bash
 npm run dev
 ```
 
-### 构建生产版本
+生产构建与预览：
 
 ```bash
 npm run build
+npm run preview
 ```
-
-### Android 构建
-
-```bash
-# 构建 Web 资源
-npm run build
-
-# 同步到 Android 项目
-npx cap sync android
-
-# 打开 Android Studio
-npx cap open android
-```
-
-详细步骤请参考 [DEVELOP_DEPLOY.md](./docs/DEVELOP_DEPLOY.md)
 
 ---
 
-## 开发指南
+## 用法示例
 
-### AI 辅助开发
+项目已在 **`src/main.ts`** 中注册 `createDrawEmptyPlugin`，全局默认插图主色为 `#2563EB`：
 
-本项目支持 AI 辅助开发，相关配置和日志位于 `docs/` 目录：
+```ts
+import { createApp } from 'vue';
+import App from './App.vue';
+import { createDrawEmptyPlugin } from 'draw-empty';
 
-- **`AGENT.md`**：AI 开发助手专用指南，定义设计规范和技术标准
-- **`AI_CHANGE_LOG.md`**：记录所有 AI 辅助开发的变更历史
+const app = createApp(App);
 
-### 代码规范
+app.use(
+  createDrawEmptyPlugin({
+    accentColor: '#2563EB',
+  }),
+);
 
-- 使用 Vue 3 `<script setup>` 语法
-- 优先使用 Vant UI 组件
-- 样式优先使用 UnoCSS 原子类
-- 自定义样式使用 Sass，优先使用 vw/vh 相对单位
-
-### 外部资源引用
-
-**占位图 / 空状态**：使用 **[draw-empty](https://github.com/yuJunOk/draw-empty)**（npm 包名 `draw-empty`）。插图著作权遵循 [unDraw](https://undraw.co/illustrations) 许可；包内自带一批 SVG，组件通过 `illustration` / `name` 选用（文件名与官网英文标题一致，可含空格，例如 `Empty`、`Empty Mailbox`）。
-
-**安装：** 上游若已发布 npm，可执行 `npm install draw-empty`。当前仓库默认使用 **GitHub Release 附件**（版本号随 Release 更新）：
-
-```bash
-npm install https://github.com/yuJunOk/draw-empty/releases/download/v0.1.0/draw-empty-0.1.0.tgz
+app.mount('#app');
 ```
 
-**接入：** 已在 `src/main.ts` 中注册 `createDrawEmptyPlugin`，全局默认主色 `#2563EB`（与 AGENT.md 主色一致）。模板中可直接使用：
+在页面模板中可直接使用：
 
 ```vue
 <template>
   <DrawEmpty
-    title="暂无数据"
-    description="请稍后再试"
+    title="暂无记录"
+    description="完成一次算卦后会显示在这里"
     illustration="Empty"
   />
-  <UndrawImg name="Meditation" width="180" />
 </template>
 ```
 
-按需覆盖主色：`accent-color="#059669"`（或 `accentColor`）。
+更多插图名称与组件能力见 [draw-empty](https://github.com/yuJunOk/draw-empty)。
 
 ---
 
-## 相关文档
+## 预览
 
-| 文档 | 说明 |
+| 首页 | 算卦入口 | 历史（空状态） |
+|------|----------|----------------|
+| ![](./assets/readme/readme-home.png) | ![](./assets/readme/readme-divination.png) | ![](./assets/readme/readme-history-empty.png) |
+
+---
+
+## Android 构建
+
+先构建 Web 资源，再同步到 Capacitor Android 工程：
+
+```bash
+npm run build
+npx cap sync android
+npx cap open android
+```
+
+详细环境配置、真机运行与打包流程见 [**DEVELOP_DEPLOY.md**](./docs/DEVELOP_DEPLOY.md)。
+
+---
+
+## 常用脚本
+
+| 命令 | 说明 |
 |------|------|
-| [AGENT.md](./docs/AGENT.md) | AI 开发指南（给 AI 看） |
-| [AI_CHANGE_LOG.md](./docs/AI_CHANGE_LOG.md) | AI 开发变更日志 |
-| [DEVELOP_DEPLOY.md](./docs/DEVELOP_DEPLOY.md) | 开发依赖与部署教程 |
+| `npm run dev` | 启动 Vite 开发服务器 |
+| `npm run build` | TypeScript 类型检查 + Vite 生产构建 |
+| `npm run preview` | 本地预览构建产物 |
+| `npm run icons:android` | 使用 `public/logo.svg` 生成 Android 图标 |
+
+设计规范、目录约定与 AI 协作规则见 [**AGENT.md**](./docs/AGENT.md)；AI 辅助变更记录见 [**AI_CHANGE_LOG.md**](./docs/AI_CHANGE_LOG.md)。
 
 ---
 
-## 许可证
+## 许可
 
-MIT License
+- 仓库代码：**MIT**
+- 硬币等第三方素材：见对应目录的 **`ATTRIBUTION.txt`**
+- draw-empty 插图：遵循 [unDraw 许可](https://undraw.co/license)
