@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import logoUrl from '../assets/logo.svg';
+/** 与 public/logo.svg、favicon 同源，见 index.html */
+const logoUrl = '/logo.svg';
 
 withDefaults(
   defineProps<{

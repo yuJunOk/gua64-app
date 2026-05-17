@@ -57,9 +57,10 @@ Gua64（六十四 / G64）是一款专注于卦象解析的移动端应用，提
 
 ```
 gua64-app/
+├── public/
+│   └── logo.svg          # 应用 Logo（导航、favicon、安卓图标源）
 ├── src/
 │   ├── assets/           # 静态资源
-│   │   └── logo.svg      # 应用 Logo（导航等）
 │   ├── components/       # 公共组件（含 AppLogo）
 │   ├── composables/      # 组合式函数
 │   ├── router/           # 路由配置
