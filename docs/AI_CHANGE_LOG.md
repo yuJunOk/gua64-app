@@ -8,10 +8,27 @@
 
 | 日期 | 类型 | 描述 | 文件 |
 |------|------|------|------|
+| 2026-05-19 | 文档 | 新增 `design/rp` 与 `design/exports` 目录约定；README、AGENT 补充 Axure 设计稿说明 | `design/`、`.gitignore`、`README.md`、`docs/AGENT.md`、`docs/AI_CHANGE_LOG.md` |
 | 2026-05-17 | 文档 | README 参考 draw-empty 仓库样式重排：首页说明、徽章导航、安装、技术栈、预览、Android 构建与脚本说明，并弱化 draw-empty 为辅助组件 | `README.md`、`docs/AI_CHANGE_LOG.md` |
 | 2026-05-06 | 文档/依赖 | README「界面预览」手工配图路径；Playwright `readme:capture` 曾接入后移除（脚本、`preview:readme`、依赖已删） | `README.md`、`assets/readme/`、`scripts/`、`src/App.vue`、`src/router/`、`package.json`、`package-lock.json`、`docs/AGENT.md`、`docs/DEVELOP_DEPLOY.md`、`docs/AI_CHANGE_LOG.md`、`assets/readme/.gitkeep` |
 | 2026-05-05 | 依赖/文档/修复 | 移除 `undraw-utils`；引入 `draw-empty` 及文档同步；`npm run build` 修复：`tsconfig.json` 改为 solution 引用、`vue-tsc` 改用 `tsconfig.app.json --noEmit`；`DivinationView` 手动爻位改为 `YaoType \| null` 与 `calculateYao` 窄化返回类型 | `tsconfig.json`、`package.json`、`src/views/DivinationView.vue`、及其他同日已列文件 |
 | 2026-04-14 | 文档 | 初始化 AI 开发日志 | `AI_CHANGE_LOG.md` |
+
+---
+
+## 2026-05-19
+
+### 新增
+1. `design/rp/`：Axure RP 源文件目录（含 `.gitkeep`）
+2. `design/exports/`：导出预览目录（`.gitignore` 忽略）
+
+### 修改
+1. `README.md`：新增「设计稿」小节，说明 `design/rp` 与 `design/exports` 用途
+2. `docs/AGENT.md`：第 5 节补充 Axure 设计稿目录约定
+3. `.gitignore`：忽略 `design/exports/`
+
+### 修复
+- 无
 
 ---
 

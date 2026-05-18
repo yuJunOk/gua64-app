@@ -108,6 +108,13 @@ npx cap open android
 
 ---
 
+## 设计稿
+
+- **Axure RP 源文件**：[`design/rp/`](./design/rp/)
+- **导出预览 / HTML**：`design/exports/`（已在 `.gitignore` 忽略，默认不提交）
+
+---
+
 ## 许可
 
 - 仓库代码：**MIT**

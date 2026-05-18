@@ -64,3 +64,6 @@ coverage
 *.tmp
 *.temp
 .cache
+
+# Axure RP 导出（体积大，一般不提交）
+design/exports/

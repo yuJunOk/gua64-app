@@ -260,6 +260,8 @@ const fetchData = async () => {
 
 **README 配图：** 根目录 **`README.md`**「界面预览」引用 **`assets/readme/*.png`**，由维护者**手工截图**后放入对应路径（文件名见 README 表格）；无需自动化脚本约定。
 
+**Axure 设计稿：** 源文件放 **`design/rp/`**（`.rp`）；导出 HTML / 预览图放 **`design/exports/`**，该目录在 **`.gitignore`** 中忽略，默认不提交。
+
 ---
 
 ## 6. 开发日志
