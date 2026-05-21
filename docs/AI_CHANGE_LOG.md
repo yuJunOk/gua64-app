@@ -8,11 +8,26 @@
 
 | 日期 | 类型 | 描述 | 文件 |
 |------|------|------|------|
+| 2026-05-22 | 修复 | Android 图标生成脚本同步 adaptive icon XML，避免启动图标继续引用旧矢量前景 | `scripts/generate-android-icons.mjs`、`android/app/src/main/res/`、`docs/AI_CHANGE_LOG.md` |
 | 2026-05-19 | 文档 | 新增 `design/rp` 与 `design/exports` 目录约定；README、AGENT 补充 Axure 设计稿说明 | `design/`、`.gitignore`、`README.md`、`docs/AGENT.md`、`docs/AI_CHANGE_LOG.md` |
 | 2026-05-17 | 文档 | README 参考 draw-empty 仓库样式重排：首页说明、徽章导航、安装、技术栈、预览、Android 构建与脚本说明，并弱化 draw-empty 为辅助组件 | `README.md`、`docs/AI_CHANGE_LOG.md` |
 | 2026-05-06 | 文档/依赖 | README「界面预览」手工配图路径；Playwright `readme:capture` 曾接入后移除（脚本、`preview:readme`、依赖已删） | `README.md`、`assets/readme/`、`scripts/`、`src/App.vue`、`src/router/`、`package.json`、`package-lock.json`、`docs/AGENT.md`、`docs/DEVELOP_DEPLOY.md`、`docs/AI_CHANGE_LOG.md`、`assets/readme/.gitkeep` |
 | 2026-05-05 | 依赖/文档/修复 | 移除 `undraw-utils`；引入 `draw-empty` 及文档同步；`npm run build` 修复：`tsconfig.json` 改为 solution 引用、`vue-tsc` 改用 `tsconfig.app.json --noEmit`；`DivinationView` 手动爻位改为 `YaoType \| null` 与 `calculateYao` 窄化返回类型 | `tsconfig.json`、`package.json`、`src/views/DivinationView.vue`、及其他同日已列文件 |
 | 2026-04-14 | 文档 | 初始化 AI 开发日志 | `AI_CHANGE_LOG.md` |
+
+---
+
+## 2026-05-22
+
+### 新增
+- 无
+
+### 修改
+1. `scripts/generate-android-icons.mjs`：生成各密度 PNG 后同步写入 `mipmap-anydpi-v26/ic_launcher.xml` 与 `ic_launcher_round.xml`。
+2. Android adaptive icon 前景改为引用 `@mipmap/ic_launcher_foreground`，复用脚本生成的密度图标。
+
+### 修复
+1. 删除旧的 `drawable/ic_launcher_foreground.xml`，避免启动图标继续引用不会被脚本更新的旧矢量 Logo。
 
 ---
 
