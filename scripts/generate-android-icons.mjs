@@ -23,13 +23,31 @@ const map = [
 
 const outBase = join(root, 'android/app/src/main/res');
 
+// 先生成高分辨率基础图，再缩放以获得更好质量
+const BASE_SIZE = 1024;
+
 for (const [folder, size] of map) {
   const dir = join(outBase, folder);
   mkdirSync(dir, { recursive: true });
-  const png = await sharp(svg).resize(size, size).png().toBuffer();
-  await sharp(png).toFile(join(dir, 'ic_launcher.png'));
-  await sharp(png).toFile(join(dir, 'ic_launcher_round.png'));
-  await sharp(png).toFile(join(dir, 'ic_launcher_foreground.png'));
+  
+  // 从高分辨率缩放到目标尺寸，使用高质量插值
+  const png = await sharp(svg, { density: 300 })
+    .resize(BASE_SIZE, BASE_SIZE)
+    .png()
+    .toBuffer();
+  
+  const resizedPng = await sharp(png)
+    .resize(size, size, {
+      kernel: sharp.kernel.lanczos3,
+      fit: 'contain',
+      background: { r: 0, g: 0, b: 0, alpha: 0 }
+    })
+    .png({ quality: 100, compressionLevel: 9 })
+    .toBuffer();
+  
+  await sharp(resizedPng).toFile(join(dir, 'ic_launcher.png'));
+  await sharp(resizedPng).toFile(join(dir, 'ic_launcher_round.png'));
+  await sharp(resizedPng).toFile(join(dir, 'ic_launcher_foreground.png'));
 }
 
 const adaptiveIconXml = `<?xml version="1.0" encoding="utf-8"?>
