@@ -1,0 +1,771 @@
+# G64 智能解卦系统研究记录
+
+> 研究主题：不依赖大模型AI的智能解卦方案
+> 
+> 记录时间：2026-05-24
+> 
+> 研究状态：进行中
+
+---
+
+## 目录
+
+1. [研究背景](#1-研究背景)
+2. [技术方案对比](#2-技术方案对比)
+3. [人工智能三大主义](#3-人工智能三大主义)
+4. [专家系统详解](#4-专家系统详解)
+5. [本体论与知识图谱](#5-本体论与知识图谱)
+6. [推荐架构方案](#6-推荐架构方案)
+7. [实现参考资源](#7-实现参考资源)
+8. [后续研究方向](#8-后续研究方向)
+
+---
+
+## 1. 研究背景
+
+### 1.1 项目需求
+
+G64 是一个基于 Vue 3 + Capacitor 的移动端易学应用，核心功能是通过三枚硬币自动起卦或手动录入，展示本卦/变卦/卦辞/爻辞等多维度文献。
+
+### 1.2 研究目标
+
+在开发初期不引入AI大模型的情况下，实现智能化解卦回答，要求：
+- 回答自然流畅，不重复
+- 可解释推理过程
+- 离线可用
+- 易于维护和扩展
+
+### 1.3 核心挑战
+
+| 挑战 | 说明 |
+|------|------|
+| 避免重复 | 纯规则匹配容易生成死板的重复回答 |
+| 语义理解 | 用户问题多样化，需要理解真实意图 |
+| 知识组织 | 64卦 × 384爻 × 多方面解读，数据结构复杂 |
+| 可解释性 | 用户需要知道"为什么这么解" |
+
+---
+
+## 2. 技术方案对比
+
+### 2.1 方案概览
+
+| 方案类型 | 具体技术 | 优点 | 缺点 | 推荐度 |
+|----------|----------|------|------|--------|
+| **调用AI大模型** | ChatGPT/Claude API | 效果最佳 | 需要联网、成本高、隐私问题 | ⭐⭐ |
+| **专家系统** | 规则引擎+推理机 | 可解释、离线、成本低 | 规则编写工作量大 | ⭐⭐⭐⭐⭐ |
+| **知识图谱** | 本体论+RDF | 关系推理强、可扩展 | 构建复杂 | ⭐⭐⭐⭐ |
+| **向量检索** | TF-IDF/语义向量 | 理解语义相似度 | 需要向量计算 | ⭐⭐⭐⭐ |
+| **模板生成** | 模板+同义词替换 | 简单快速 | 灵活性有限 | ⭐⭐⭐ |
+| **案例推理** | KNN/FAISS相似度 | 有历史依据 | 需要大量案例数据 | ⭐⭐⭐ |
+
+### 2.2 推荐组合方案
+
+**分层架构**：
+
+```
+┌─────────────────────────────────────────┐
+│         应用层（解卦、问答）              │
+└─────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────┐
+│         推理层（专家系统/规则引擎）        │
+│    快速匹配常见模式，给出初步结论          │
+└─────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────┐
+│         知识层（本体论+知识图谱）          │
+│    深度推理、关系查询、复杂问题分析         │
+│    回答"为什么"和"还有什么关联"           │
+└─────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────┐
+│         数据层（64卦、爻辞、案例）         │
+└─────────────────────────────────────────┘
+```
+
+---
+
+## 3. 人工智能三大主义
+
+### 3.1 符号主义 AI（Symbolism）
+
+**核心理念**：智能源于符号操作和逻辑推理
+
+```
+人类思维 = 符号操作
+    ↓
+用计算机模拟逻辑推理
+    ↓
+IF A THEN B 的规则系统
+```
+
+**特点**：
+- ✅ 可解释性强（能说明为什么）
+- ✅ 不需要大量数据
+- ✅ 离线运行
+- ❌ 难以处理模糊和不确定
+- ❌ 知识获取困难（需要人工编码）
+
+**代表技术**：
+- 专家系统
+- 知识图谱
+- 逻辑编程（Prolog）
+- 规则引擎
+
+**适用场景**：解卦系统（规则明确、需要解释）
+
+---
+
+### 3.2 连接主义 AI（Connectionism）
+
+**核心理念**：智能源于大量简单单元的连接
+
+```
+大脑 = 神经元网络
+    ↓
+用计算机模拟神经网络
+    ↓
+从数据中学习模式和规律
+```
+
+**特点**：
+- ✅ 能处理模糊和复杂模式
+- ✅ 自动从数据学习
+- ❌ 黑盒（难以解释为什么）
+- ❌ 需要大量数据和算力
+
+**代表技术**：
+- 深度学习
+- 大语言模型（ChatGPT）
+- 词向量（Word2Vec）
+- 神经网络
+
+**适用场景**：语义理解、文本生成
+
+---
+
+### 3.3 行为主义 AI（Actionism）
+
+**核心理念**：智能源于与环境的交互
+
+```
+智能 = 感知 → 行动 → 反馈 → 学习
+    ↓
+不依赖内部表示，只看行为效果
+    ↓
+试错学习，追求最大奖励
+```
+
+**特点**：
+- ✅ 能处理动态环境
+- ✅ 自适应能力强
+- ❌ 训练困难（需要大量试错）
+- ❌ 不稳定
+
+**代表技术**：
+- 强化学习
+- 机器人控制
+- 游戏AI
+
+**适用场景**：动态决策、用户反馈优化
+
+---
+
+### 3.4 深度学习 vs 强化学习 的区别
+
+| 维度 | 深度学习（连接主义） | 强化学习（行为主义） |
+|------|---------------------|---------------------|
+| **学习信号** | 正确答案（监督学习） | 奖励/惩罚（环境反馈） |
+| **数据** | 大量标注数据 | 与环境交互产生的经验 |
+| **目标** | 拟合输入→输出的映射 | 最大化长期累积奖励 |
+| **过程** | 一次性训练好再使用 | 持续与环境交互学习 |
+
+**关键理解**：
+- 深度学习是**工具/技术**（神经网络）
+- 行为主义是**理念**（从交互中学习）
+- 神经网络可以用于连接主义（图像识别），也可以用于行为主义（强化学习）
+
+---
+
+## 4. 专家系统详解
+
+### 4.1 定义
+
+专家系统是一种**模拟人类专家决策过程**的计算机程序，通过编码领域知识和推理规则，解决特定领域的复杂问题。
+
+### 4.2 核心组成
+
+```
+┌─────────────────────────────────────────┐
+│              用户接口                    │
+│         （输入问题/查看结果）              │
+└─────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────┐
+│              推理引擎                    │
+│    （"如果...那么..."规则匹配）           │
+│         前向链 / 后向链推理               │
+└─────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────┐
+│              知识库                      │
+│  ┌─────────┐    ┌─────────┐            │
+│  │  事实   │    │  规则   │            │
+│  │ 乾卦=吉 │    │ IF乾卦   │            │
+│  │ 变爻=2  │    │ THEN进取 │            │
+│  └─────────┘    └─────────┘            │
+└─────────────────────────────────────────┘
+```
+
+### 4.3 推理方式
+
+#### 前向链（数据驱动）
+
+```
+已知事实 → 匹配规则 → 得出结论
+
+例：
+事实：乾卦 + 事业 + 变爻多
+规则1：IF 乾卦 AND 事业 THEN 宜进取
+规则2：IF 变爻>2 THEN 变化大
+结论：宜积极进取，但变化较多需谨慎
+```
+
+#### 后向链（目标驱动）
+
+```
+目标结论 ← 寻找支持 ← 验证条件
+
+例：
+目标：给出事业建议？
+需要：卦象吉 + 应对策略
+  └─ 事业吉凶需要：卦象 + 方面
+      └─ 卦象=乾（已知）
+      └─ 方面=事业（已知）
+  └─ 应对策略需要：变爻情况
+      └─ 变爻=2（已知）
+
+验证通过，生成结论
+```
+
+### 4.4 TypeScript 实现示例
+
+```typescript
+// types.ts
+interface Fact {
+  key: string;
+  value: any;
+}
+
+interface Rule {
+  id: string;
+  condition: (facts: Map<string, any>) => boolean;
+  action: (facts: Map<string, any>) => string | void;
+  priority?: number;
+}
+
+// expertSystem.ts
+class IChingExpertSystem {
+  private facts = new Map<string, any>();
+  private rules: Rule[] = [];
+
+  addFact(key: string, value: any) {
+    this.facts.set(key, value);
+  }
+
+  addRule(rule: Rule) {
+    this.rules.push(rule);
+    this.rules.sort((a, b) => (b.priority || 0) - (a.priority || 0));
+  }
+
+  infer(): string {
+    for (const rule of this.rules) {
+      if (rule.condition(this.facts)) {
+        const result = rule.action(this.facts);
+        if (result) return result;
+      }
+    }
+    return '暂无解读';
+  }
+}
+```
+
+### 4.5 规则设计示例
+
+```typescript
+// 初始化规则
+expertSystem.addRule({
+  id: 'qian-career',
+  condition: (facts) => 
+    facts.get('guaName') === '乾卦' && 
+    facts.get('aspect') === 'career',
+  action: () => '事业方面，宜积极进取，创业开拓会有收获。',
+  priority: 100
+});
+
+expertSystem.addRule({
+  id: 'many-changing-lines',
+  condition: (facts) => (facts.get('changingLines') as number[]).length >= 3,
+  action: () => '此卦变化较多，事情发展可能不如预期稳定，需灵活应对。',
+  priority: 80
+});
+```
+
+---
+
+## 5. 本体论与知识图谱
+
+### 5.1 本体论定义
+
+本体论（Ontology）是**对特定领域概念及其关系的正式、明确的规范**，用于：
+- 定义概念层次结构
+- 规范概念间关系
+- 支持逻辑推理
+
+### 5.2 在G64中的价值
+
+| 场景 | 必要性 | 说明 |
+|------|--------|------|
+| 简单解卦（规则匹配） | 低 | 专家系统就够了 |
+| 复杂推理（卦象关联） | 高 | 需要本体定义概念关系 |
+| 知识扩展（中医、风水等） | 高 | 多领域融合必须本体统一 |
+| 智能问答（深层语义） | 高 | 理解"乾卦为什么利事业" |
+
+### 5.3 G64本体设计
+
+```typescript
+// ontology.ts
+interface IChingOntology {
+  concepts: {
+    // 卦象本体
+    Hexagram: {
+      properties: ['id', 'name', 'symbol', 'binary', 'element', 'nature'];
+      relations: ['contains', 'transformsTo', 'oppositeOf', 'complementaryTo'];
+    };
+    
+    // 爻本体
+    Yao: {
+      properties: ['position', 'yinYang', 'moving', 'text'];
+      relations: ['belongsTo', 'correspondsTo', 'affects'];
+    };
+    
+    // 八卦本体
+    Trigram: {
+      properties: ['name', 'symbol', 'element', 'direction', 'family'];
+      relations: ['combinesTo', 'generates', 'restricts'];
+    };
+    
+    // 应用领域本体
+    Domain: {
+      properties: ['name', 'keywords', 'interpretationRules'];
+      relations: ['associatedWith', 'influencedBy'];
+    };
+  };
+}
+```
+
+### 5.4 关系定义
+
+```typescript
+const relations = {
+  // 卦之间的关系
+  '乾卦': {
+    'oppositeOf': '坤卦',        // 错卦
+    'complementaryTo': '坤卦',   // 阴阳互补
+    'transformsTo': ['姤卦', '同人卦', '履卦', '小畜卦', '大有卦', '夬卦'],
+    'contains': ['乾', '乾'],     // 上下卦
+  },
+  
+  // 五行生克关系
+  '金': {
+    'generates': '水',   // 金生水
+    'restricts': '木',   // 金克木
+    'generatedBy': '土', // 土生金
+    'restrictedBy': '火' // 火克金
+  },
+  
+  // 卦与应用领域的关系
+  '乾卦': {
+    'associatedWith': {
+      '事业': { strength: 0.9, reason: '乾为君，主领导' },
+      '健康': { strength: 0.6, reason: '乾为首，注意头部' },
+      '感情': { strength: 0.4, reason: '过于刚强，需配合坤卦' }
+    }
+  }
+};
+```
+
+### 5.5 专家系统 vs 本体论+知识图谱
+
+| 维度 | 专家系统 | 本体论+知识图谱 |
+|------|----------|-----------------|
+| **知识形式** | 规则（IF-THEN） | 概念+关系+属性 |
+| **推理方式** | 规则匹配 | 图遍历+逻辑推理 |
+| **扩展性** | 加新规则可能冲突 | 加新概念自然融合 |
+| **可解释性** | "因为规则X" | "因为乾卦属金，金生水，水主智..." |
+| **复杂度** | 简单 | 较复杂 |
+| **查询能力** | 固定问题 | 任意关系查询 |
+
+---
+
+## 6. 推荐架构方案
+
+### 6.1 分阶段实施
+
+| 阶段 | 技术方案 | 目标 |
+|------|----------|------|
+| **MVP阶段** | 专家系统 + 模板生成 | 快速上线，基础解卦 |
+| **进阶阶段** | 引入本体论 + 向量匹配 | 语义理解，关系推理 |
+| **差异化阶段** | 知识图谱 + 案例推理 | 深度智能，核心竞争力 |
+
+### 6.2 避免回答重复的策略
+
+```typescript
+// 1. 多版本解读
+const interpretations = {
+  career: {
+    ji: ['宜积极进取', '创业开拓', '大展宏图', '奋发向上'],
+    xiong: ['宜守成', '不可冒进', '等待时机', '谨慎行事'],
+    ping: ['平稳发展', '按部就班', '循序渐进']
+  }
+};
+
+// 2. 模板 + 变量
+const templates = [
+  '{time}，{aspect}方面宜{action}，{result}。',
+  '{action}之事，{time}正当其时，{result}可期。',
+  '{aspect}上宜{action}，{result}，{advice}。'
+];
+
+// 3. 随机组合
+function generate(gua, aspect, luck) {
+  const action = random(interpretations[aspect][luck]);
+  const template = random(templates);
+  return template.replace('{action}', action);
+}
+```
+
+### 6.3 数据量估算
+
+| 数据类型 | 数量 | 组合数 |
+|----------|------|--------|
+| 64卦基础信息 | 64条 | - |
+| 每卦5方面解读 | 320条 | - |
+| 每方面3种吉凶 | 960条 | - |
+| 每种吉凶4种表述 | 3840种 | **基本不重复** |
+
+---
+
+## 7. 实现参考资源
+
+### 7.1 开源数据仓库
+
+| 项目 | 链接 | 说明 |
+|------|------|------|
+| iching-wilhelm-dataset | https://github.com/adamblvck/iching-wilhelm-dataset | 64卦JSON数据，MIT许可 |
+| i-ching (jesshewitt) | https://github.com/jesshewitt/i-ching | PWA应用+完整数据 |
+| yi_data (中文) | https://github.com/fr0nky0ng/yi_data | 易经原文+高岛易断 |
+| IChingLibrary (C#) | https://github.com/TheodoreCheung/IChingLibrary | 六爻系统实现 |
+| IChing-API (Python) | https://github.com/Amarcord-Software/IChing-API | FastAPI实现 |
+
+### 7.2 技术方案博客
+
+| 标题 | 链接 | 核心技术 |
+|------|------|----------|
+| 周易断卦程序设计 | https://blog.csdn.net/weixin_31800911/article/details/151323305 | 向量匹配、语义相似度 |
+| 专家系统介绍 | https://blog.csdn.net/qq_66726657/article/details/158933393 | 规则引擎、推理机 |
+| Python+C++易经开发 | https://blog.csdn.net/2501_90802096/article/details/146991831 | FAISS、BERT、知识图谱 |
+
+### 7.3 推荐npm包
+
+```bash
+# 专家系统/规则引擎
+npm install json-rules-engine
+
+# 文本相似度
+npm install natural
+
+# 向量计算
+npm install ml-vector
+
+# 模糊匹配
+npm install fuse.js
+```
+
+---
+
+## 8. 代码结构设计（DDD + 专家系统）
+
+### 8.1 目录结构
+
+```
+src/
+├── assets/                        # 静态资源（已有）
+├── components/                    # Vue组件（已有）
+├── composables/                   # Vue组合式函数（已有）
+├── router/                        # 路由（已有）
+├── utils/                         # 工具函数（已有）
+├── views/                         # 页面视图（已有）
+│
+├── services/                      # ★ 业务服务层（新增）
+│   ├── core/                      # 领域层
+│   │   ├── domain/
+│   │   │   ├── entities/
+│   │   │   │   ├── Hexagram.ts        # 卦象实体
+│   │   │   │   ├── Yao.ts             # 爻实体
+│   │   │   │   └── Trigram.ts         # 八卦实体
+│   │   │   │
+│   │   │   ├── value-objects/
+│   │   │   │   ├── GuaSymbol.ts       # 卦象符号（☰）
+│   │   │   │   ├── FiveElements.ts    # 五行
+│   │   │   │   └── YaoPosition.ts     # 爻位
+│   │   │   │
+│   │   │   ├── aggregates/
+│   │   │   │   └── Divination.ts      # 占卜聚合
+│   │   │   │
+│   │   │   ├── repositories/
+│   │   │   │   ├── IHexagramRepository.ts
+│   │   │   │   └── IInterpretationRepository.ts
+│   │   │   │
+│   │   │   └── events/
+│   │   │       └── DivinationCompleted.ts
+│   │   │
+│   │   └── shared/
+│   │       ├── types.ts
+│   │       └── utils.ts
+│   │
+│   ├── expert-system/             # 专家系统层
+│   │   ├── engine/
+│   │   │   ├── InferenceEngine.ts     # 主推理机
+│   │   │   ├── ForwardChaining.ts     # 前向链
+│   │   │   └── BackwardChaining.ts    # 后向链
+│   │   │
+│   │   ├── knowledge-base/
+│   │   │   ├── Fact.ts
+│   │   │   ├── Rule.ts
+│   │   │   ├── KnowledgeBase.ts
+│   │   │   └── rules/
+│   │   │       ├── CareerRules.ts     # 事业规则
+│   │   │       ├── LoveRules.ts       # 感情规则
+│   │   │       └── WealthRules.ts     # 财运规则
+│   │   │
+│   │   ├── working-memory/
+│   │   │   └── WorkingMemory.ts
+│   │   │
+│   │   └── explanation/
+│   │       ├── ExplanationFacility.ts
+│   │       └── Trace.ts
+│   │
+│   ├── ontology/                  # 本体论层
+│   │   ├── concepts/
+│   │   │   ├── HexagramConcept.ts
+│   │   │   ├── YaoConcept.ts
+│   │   │   └── TrigramConcept.ts
+│   │   │
+│   │   ├── relations/
+  │   │   │   ├── FiveElementRelations.ts
+  │   │   │   ├── HexagramRelations.ts
+  │   │   │   └── DomainRelations.ts
+  │   │   │
+  │   │   ├── Ontology.ts
+  │   │   └── Reasoner.ts
+  │   │
+  │   ├── infrastructure/            # 基础设施层
+  │   │   ├── persistence/
+  │   │   │   ├── repositories/
+  │   │   │   │   ├── HexagramRepository.ts
+  │   │   │   │   └── SqliteInterpretationRepository.ts
+  │   │   │   │
+  │   │   │   └── mappers/
+  │   │   │       └── HexagramMapper.ts
+  │   │   │
+  │   │   ├── data/
+  │   │   │   ├── hexagrams.json
+  │   │   │   ├── yaos.json
+  │   │   │   └── interpretations.json
+  │   │   │
+  │   │   └── config/
+  │   │       └── ExpertSystemConfig.ts
+  │   │
+  │   └── application/               # 应用层
+  │       ├── services/
+  │       │   ├── DivinationService.ts
+  │       │   ├── InterpretationService.ts
+  │       │   └── HistoryService.ts
+  │       │
+  │       ├── dto/
+  │       │   ├── CreateDivinationDTO.ts
+  │       │   └── InterpretationResultDTO.ts
+  │       │
+  │       └── queries/
+  │           ├── GetHexagramQuery.ts
+  │           └── SearchInterpretationQuery.ts
+  │
+├── App.vue
+├── main.ts
+├── types.ts
+├── data.ts
+└── db.ts
+```
+
+### 8.2 模块依赖关系
+
+```
+services/
+  ├── application
+  │       ↓
+  ├── expert-system → core
+  │       ↓              ↓
+  ├── ontology  ←───────┘
+  │       ↓
+  └── infrastructure
+```
+
+views/composables → services/application → services/expert-system → services/core
+                                                    ↓
+                                             services/ontology
+                                                    ↓
+                                             services/infrastructure
+```
+
+### 8.3 DDD分层原则
+
+| 层级 | 职责 | 依赖方向 |
+|------|------|----------|
+| **services/core** | 业务核心，最稳定 | 不依赖任何层 |
+| **services/expert-system** | 算法实现 | 依赖core |
+| **services/ontology** | 知识表示 | 依赖core |
+| **services/application** | 用例编排 | 依赖core、expert-system |
+| **services/infrastructure** | 技术实现 | 依赖所有上层 |
+| **views/composables** | UI适配 | 依赖application |
+
+### 8.4 核心代码示例
+
+#### 推理引擎
+
+```typescript
+// src/services/expert-system/engine/InferenceEngine.ts
+
+export class InferenceEngine {
+  private workingMemory: WorkingMemory;
+  private rules: Rule[];
+  private firedRules: string[] = [];
+
+  constructor(rules: Rule[]) {
+    this.workingMemory = new WorkingMemory();
+    this.rules = rules.sort((a, b) => b.priority - a.priority);
+  }
+
+  // 前向链推理
+  forwardChain(initialFacts: Fact[]): InterpretationResult {
+    initialFacts.forEach(fact => this.workingMemory.addFact(fact));
+
+    let hasNewFacts = true;
+    while (hasNewFacts) {
+      hasNewFacts = false;
+      
+      for (const rule of this.rules) {
+        if (this.firedRules.includes(rule.id)) continue;
+        
+        if (rule.condition(this.workingMemory.getAllFacts())) {
+          const result = rule.action(this.workingMemory.getAllFacts());
+          if (result) {
+            this.workingMemory.addFact(new Fact('conclusion', result));
+            this.firedRules.push(rule.id);
+            hasNewFacts = true;
+          }
+        }
+      }
+    }
+
+    return this.buildResult();
+  }
+
+  private buildResult(): InterpretationResult {
+    return {
+      text: this.workingMemory.getConclusion(),
+      matchedRules: this.firedRules,
+      trace: this.workingMemory.getTrace()
+    };
+  }
+}
+```
+
+#### 规则定义
+
+```typescript
+// src/services/expert-system/knowledge-base/rules/CareerRules.ts
+
+export const CareerRules: Rule[] = [
+  {
+    id: 'qian-career-1',
+    name: '乾卦事业进取',
+    description: '乾卦问事业，宜积极进取',
+    priority: 100,
+    condition: (facts) => 
+      facts.get('hexagram') === '乾卦' && 
+      facts.get('aspect') === 'career',
+    action: (facts) => '事业方面，宜积极进取，创业开拓会有收获。'
+  },
+  
+  {
+    id: 'changing-lines-many',
+    name: '变爻多提醒',
+    description: '变爻数量多，提醒变化大',
+    priority: 80,
+    condition: (facts) => {
+      const lines = facts.get('changingLines') as number[];
+      return lines && lines.length >= 3;
+    },
+    action: (facts) => '此卦变化较多，事情发展可能不如预期稳定，需灵活应对。'
+  }
+];
+```
+
+---
+
+## 9. 后续研究方向
+
+### 9.1 待深入研究
+
+- [ ] **历史案例库构建**：收集《左传》《国语》等古籍中的真实占筮案例
+- [ ] **五行生克算法**：完整的生克制化计算逻辑
+- [ ] **时间起卦算法**：梅花易数、六爻纳甲的时间计算
+- [ ] **用户反馈学习**：根据用户评价优化推荐（行为主义）
+- [ ] **多语言支持**：古文/现代文/英文切换
+
+### 9.2 技术债务
+
+- [ ] 专家系统规则冲突检测机制
+- [ ] 知识图谱的图数据库存储方案
+- [ ] 解卦结果的可视化展示
+
+### 9.3 相关研究记录
+
+- [设计规范](./AGENT.md)
+- [开发部署指南](./DEVELOP_DEPLOY.md)
+- [AI变更日志](./AI_CHANGE_LOG.md)
+
+---
+
+## 附录：核心概念速查
+
+| 概念 | 定义 | 在G64中的应用 |
+|------|------|---------------|
+| **专家系统** | 模拟专家决策的规则系统 | 核心解卦引擎 |
+| **本体论** | 概念及其关系的规范定义 | 卦象、五行、六亲的关系建模 |
+| **知识图谱** | 大规模语义网络 | 多维度关联查询 |
+| **前向链** | 从事实推导结论 | 根据卦象生成解读 |
+| **后向链** | 从目标倒推条件 | 验证解卦合理性 |
+| **符号主义** | 基于逻辑和规则 | 专家系统、知识图谱 |
+| **连接主义** | 基于神经网络 | 语义向量匹配（可选） |
+| **行为主义** | 基于环境交互 | 用户反馈优化（可选） |
+
+---
+
+> **记录者备注**：
+> 
+> 本文档整理了关于G64智能解卦系统的技术调研，核心结论是采用**专家系统+本体论**的符号主义AI方案，既能实现智能化回答，又能保持可解释性和离线可用性。
+> 
+> 研究过程中发现，情报图谱分析的本体论经验可以直接迁移到易经知识图谱的构建，这是项目的独特优势。
