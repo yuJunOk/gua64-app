@@ -17,7 +17,7 @@
 [![License MIT](https://img.shields.io/badge/License-MIT-9cf?style=flat-square)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-0.0.0-666?style=flat-square)](./package.json)
 
-| [开发部署](./docs/DEVELOP_DEPLOY.md) | [AI 开发指南](./docs/AGENT.md) | [AI 变更日志](./docs/AI_CHANGE_LOG.md) | [项目配置](./package.json) |
+| [开发部署](./docs/开发部署.md) | [开发指南](./docs/开发指南.md) | [开发日志](./docs/开发日志.md) | [项目配置](./package.json) |
 | :--: | :--: | :--: | :--: |
 
 ---
@@ -134,7 +134,7 @@ npx cap sync android
 npx cap open android
 ```
 
-详细环境配置、真机运行与打包流程见 [**DEVELOP_DEPLOY.md**](./docs/DEVELOP_DEPLOY.md)。
+详细环境配置、真机运行与打包流程见 [**开发部署.md**](./docs/开发部署.md)。
 
 ---
 
@@ -147,7 +147,7 @@ npx cap open android
 | `npm run preview` | 本地预览构建产物 |
 | `npm run icons:android` | 使用 `public/logo.svg` 生成 Android 图标 |
 
-设计规范、目录约定与 AI 协作规则见 [**AGENT.md**](./docs/AGENT.md)；AI 辅助变更记录见 [**AI_CHANGE_LOG.md**](./docs/AI_CHANGE_LOG.md)。
+设计规范、目录约定与 AI 协作规则见 [**开发指南.md**](./docs/开发指南.md)；AI 辅助变更记录见 [**开发日志.md**](./docs/开发日志.md)。
 
 ---
 
