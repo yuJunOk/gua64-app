@@ -215,6 +215,7 @@
 <script setup lang="ts">
 import { ref, computed, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
+import { showToast, showFailToast } from 'vant';
 import CoinFlip from '../components/CoinFlip.vue';
 import HexagramFigure from '../components/HexagramFigure.vue';
 import YaoLine from '../components/YaoLine.vue';
@@ -302,6 +303,7 @@ const startDivination = async () => {
     } catch (error) {
         console.error('算卦过程出错:', error);
         isDivining.value = false;
+        showFailToast('算卦失败，请重试');
     }
 };
 
@@ -381,11 +383,16 @@ const submitManualInput = async () => {
         (value): value is YaoType => value !== null && [6, 7, 8, 9].includes(value),
     );
     if (!validInput) {
-        alert('请为六爻各选一爻值（6、7、8、9）');
+        showToast('请为六爻各选一爻值');
         return;
     }
     yaoValues.value = slots.slice() as YaoType[];
-    await completeDivination('manual');
+    try {
+        await completeDivination('manual');
+    } catch (error) {
+        console.error('保存手动算卦结果失败:', error);
+        showFailToast('保存失败，请重试');
+    }
 };
 
 /** 跳转到历史记录页；无入参无返回，副作用是触发路由导航 */

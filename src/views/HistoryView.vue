@@ -118,6 +118,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { showSuccessToast, showFailToast } from 'vant';
 import { getHistory, deleteHistory, clearHistory } from '../db';
 
 const router = useRouter();
@@ -135,6 +136,7 @@ const loadHistory = async () => {
     historyRecords.value = await getHistory();
   } catch (error) {
     console.error('加载历史记录失败:', error);
+    showFailToast('加载失败，请重试');
   } finally {
     isLoading.value = false;
   }
@@ -144,9 +146,11 @@ const loadHistory = async () => {
 const deleteRecord = async (id: number) => {
   try {
     await deleteHistory(id);
+    showSuccessToast('已删除');
     await loadHistory();
   } catch (error) {
     console.error('删除历史记录失败:', error);
+    showFailToast('删除失败，请重试');
   }
 };
 
@@ -156,8 +160,10 @@ const handleClearHistory = async () => {
     await clearHistory();
     await loadHistory();
     showConfirmDialog.value = false;
+    showSuccessToast('已清空');
   } catch (error) {
     console.error('清空历史记录失败:', error);
+    showFailToast('清空失败，请重试');
   }
 };
 

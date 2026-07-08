@@ -43,7 +43,7 @@
                         </div>
                         <div>
                             <div class="text-sm font-semibold text-gray-800">{{ item.label }}</div>
-                            <div class="mt-0.5 text-xs text-slate-400">基础卦象与说明</div>
+                            <div class="mt-0.5 text-xs text-slate-400">{{ item.subtitle }}</div>
                         </div>
                     </div>
                     <div class="text-gray-400">›</div>
@@ -72,7 +72,7 @@
                         </div>
                         <div>
                             <div class="text-sm font-semibold text-gray-800">{{ item.label }}</div>
-                            <div class="mt-0.5 text-xs text-slate-400">整理你的起卦数据</div>
+                            <div class="mt-0.5 text-xs text-slate-400">{{ item.subtitle }}</div>
                         </div>
                     </div>
                     <div class="text-gray-400">›</div>
@@ -101,7 +101,7 @@
                         </div>
                         <div>
                             <div class="text-sm font-semibold text-gray-800">{{ item.label }}</div>
-                            <div class="mt-0.5 text-xs text-slate-400">配置与数据维护</div>
+                            <div class="mt-0.5 text-xs text-slate-400">{{ item.subtitle }}</div>
                         </div>
                     </div>
                     <div class="text-gray-400">›</div>
@@ -126,21 +126,21 @@ interface MenuItem {
     name: string;
     label: string;
     icon: string;
+    subtitle: string;
 }
 
 const menuGroupKnowledge: MenuItem[] = [
-    { name: 'knowledge', label: '六十四卦', icon: '📖' }
+    { name: 'knowledge', label: '六十四卦', icon: '📖', subtitle: '基础卦象与说明' }
 ];
 
 const menuGroupManagement: MenuItem[] = [
-    { name: 'statistics', label: '数据统计', icon: '📊' },
-    { name: 'collection', label: '卦局收藏', icon: '⭐' },
-    { name: 'share', label: '卦局分享', icon: '📤' }
+    { name: 'statistics', label: '数据统计', icon: '📊', subtitle: '汇总分析卦局数据' },
+    { name: 'collection', label: '卦局收藏', icon: '⭐', subtitle: '收藏重要卦局' },
+    { name: 'importexport', label: '数据管理', icon: '💾', subtitle: '导入与导出卦局数据' }
 ];
 
 const menuGroupOther: MenuItem[] = [
-    { name: 'importexport', label: '数据管理', icon: '💾' },
-    { name: 'settings', label: '应用设置', icon: '⚙️' }
+    { name: 'settings', label: '应用设置', icon: '⚙️', subtitle: '应用偏好与设置' }
 ];
 
 /** 响应更多页菜单点击；入参为菜单名，当前阶段统一提示功能开发中 */
@@ -149,8 +149,7 @@ const handleMenuClick = (name: string): void => {
         knowledge: '六十四卦功能开发中',
         statistics: '数据统计功能开发中',
         collection: '卦局收藏功能开发中',
-        share: '卦局分享功能开发中',
-        importexport: '数据管理功能开发中',
+        importexport: '卦局数据导入导出功能开发中',
         settings: '应用设置功能开发中'
     };
     showToast(messages[name] || '功能开发中');
