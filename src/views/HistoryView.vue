@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-full bg-gradient-to-b from-blue-50 to-white pb-6">
     <!-- 顶部导航 -->
-    <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-sm shadow-sm px-4 py-3 flex items-center justify-between">
+    <header class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100/80 bg-white/78 px-4 py-3 shadow-[0_8px_24px_rgba(15,23,42,0.04)] backdrop-blur-xl">
       <div class="flex items-center gap-3">
         <AppLogo size="2.25rem" />
         <h1 class="text-lg font-bold text-gray-800">历史记录</h1>
@@ -9,7 +9,7 @@
       <button 
         v-if="historyRecords.length > 0"
         @click="showConfirmDialog = true"
-        class="bg-red-100 text-red-700 font-medium py-2 px-4 rounded-full text-sm hover:bg-red-200 transition-colors"
+        class="rounded-full border border-rose-100/80 bg-rose-50/70 px-4 py-2 text-sm font-medium text-rose-700 shadow-[0_6px_18px_rgba(244,63,94,0.06)] transition-all duration-300 active:scale-95 hover:bg-rose-100/70"
       >
         清空记录
       </button>
@@ -18,8 +18,8 @@
     <!-- 主内容区 -->
     <main class="px-4 py-6">
       <!-- 加载状态 -->
-      <div v-if="isLoading" class="flex flex-col items-center justify-center py-12">
-        <div class="text-4xl mb-4">⏳</div>
+      <div v-if="isLoading" class="rounded-[22px] border border-slate-100/80 bg-white/78 py-12 text-center shadow-[0_14px_32px_rgba(15,23,42,0.05)] backdrop-blur-sm">
+        <div class="mb-4 text-4xl">⏳</div>
         <p class="text-sm text-gray-600">加载历史记录中...</p>
       </div>
 
@@ -35,7 +35,7 @@
           <button
             type="button"
             @click="goToDivination"
-            class="bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 px-10 rounded-full text-sm shadow-lg hover:shadow-xl transition-all duration-300 active:scale-95"
+            class="rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-10 py-3 text-sm font-bold text-white shadow-[0_18px_35px_rgba(37,99,235,0.24)] transition-all duration-300 active:scale-95 hover:shadow-[0_22px_42px_rgba(37,99,235,0.3)]"
           >
             去算卦
           </button>
@@ -44,10 +44,21 @@
 
       <!-- 历史记录列表 -->
       <div v-else class="space-y-4">
+        <div class="rounded-[18px] border border-slate-100/80 bg-white/82 px-4 py-3 shadow-[0_12px_28px_rgba(15,23,42,0.05)] backdrop-blur-sm">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-sm font-bold text-slate-800">共 {{ historyRecords.length }} 条记录</div>
+              <div class="mt-1 text-xs text-slate-500">按时间倒序展示最近起卦结果</div>
+            </div>
+            <div class="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
+              历史档案
+            </div>
+          </div>
+        </div>
         <div 
           v-for="record in historyRecords" 
           :key="record.id"
-          class="bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition-all duration-300"
+          class="rounded-[18px] border border-slate-100/80 bg-white/88 p-5 shadow-[0_14px_32px_rgba(15,23,42,0.06)] transition-all duration-300 hover:shadow-[0_18px_36px_rgba(15,23,42,0.08)]"
         >
           <div class="flex justify-between items-start mb-4">
             <div>
@@ -65,19 +76,19 @@
             </div>
             <button 
               @click="deleteRecord(record.id)"
-              class="bg-red-100 text-red-700 p-2 rounded-full hover:bg-red-200 transition-colors text-lg"
+              class="flex h-10 w-10 items-center justify-center rounded-full border border-rose-100/80 bg-rose-50/80 text-base text-rose-700 transition-all duration-300 active:scale-95 hover:bg-rose-100"
             >
               🗑️
             </button>
           </div>
           
-          <div class="bg-gray-50 rounded-lg p-4">
+          <div class="rounded-[14px] bg-slate-50/80 p-4 ring-1 ring-slate-100/80">
             <div class="text-sm font-semibold text-gray-800 mb-3">爻值：</div>
             <div class="flex flex-wrap gap-2">
               <span 
                 v-for="(yao, index) in (record.yao_data ? JSON.parse(record.yao_data) : [])" 
                 :key="index"
-                :class="['px-3 py-2 rounded-lg font-bold text-sm', (yao === 6 || yao === 9) ? 'bg-orange-100 text-orange-700' : 'bg-blue-50 text-blue-700']"
+                :class="['rounded-[12px] px-3 py-2 text-sm font-bold ring-1', (yao === 6 || yao === 9) ? 'bg-orange-50 text-orange-700 ring-orange-100/80' : 'bg-blue-50 text-blue-700 ring-blue-100/80']"
               >
                 {{ yao }}
               </span>
@@ -117,6 +128,7 @@ const isLoading = ref(true);
 const showConfirmDialog = ref(false);
 
 // 方法
+/** 加载历史记录列表；无入参无返回，失败时仅结束 loading，不主动抛错 */
 const loadHistory = async () => {
   isLoading.value = true;
   try {
@@ -128,6 +140,7 @@ const loadHistory = async () => {
   }
 };
 
+/** 删除单条历史记录；入参为记录 id，副作用是删库后刷新列表 */
 const deleteRecord = async (id: number) => {
   try {
     await deleteHistory(id);
@@ -137,6 +150,7 @@ const deleteRecord = async (id: number) => {
   }
 };
 
+/** 清空全部历史记录；无入参无返回，副作用是清库、关闭弹窗并刷新列表 */
 const handleClearHistory = async () => {
   try {
     await clearHistory();
@@ -147,11 +161,12 @@ const handleClearHistory = async () => {
   }
 };
 
+/** 跳转到问卦页；无入参无返回，副作用是触发路由导航 */
 const goToDivination = () => {
-  router.push('/divination');
+  router.push({ name: 'divination' });
 };
 
-// 格式化日期
+/** 格式化历史记录时间；入参为时间字符串，返回本地化年月日时分文本 */
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   return date.toLocaleString('zh-CN', {

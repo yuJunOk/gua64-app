@@ -18,6 +18,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     TabBar: typeof import('./src/components/TabBar.vue')['default']
     VanDialog: typeof import('vant/es')['Dialog']
+    VanIcon: typeof import('vant/es')['Icon']
     VanTabbar: typeof import('vant/es')['Tabbar']
     VanTabbarItem: typeof import('vant/es')['TabbarItem']
     YaoLine: typeof import('./src/components/YaoLine.vue')['default']

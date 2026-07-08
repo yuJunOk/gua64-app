@@ -1,13 +1,13 @@
 <template>
     <div class="min-h-full bg-gradient-to-b from-blue-50 to-white pb-6">
         <!-- 顶部导航 -->
-        <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-sm shadow-sm px-4 py-3 flex items-center justify-between">
+        <header class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100/80 bg-white/78 px-4 py-3 shadow-[0_8px_24px_rgba(15,23,42,0.04)] backdrop-blur-xl">
             <div class="flex items-center gap-3">
                 <AppLogo size="2.25rem" />
                 <h1 class="text-lg font-bold text-gray-800">易经算卦</h1>
             </div>
             <button @click="goToHistory"
-                class="bg-blue-100 text-blue-700 font-medium py-2 px-4 rounded-full text-sm hover:bg-blue-200 transition-colors">
+                class="rounded-full border border-blue-100/70 bg-blue-50/55 px-4 py-2 text-sm font-medium text-blue-700 shadow-[0_6px_18px_rgba(37,99,235,0.06)] transition-all duration-300 active:scale-95 hover:bg-blue-100/60">
                 历史记录
             </button>
         </header>
@@ -15,34 +15,36 @@
         <!-- 主内容区 -->
         <main class="px-4 py-6">
             <!-- 模式切换 -->
-            <div class="flex gap-3 mb-8">
-                <button :class="['flex-1 py-3 px-4 rounded-full font-bold text-sm transition-all flex items-center justify-center gap-2',
+            <div class="mb-8 rounded-[22px] border border-slate-100/80 bg-white/74 p-2 shadow-[0_14px_32px_rgba(15,23,42,0.05)] backdrop-blur-md">
+                <div class="flex gap-2">
+                <button :class="['flex flex-1 items-center justify-center gap-2 rounded-[18px] px-4 py-3 text-sm font-bold transition-all duration-300',
                     !isManualMode
-                        ? 'bg-blue-600 text-white shadow-md'
-                        : 'bg-white text-gray-600 border border-gray-300']" @click="switchToAutoMode">
+                        ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-[0_12px_24px_rgba(37,99,235,0.18)]'
+                        : 'bg-white/70 text-slate-500 shadow-[inset_0_0_0_1px_rgba(226,232,240,0.75)] hover:bg-slate-50/80']" @click="switchToAutoMode">
                     <span>🎲</span>
                     <span>自动算卦</span>
                 </button>
-                <button :class="['flex-1 py-3 px-4 rounded-full font-bold text-sm transition-all flex items-center justify-center gap-2',
+                <button :class="['flex flex-1 items-center justify-center gap-2 rounded-[18px] px-4 py-3 text-sm font-bold transition-all duration-300',
                     isManualMode
-                        ? 'bg-blue-600 text-white shadow-md'
-                        : 'bg-white text-gray-600 border border-gray-300']" @click="switchToManualMode">
+                        ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-[0_12px_24px_rgba(37,99,235,0.18)]'
+                        : 'bg-white/70 text-slate-500 shadow-[inset_0_0_0_1px_rgba(226,232,240,0.75)] hover:bg-slate-50/80']" @click="switchToManualMode">
                     <span>✍️</span>
                     <span>手动输入</span>
                 </button>
+                </div>
             </div>
 
             <!-- 自动算卦模式 -->
             <div v-if="!isManualMode" class="space-y-6">
                 <!-- 初始状态 -->
-                <div v-if="!isDivining && !isComplete" class="text-center py-8">
-                    <div class="w-24 h-24 mx-auto rounded-full bg-blue-100 flex items-center justify-center mb-6 p-3">
+                <div v-if="!isDivining && !isComplete" class="rounded-[24px] border border-slate-100/80 bg-white/78 py-10 text-center shadow-[0_16px_36px_rgba(15,23,42,0.06)] backdrop-blur-sm">
+                    <div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-blue-100 p-3 ring-8 ring-blue-100/70">
                         <AppLogo size="4.5rem" radius="full" />
                     </div>
                     <h2 class="text-xl font-bold text-gray-800 mb-2">诚心问卜</h2>
                     <p class="text-gray-600 text-sm mb-8">静心凝神，默念所求之事</p>
                     <button @click="startDivination"
-                        class="bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 px-10 rounded-full text-sm shadow-lg hover:shadow-xl transition-all duration-300 active:scale-95">
+                        class="rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-10 py-3 text-sm font-bold text-white shadow-[0_18px_35px_rgba(37,99,235,0.26)] transition-all duration-300 active:scale-95 hover:shadow-[0_22px_42px_rgba(37,99,235,0.3)]">
                         开始算卦
                     </button>
                 </div>
@@ -50,7 +52,7 @@
                 <!-- 算卦过程 -->
                 <div v-if="isDivining" class="space-y-6">
                     <!-- 进度 -->
-                    <div class="bg-white rounded-xl p-5 shadow-md">
+                    <div class="rounded-[20px] border border-slate-100/80 bg-white/88 p-5 shadow-[0_14px_32px_rgba(15,23,42,0.06)]">
                         <div class="text-center mb-4">
                             <h3 class="text-base font-bold text-gray-800">正在算卦</h3>
                             <p class="text-blue-600 font-bold text-xl mt-1">第 {{ currentStep }} / {{ totalSteps }} 爻</p>
@@ -66,7 +68,7 @@
                     </div>
 
                     <!-- 硬币动画 -->
-                    <div class="bg-white rounded-xl p-6 shadow-md">
+                    <div class="rounded-[20px] border border-slate-100/80 bg-white/88 p-6 shadow-[0_14px_32px_rgba(15,23,42,0.06)]">
                         <div class="flex justify-center gap-5">
                             <div
                                 v-for="(coin, index) in coins"
@@ -92,14 +94,14 @@
                     </div>
 
                     <!-- 爻值记录 -->
-                    <div class="bg-white rounded-xl p-5 shadow-md">
+                    <div class="rounded-[20px] border border-slate-100/80 bg-white/88 p-5 shadow-[0_14px_32px_rgba(15,23,42,0.06)]">
                         <h4 class="text-sm font-bold text-gray-800 mb-3">爻值记录</h4>
                         <div class="grid grid-cols-6 gap-2">
-                            <div v-for="(yao, index) in yaoValues" :key="index" class="bg-blue-50 rounded-lg p-2 text-center">
+                            <div v-for="(yao, index) in yaoValues" :key="index" class="rounded-[14px] bg-blue-50/80 p-2 text-center ring-1 ring-blue-100/80">
                                 <div class="text-lg font-bold text-blue-700">{{ yao }}</div>
                                 <div class="text-xs text-gray-500">{{ 6 - index }}爻</div>
                             </div>
-                            <div v-for="i in (totalSteps - yaoValues.length)" :key="`empty-${i}`" class="bg-gray-100 rounded-lg p-2 text-center">
+                            <div v-for="i in (totalSteps - yaoValues.length)" :key="`empty-${i}`" class="rounded-[14px] bg-slate-50 p-2 text-center ring-1 ring-slate-100/80">
                                 <div class="text-lg font-bold text-gray-300">-</div>
                                 <div class="text-xs text-gray-400">{{ 6 - (yaoValues.length + i - 1) }}爻</div>
                             </div>
@@ -117,7 +119,7 @@
                     <!-- 卦象展示 -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- 本卦 -->
-                        <div class="bg-white rounded-xl p-5 shadow-md">
+                        <div class="rounded-[20px] border border-slate-100/80 bg-white/88 p-5 shadow-[0_14px_32px_rgba(15,23,42,0.06)]">
                             <h4 class="text-sm font-bold text-blue-700 mb-3">本卦：{{ divinationResult.originalHexagram.name }}</h4>
                             <HexagramFigure
                                 class="mb-2"
@@ -129,7 +131,7 @@
                         </div>
 
                         <!-- 变卦 -->
-                        <div class="bg-white rounded-xl p-5 shadow-md">
+                        <div class="rounded-[20px] border border-slate-100/80 bg-white/88 p-5 shadow-[0_14px_32px_rgba(15,23,42,0.06)]">
                             <h4 class="text-sm font-bold text-orange-600 mb-3">变卦：{{ divinationResult.changedHexagram.name }}</h4>
                             <HexagramFigure
                                 class="mb-3"
@@ -141,13 +143,13 @@
                     </div>
 
                     <!-- 六爻详情 -->
-                    <div class="bg-white rounded-xl p-5 shadow-md">
+                    <div class="rounded-[20px] border border-slate-100/80 bg-white/88 p-5 shadow-[0_14px_32px_rgba(15,23,42,0.06)]">
                         <h4 class="text-sm font-bold text-gray-800 mb-3">六爻详情</h4>
                         <div class="space-y-2">
                             <div
                                 v-for="row in originalYaoRows"
                                 :key="row.indexFromBottom"
-                                :class="['flex items-center justify-between gap-4 rounded-lg px-3 py-2.5 text-sm', row.yaoType && (row.yaoType === 6 || row.yaoType === 9) ? 'bg-orange-50' : 'bg-gray-50']"
+                                :class="['flex items-center justify-between gap-4 rounded-[14px] px-3 py-2.5 text-sm ring-1', row.yaoType && (row.yaoType === 6 || row.yaoType === 9) ? 'bg-orange-50 ring-orange-100/80' : 'bg-slate-50 ring-slate-100/80']"
                             >
                                 <div class="min-w-0">
                                     <span class="font-semibold text-gray-700">{{ row.positionName }}</span>
@@ -165,10 +167,10 @@
 
                     <!-- 操作按钮 -->
                     <div class="flex gap-4">
-                        <button @click="resetDivination" class="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 px-6 rounded-full text-sm shadow-lg hover:shadow-xl transition-all">
+                        <button @click="resetDivination" class="flex-1 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-bold text-white shadow-[0_18px_35px_rgba(37,99,235,0.24)] transition-all duration-300 active:scale-95 hover:shadow-[0_22px_42px_rgba(37,99,235,0.3)]">
                             重新算卦
                         </button>
-                        <button @click="goToHistory" class="flex-1 bg-white text-blue-700 font-bold py-3 px-6 rounded-full text-sm border border-blue-600 shadow-md hover:bg-blue-50 transition-all">
+                        <button @click="goToHistory" class="flex-1 rounded-full border border-slate-200 bg-white/90 px-6 py-3 text-sm font-bold text-slate-700 shadow-[0_12px_24px_rgba(15,23,42,0.06)] transition-all duration-300 active:scale-95 hover:border-blue-200 hover:bg-blue-50/80 hover:text-blue-700">
                             查看历史
                         </button>
                     </div>
@@ -177,8 +179,8 @@
 
             <!-- 手动输入模式 -->
             <div v-if="isManualMode" class="space-y-6">
-                <div class="text-center py-4">
-                    <div class="w-16 h-16 mx-auto rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                <div class="rounded-[24px] border border-slate-100/80 bg-white/76 py-8 text-center shadow-[0_16px_36px_rgba(15,23,42,0.06)] backdrop-blur-sm">
+                    <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-blue-100">
                         <span class="text-3xl">✍️</span>
                     </div>
                     <h2 class="text-lg font-bold text-gray-800 mb-2">手动输入爻值</h2>
@@ -186,13 +188,13 @@
                 </div>
 
                 <!-- 爻值输入 -->
-                <div class="bg-white rounded-xl p-5 shadow-md">
+                <div class="rounded-[20px] border border-slate-100/80 bg-white/88 p-5 shadow-[0_14px_32px_rgba(15,23,42,0.06)]">
                     <div class="space-y-3">
                         <div v-for="(_, index) in manualYaoValues" :key="index" class="flex items-center gap-3">
                             <span class="text-sm font-semibold text-gray-700 w-12">第{{ 6 - index }}爻</span>
                             <div class="flex-1 grid grid-cols-4 gap-2">
                                 <button v-for="option in manualYaoOptions" :key="option"
-                                    :class="['py-2 px-3 rounded-lg font-bold text-sm transition-all', manualYaoValues[index] === option ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
+                                    :class="['rounded-[14px] px-3 py-2.5 text-sm font-bold transition-all duration-300', manualYaoValues[index] === option ? 'bg-blue-600 text-white shadow-[0_10px_22px_rgba(37,99,235,0.18)]' : 'bg-slate-50 text-slate-700 ring-1 ring-slate-100/80 hover:bg-slate-100']"
                                     @click="manualYaoValues[index] = option">
                                     {{ option }}
                                 </button>
@@ -202,7 +204,7 @@
                 </div>
 
                 <!-- 提交按钮 -->
-                <button @click="submitManualInput" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 px-10 rounded-full text-sm shadow-lg hover:shadow-xl transition-all">
+                <button @click="submitManualInput" class="w-full rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-10 py-3 text-sm font-bold text-white shadow-[0_18px_35px_rgba(37,99,235,0.24)] transition-all duration-300 active:scale-95 hover:shadow-[0_22px_42px_rgba(37,99,235,0.3)]">
                     提交算卦
                 </button>
             </div>
@@ -221,6 +223,7 @@ import { DEFAULT_COIN_SET_ID } from '../assets/coins/coinSets';
 import { useDivination } from '../composables/useDivination';
 import { saveResult } from '../db';
 import type { YaoType } from '../types';
+import AppLogo from "../components/AppLogo.vue";
 
 const manualYaoOptions: YaoType[] = [6, 7, 8, 9];
 
@@ -246,6 +249,7 @@ const activeCoinSetId = ref(DEFAULT_COIN_SET_ID);
 
 const coinFlipRefs: InstanceType<typeof CoinFlip>[] = [];
 
+/** 收集硬币组件实例；el 为空时清掉旧引用，副作用是更新本地 ref 列表 */
 const setCoinFlipRef = (el: unknown, index: number) => {
     if (el) {
         coinFlipRefs[index] = el as InstanceType<typeof CoinFlip>;
@@ -254,6 +258,7 @@ const setCoinFlipRef = (el: unknown, index: number) => {
     }
 };
 
+/** 判断三枚硬币组件是否都已挂载；无入参，返回布尔值，无副作用 */
 const coinFlipRefsReady = () =>
     coins.value.every((_, i) => coinFlipRefs[i] != null);
 
@@ -276,6 +281,7 @@ const originalYaoRows = computed(() => {
 });
 
 // 方法
+/** 执行完整自动算卦流程；无入参无返回，异常时中断并重置进行中状态 */
 const startDivination = async () => {
     isDivining.value = true;
     currentStep.value = 0;
@@ -299,6 +305,7 @@ const startDivination = async () => {
     }
 };
 
+/** 驱动三枚铜钱抛掷动画并写回结果；无入参无返回，副作用是更新 coins 状态 */
 const flipCoins = async () => {
     coins.value.forEach((coin) => {
         coin.isFlipping = true;
@@ -322,6 +329,7 @@ const flipCoins = async () => {
     });
 };
 
+/** 根据三枚铜钱点数求爻值；无入参返回 6/7/8/9，异常和脏值回退为 7 */
 const calculateYao = (): YaoType => {
     const sum = coins.value.reduce((acc, coin) => acc + coin.value, 0);
     if (sum === 6 || sum === 7 || sum === 8 || sum === 9) {
@@ -330,6 +338,7 @@ const calculateYao = (): YaoType => {
     return 7;
 };
 
+/** 结束一次算卦并落库；入参为来源类型，副作用是生成结果并保存历史 */
 const completeDivination = async (type: string) => {
     isDivining.value = false;
     divinationResult.value = getDivinationResult(yaoValues.value);
@@ -340,6 +349,7 @@ const completeDivination = async (type: string) => {
     });
 };
 
+/** 清空当前算卦过程状态；无入参无返回，副作用是重置动画与结果数据 */
 const resetDivination = () => {
     isDivining.value = false;
     currentStep.value = 0;
@@ -351,17 +361,20 @@ const resetDivination = () => {
     });
 };
 
+/** 切到手动录入模式；无入参无返回，副作用是重置自动算卦状态 */
 const switchToManualMode = () => {
     isManualMode.value = true;
     resetDivination();
 };
 
+/** 切回自动算卦模式；无入参无返回，副作用是清空手动输入和当前结果 */
 const switchToAutoMode = () => {
     isManualMode.value = false;
     resetDivination();
     manualYaoValues.value = [null, null, null, null, null, null];
 };
 
+/** 校验并提交手动六爻；缺失任一爻值则阻止提交，副作用是保存一条历史记录 */
 const submitManualInput = async () => {
     const slots = manualYaoValues.value;
     const validInput = slots.every(
@@ -375,8 +388,9 @@ const submitManualInput = async () => {
     await completeDivination('manual');
 };
 
+/** 跳转到历史记录页；无入参无返回，副作用是触发路由导航 */
 const goToHistory = () => {
-    router.push('/history');
+    router.push({ name: 'history' });
 };
 
 </script>
