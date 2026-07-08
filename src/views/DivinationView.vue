@@ -1,13 +1,13 @@
 <template>
     <div class="min-h-full bg-gradient-to-b from-blue-50 to-white pb-6">
         <!-- 顶部导航 -->
-        <header class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100/80 bg-white/78 px-4 py-3 shadow-[0_8px_24px_rgba(15,23,42,0.04)] backdrop-blur-xl">
+        <header class="sticky top-0 z-10 flex items-center justify-between bg-white/80 px-4 py-3 shadow-sm backdrop-blur-sm">
             <div class="flex items-center gap-3">
                 <AppLogo size="2.25rem" />
                 <h1 class="text-lg font-bold text-gray-800">易经算卦</h1>
             </div>
             <button @click="goToHistory"
-                class="rounded-full border border-blue-100/70 bg-blue-50/55 px-4 py-2 text-sm font-medium text-blue-700 shadow-[0_6px_18px_rgba(37,99,235,0.06)] transition-all duration-300 active:scale-95 hover:bg-blue-100/60">
+                class="rounded-full bg-blue-50/70 px-4 py-2 text-sm font-medium text-blue-700 shadow-sm transition-all duration-300 active:scale-95 hover:bg-blue-100/60">
                 历史记录
             </button>
         </header>
@@ -15,7 +15,7 @@
         <!-- 主内容区 -->
         <main class="px-4 py-6">
             <!-- 模式切换 -->
-            <div class="mb-8 rounded-[22px] border border-slate-100/80 bg-white/74 p-2 shadow-[0_14px_32px_rgba(15,23,42,0.05)] backdrop-blur-md">
+            <div class="mb-8 rounded-xl bg-white/74 p-2 shadow-sm backdrop-blur-md">
                 <div class="flex gap-2">
                 <button :class="['flex flex-1 items-center justify-center gap-2 rounded-[18px] px-4 py-3 text-sm font-bold transition-all duration-300',
                     !isManualMode
@@ -37,9 +37,9 @@
             <!-- 自动算卦模式 -->
             <div v-if="!isManualMode" class="space-y-6">
                 <!-- 初始状态 -->
-                <div v-if="!isDivining && !isComplete" class="rounded-[24px] border border-slate-100/80 bg-white/78 py-10 text-center shadow-[0_16px_36px_rgba(15,23,42,0.06)] backdrop-blur-sm">
-                    <div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-blue-100 p-3 ring-8 ring-blue-100/70">
-                        <AppLogo size="4.5rem" radius="full" />
+                <div v-if="!isDivining && !isComplete" class="rounded-xl bg-white/78 py-10 text-center shadow-sm backdrop-blur-sm">
+                    <div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-blue-100 p-3 shadow-[0_10px_24px_rgba(59,130,246,0.08)] ring-8 ring-blue-50/50">
+                        <TaijiIcon size="xl" />
                     </div>
                     <h2 class="text-xl font-bold text-gray-800 mb-2">诚心问卜</h2>
                     <p class="text-gray-600 text-sm mb-8">静心凝神，默念所求之事</p>
@@ -52,7 +52,7 @@
                 <!-- 算卦过程 -->
                 <div v-if="isDivining" class="space-y-6">
                     <!-- 进度 -->
-                    <div class="rounded-[20px] border border-slate-100/80 bg-white/88 p-5 shadow-[0_14px_32px_rgba(15,23,42,0.06)]">
+                    <div class="rounded-xl bg-white/88 p-5 shadow-sm">
                         <div class="text-center mb-4">
                             <h3 class="text-base font-bold text-gray-800">正在算卦</h3>
                             <p class="text-blue-600 font-bold text-xl mt-1">第 {{ currentStep }} / {{ totalSteps }} 爻</p>
@@ -68,7 +68,7 @@
                     </div>
 
                     <!-- 硬币动画 -->
-                    <div class="rounded-[20px] border border-slate-100/80 bg-white/88 p-6 shadow-[0_14px_32px_rgba(15,23,42,0.06)]">
+                    <div class="rounded-xl bg-white/88 p-6 shadow-sm">
                         <div class="flex justify-center gap-5">
                             <div
                                 v-for="(coin, index) in coins"
@@ -94,7 +94,7 @@
                     </div>
 
                     <!-- 爻值记录 -->
-                    <div class="rounded-[20px] border border-slate-100/80 bg-white/88 p-5 shadow-[0_14px_32px_rgba(15,23,42,0.06)]">
+                    <div class="rounded-xl bg-white/88 p-5 shadow-sm">
                         <h4 class="text-sm font-bold text-gray-800 mb-3">爻值记录</h4>
                         <div class="grid grid-cols-6 gap-2">
                             <div v-for="(yao, index) in yaoValues" :key="index" class="rounded-[14px] bg-blue-50/80 p-2 text-center ring-1 ring-blue-100/80">
@@ -119,7 +119,7 @@
                     <!-- 卦象展示 -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- 本卦 -->
-                        <div class="rounded-[20px] border border-slate-100/80 bg-white/88 p-5 shadow-[0_14px_32px_rgba(15,23,42,0.06)]">
+                        <div class="rounded-xl bg-white/88 p-5 shadow-sm">
                             <h4 class="text-sm font-bold text-blue-700 mb-3">本卦：{{ divinationResult.originalHexagram.name }}</h4>
                             <HexagramFigure
                                 class="mb-2"
@@ -131,7 +131,7 @@
                         </div>
 
                         <!-- 变卦 -->
-                        <div class="rounded-[20px] border border-slate-100/80 bg-white/88 p-5 shadow-[0_14px_32px_rgba(15,23,42,0.06)]">
+                        <div class="rounded-xl bg-white/88 p-5 shadow-sm">
                             <h4 class="text-sm font-bold text-orange-600 mb-3">变卦：{{ divinationResult.changedHexagram.name }}</h4>
                             <HexagramFigure
                                 class="mb-3"
@@ -143,7 +143,7 @@
                     </div>
 
                     <!-- 六爻详情 -->
-                    <div class="rounded-[20px] border border-slate-100/80 bg-white/88 p-5 shadow-[0_14px_32px_rgba(15,23,42,0.06)]">
+                    <div class="rounded-xl bg-white/88 p-5 shadow-sm">
                         <h4 class="text-sm font-bold text-gray-800 mb-3">六爻详情</h4>
                         <div class="space-y-2">
                             <div
@@ -179,7 +179,7 @@
 
             <!-- 手动输入模式 -->
             <div v-if="isManualMode" class="space-y-6">
-                <div class="rounded-[24px] border border-slate-100/80 bg-white/76 py-8 text-center shadow-[0_16px_36px_rgba(15,23,42,0.06)] backdrop-blur-sm">
+                <div class="rounded-xl bg-white/76 py-8 text-center shadow-sm backdrop-blur-sm">
                     <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-blue-100">
                         <span class="text-3xl">✍️</span>
                     </div>
@@ -188,7 +188,7 @@
                 </div>
 
                 <!-- 爻值输入 -->
-                <div class="rounded-[20px] border border-slate-100/80 bg-white/88 p-5 shadow-[0_14px_32px_rgba(15,23,42,0.06)]">
+                <div class="rounded-xl bg-white/88 p-5 shadow-sm">
                     <div class="space-y-3">
                         <div v-for="(_, index) in manualYaoValues" :key="index" class="flex items-center gap-3">
                             <span class="text-sm font-semibold text-gray-700 w-12">第{{ 6 - index }}爻</span>
@@ -224,7 +224,8 @@ import { DEFAULT_COIN_SET_ID } from '../assets/coins/coinSets';
 import { useDivination } from '../composables/useDivination';
 import { saveResult } from '../db';
 import type { YaoType } from '../types';
-import AppLogo from "../components/AppLogo.vue";
+import AppLogo from '../components/AppLogo.vue';
+import TaijiIcon from '../components/TaijiIcon.vue';
 
 const manualYaoOptions: YaoType[] = [6, 7, 8, 9];
 

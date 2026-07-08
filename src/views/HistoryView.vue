@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-full bg-gradient-to-b from-blue-50 to-white pb-6">
     <!-- 顶部导航 -->
-    <header class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100/80 bg-white/78 px-4 py-3 shadow-[0_8px_24px_rgba(15,23,42,0.04)] backdrop-blur-xl">
+    <header class="sticky top-0 z-10 flex items-center justify-between bg-white/80 px-4 py-3 shadow-sm backdrop-blur-sm">
       <div class="flex items-center gap-3">
         <AppLogo size="2.25rem" />
         <h1 class="text-lg font-bold text-gray-800">历史记录</h1>
@@ -9,7 +9,7 @@
       <button 
         v-if="historyRecords.length > 0"
         @click="showConfirmDialog = true"
-        class="rounded-full border border-rose-100/80 bg-rose-50/70 px-4 py-2 text-sm font-medium text-rose-700 shadow-[0_6px_18px_rgba(244,63,94,0.06)] transition-all duration-300 active:scale-95 hover:bg-rose-100/70"
+        class="rounded-full bg-rose-50/80 px-4 py-2 text-sm font-medium text-rose-700 shadow-sm transition-all duration-300 active:scale-95 hover:bg-rose-100/70"
       >
         清空记录
       </button>
@@ -18,7 +18,7 @@
     <!-- 主内容区 -->
     <main class="px-4 py-6">
       <!-- 加载状态 -->
-      <div v-if="isLoading" class="rounded-[22px] border border-slate-100/80 bg-white/78 py-12 text-center shadow-[0_14px_32px_rgba(15,23,42,0.05)] backdrop-blur-sm">
+      <div v-if="isLoading" class="rounded-xl bg-white/78 py-12 text-center shadow-sm backdrop-blur-sm">
         <div class="mb-4 text-4xl">⏳</div>
         <p class="text-sm text-gray-600">加载历史记录中...</p>
       </div>
@@ -44,7 +44,7 @@
 
       <!-- 历史记录列表 -->
       <div v-else class="space-y-4">
-        <div class="rounded-[18px] border border-slate-100/80 bg-white/82 px-4 py-3 shadow-[0_12px_28px_rgba(15,23,42,0.05)] backdrop-blur-sm">
+        <div class="rounded-xl bg-white/82 px-4 py-3 shadow-sm backdrop-blur-sm">
           <div class="flex items-center justify-between">
             <div>
               <div class="text-sm font-bold text-slate-800">共 {{ historyRecords.length }} 条记录</div>
@@ -58,7 +58,7 @@
         <div 
           v-for="record in historyRecords" 
           :key="record.id"
-          class="rounded-[18px] border border-slate-100/80 bg-white/88 p-5 shadow-[0_14px_32px_rgba(15,23,42,0.06)] transition-all duration-300 hover:shadow-[0_18px_36px_rgba(15,23,42,0.08)]"
+          class="rounded-xl bg-white/88 p-5 shadow-sm transition-all duration-300 hover:shadow-md"
         >
           <div class="flex justify-between items-start mb-4">
             <div>
@@ -76,7 +76,7 @@
             </div>
             <button 
               @click="deleteRecord(record.id)"
-              class="flex h-10 w-10 items-center justify-center rounded-full border border-rose-100/80 bg-rose-50/80 text-base text-rose-700 transition-all duration-300 active:scale-95 hover:bg-rose-100"
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-rose-50/80 text-base text-rose-700 shadow-sm transition-all duration-300 active:scale-95 hover:bg-rose-100"
             >
               🗑️
             </button>

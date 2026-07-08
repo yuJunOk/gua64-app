@@ -33,4 +33,15 @@ onMounted(async () => {
 #app {
     width: 100vw;
 }
+
+button {
+    border: none;
+    outline: none;
+    background: none;
+    font: inherit;
+    color: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+}
 </style>

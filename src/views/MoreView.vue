@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-full bg-gradient-to-b from-blue-50 to-white pb-6">
-        <header class="sticky top-0 z-10 border-b border-slate-100/80 bg-white/78 px-4 py-4 shadow-[0_8px_24px_rgba(15,23,42,0.04)] backdrop-blur-xl">
-            <div class="rounded-[20px] border border-slate-100/70 bg-white/88 px-5 py-5 shadow-[0_12px_28px_rgba(15,23,42,0.05)]">
+        <header class="sticky top-0 z-10 bg-white/80 px-4 py-4 shadow-sm backdrop-blur-sm">
+            <div class="rounded-xl bg-white/88 px-5 py-5 shadow-sm">
                 <div class="flex items-center gap-4">
                     <div class="flex h-18 w-18 items-center justify-center rounded-[16px] bg-gradient-to-br from-blue-50 to-blue-100">
                         <AppLogo size="4.25rem" />
@@ -21,7 +21,7 @@
         </header>
 
         <main class="px-4 py-5 space-y-4">
-            <div class="overflow-hidden rounded-[18px] bg-white shadow-[0_8px_24px_rgba(15,23,42,0.05)] ring-1 ring-slate-100/80">
+            <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-100/80">
                 <div class="bg-slate-50/70 px-4 py-2.5">
                     <span class="text-xs font-medium text-slate-500">卦象浏览</span>
                 </div>
@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <div class="overflow-hidden rounded-[18px] bg-white shadow-[0_8px_24px_rgba(15,23,42,0.05)] ring-1 ring-slate-100/80">
+            <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-100/80">
                 <div class="bg-slate-50/70 px-4 py-2.5">
                     <span class="text-xs font-medium text-slate-500">卦局管理</span>
                 </div>
@@ -79,7 +79,7 @@
                 </div>
             </div>
 
-            <div class="overflow-hidden rounded-[18px] bg-white shadow-[0_8px_24px_rgba(15,23,42,0.05)] ring-1 ring-slate-100/80">
+            <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-100/80">
                 <div class="bg-slate-50/70 px-4 py-2.5">
                     <span class="text-xs font-medium text-slate-500">其他</span>
                 </div>

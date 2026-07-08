@@ -1,258 +1,354 @@
 <template>
-  <div class="min-h-full bg-gradient-to-b from-blue-50 to-white pb-6">
-    <header
-        class="sticky top-0 z-10 border-b border-slate-100/80 bg-white/78 backdrop-blur-xl shadow-[0_8px_24px_rgba(15,23,42,0.04)] px-4 py-3">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <AppLogo size="2.25rem"/>
-          <div>
-            <h1 class="text-lg font-bold text-gray-800">G64</h1>
-            <p class="text-xs text-gray-500">易经六十四卦</p>
-          </div>
-        </div>
-        <button
-            @click="goToMore"
-            class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200/70 bg-white/90 text-gray-600 shadow-[0_6px_16px_rgba(15,23,42,0.05)] transition-all duration-300 active:scale-95 hover:text-blue-600"
-        >
-          <span>⚙️</span>
-        </button>
-      </div>
-    </header>
-
-    <main class="px-4 py-5 space-y-4">
-      <div
-          class="rounded-[20px] border border-slate-100/80 bg-white/88 p-4 shadow-[0_14px_32px_rgba(15,23,42,0.06)] backdrop-blur-sm">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-3">
-            <div
-                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600 ring-1 ring-blue-100">
-              <span class="text-blue-600 text-lg">📅</span>
+    <div class="min-h-full bg-gradient-to-b from-blue-50 to-white pb-6">
+        <header class="sticky top-0 z-10 flex items-center justify-between bg-white/80 px-4 py-3 shadow-sm backdrop-blur-sm">
+            <div class="flex items-center gap-3">
+                <AppLogo size="2.25rem" />
+                <h1 class="text-lg font-bold text-gray-800">首页</h1>
             </div>
-            <div class="flex-1 min-w-0">
-              <div class="text-sm font-semibold text-gray-700">{{ lunarDateText }}</div>
-              <div class="flex items-center gap-2 mt-1">
-                <span class="text-blue-500 text-xs">✦</span>
-                <span class="text-xs text-gray-500">节日：{{ currentFestival }}</span>
+            <button @click="goToMore"
+                class="w-10 h-10 rounded-full bg-gray-50 text-gray-600 shadow-sm transition-all duration-300 active:scale-95 hover:bg-gray-100 hover:text-blue-600">
+                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+            </button>
+        </header>
+
+        <main class="px-4 py-5 space-y-4">
+            <div class="rounded-xl bg-white/80 backdrop-blur-sm p-5 shadow-sm">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
+                            <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.7">
+                                <rect x="3.5" y="5" rx="2" ry="2" width="17" height="15" />
+                                <path d="M8 3.5v3" />
+                                <path d="M16 3.5v3" />
+                                <path d="M4 10.5h16" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-xs font-medium text-gray-800">{{ lunarDateText }}</div>
+                            <div class="mt-0.5 text-[11px] text-gray-400">节日：无</div>
+                        </div>
+                    </div>
+                </div>
+                <van-swipe
+                    ref="almanacSwipeRef"
+                    :loop="false"
+                    :show-indicators="false"
+                    @change="handleAlmanacSwipeChange"
+                    class="mt-1"
+                >
+                    <van-swipe-item class="pb-2">
+                        <div class="text-xs">
+                            <div class="mb-1 text-[11px] text-gray-400">此刻宜忌提示</div>
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex min-w-[1.75rem] justify-center rounded px-1.5 py-0.5 bg-emerald-50 text-[10px] font-semibold text-emerald-700">
+                                    宜
+                                </span>
+                                <span class="text-gray-700">动土</span>
+                            </div>
+                            <div class="mt-1 flex items-center gap-2">
+                                <span class="inline-flex min-w-[1.75rem] justify-center rounded px-1.5 py-0.5 bg-rose-50 text-[10px] font-semibold text-rose-600">
+                                    忌
+                                </span>
+                                <span class="text-gray-700">嫁娶</span>
+                            </div>
+                        </div>
+                    </van-swipe-item>
+                    <van-swipe-item class="pb-2">
+                        <div class="text-xs">
+                            <div class="mb-1 text-[11px] text-gray-400">今日整体宜忌</div>
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex min-w-[1.75rem] justify-center rounded px-1.5 py-0.5 bg-emerald-50 text-[10px] font-semibold text-emerald-700">
+                                    宜
+                                </span>
+                                <span class="text-gray-700">动土</span>
+                            </div>
+                            <div class="mt-1 flex items-center gap-2">
+                                <span class="inline-flex min-w-[1.75rem] justify-center rounded px-1.5 py-0.5 bg-rose-50 text-[10px] font-semibold text-rose-600">
+                                    忌
+                                </span>
+                                <span class="text-gray-700">嫁娶</span>
+                            </div>
+                        </div>
+                    </van-swipe-item>
+                </van-swipe>
+                <div class="flex items-center justify-end gap-1.5">
+                    <span
+                        class="h-1 rounded-full bg-blue-500 transition-all duration-300 cursor-pointer"
+                        :class="activeAlmanacTab === 'now' ? 'w-5 opacity-100' : 'w-2 opacity-40'"
+                        @click="setActiveAlmanacTab('now')"
+                    ></span>
+                    <span
+                        class="h-1 rounded-full bg-blue-500 transition-all duration-300 cursor-pointer"
+                        :class="activeAlmanacTab === 'today' ? 'w-5 opacity-100' : 'w-2 opacity-40'"
+                        @click="setActiveAlmanacTab('today')"
+                    ></span>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+              <button
+                  @click="startDivination"
+                  class="w-full rounded-[22px] bg-gradient-to-br from-blue-600 to-blue-700 p-5 text-left shadow-[0_18px_40px_rgba(37,99,235,0.25)] transition-all duration-300 active:scale-[0.98] hover:shadow-[0_22px_48px_rgba(37,99,235,0.3)]"
+              >
+                <div class="flex items-center gap-4">
+                  <div class="flex-shrink-0">
+                    <svg viewBox="0 0 64 64" class="w-14 h-14 taiji-spin">
+                      <circle cx="32" cy="32" r="31" fill="white"/>
+                      <path d="M32 1a31 31 0 0 1 0 62A15.5 15.5 0 0 1 32 32a15.5 15.5 0 0 0 0-31z" fill="#111827"/>
+                      <circle cx="32" cy="16.5" r="5" fill="#111827"/>
+                      <circle cx="32" cy="47.5" r="5" fill="white"/>
+                      <circle cx="32" cy="16.5" r="2" fill="white"/>
+                      <circle cx="32" cy="47.5" r="2" fill="#111827"/>
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <div class="text-xl font-bold text-white">立即问卦</div>
+                    <div class="mt-1 text-sm text-blue-100/90">诚心求问，卦无不应</div>
+                  </div>
+                  <div class="flex-shrink-0 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white/85">
+                    <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                  </div>
+                </div>
+              </button>
+
+              <div class="grid grid-cols-2 gap-2">
+                <button
+                    @click="goToMore"
+                    class="rounded-[20px] bg-white/80 backdrop-blur-md p-4 shadow-[0_14px_32px_rgba(15,23,42,0.05)] transition-all duration-300 active:scale-[0.97] hover:shadow-[0_18px_36px_rgba(15,23,42,0.07)] hover:bg-white/90"
+                >
+                  <div class="flex flex-col items-center text-center">
+                    <div class="mb-3 w-12 h-12 rounded-[14px] bg-gradient-to-br from-emerald-50 to-emerald-100 flex items-center justify-center">
+                      <svg viewBox="0 0 48 48" class="w-8 h-8" style="filter: drop-shadow(0 2px 3px rgba(16,185,129,0.2));">
+                        <defs>
+                          <linearGradient id="bambooGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#34d399"/>
+                            <stop offset="50%" stop-color="#10b981"/>
+                            <stop offset="100%" stop-color="#059669"/>
+                          </linearGradient>
+                        </defs>
+                        <rect x="11" y="9" width="5" height="30" rx="2.5" fill="url(#bambooGrad)"/>
+                        <rect x="21.5" y="9" width="5" height="30" rx="2.5" fill="url(#bambooGrad)"/>
+                        <rect x="32" y="9" width="5" height="30" rx="2.5" fill="url(#bambooGrad)"/>
+                        <line x1="11" y1="16" x2="16" y2="16" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
+                        <line x1="11" y1="24" x2="16" y2="24" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
+                        <line x1="11" y1="32" x2="16" y2="32" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
+                        <line x1="21.5" y1="16" x2="26.5" y2="16" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
+                        <line x1="21.5" y1="24" x2="26.5" y2="24" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
+                        <line x1="21.5" y1="32" x2="26.5" y2="32" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
+                        <line x1="32" y1="16" x2="37" y2="16" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
+                        <line x1="32" y1="24" x2="37" y2="24" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
+                        <line x1="32" y1="32" x2="37" y2="32" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
+                        <path d="M 16 9 Q 17 7 18.5 7" stroke="#059669" stroke-width="0.8" fill="none" opacity="0.7"/>
+                        <path d="M 26.5 9 Q 27.5 7 29 7" stroke="#059669" stroke-width="0.8" fill="none" opacity="0.7"/>
+                        <path d="M 37 9 Q 38 7 39.5 7" stroke="#059669" stroke-width="0.8" fill="none" opacity="0.7"/>
+                        <path d="M 11 9 Q 10 7 8.5 7" stroke="#059669" stroke-width="0.8" fill="none" opacity="0.7"/>
+                        <path d="M 21.5 9 Q 20.5 7 19 7" stroke="#059669" stroke-width="0.8" fill="none" opacity="0.7"/>
+                        <path d="M 32 9 Q 31 7 29.5 7" stroke="#059669" stroke-width="0.8" fill="none" opacity="0.7"/>
+                      </svg>
+                    </div>
+                    <div class="text-sm font-bold text-gray-800">易经卦象</div>
+                    <div class="mt-1 text-[11px] text-gray-400">查阅与延展</div>
+                  </div>
+                </button>
+
+                <button
+                    @click="startDivination"
+                    class="rounded-[20px] bg-white/80 backdrop-blur-md p-4 shadow-[0_14px_32px_rgba(15,23,42,0.05)] transition-all duration-300 active:scale-[0.97] hover:shadow-[0_18px_36px_rgba(15,23,42,0.07)] hover:bg-white/90"
+                >
+                  <div class="flex flex-col items-center text-center">
+                    <div class="mb-3 w-12 h-12 rounded-[14px] bg-gradient-to-br from-amber-50 to-amber-100 flex items-center justify-center">
+                      <svg viewBox="0 0 48 48" class="w-8 h-8" style="filter: drop-shadow(0 2px 3px rgba(217,119,6,0.25));">
+                        <defs>
+                          <linearGradient id="coinGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fde68a"/>
+                            <stop offset="40%" stop-color="#fbbf24"/>
+                            <stop offset="70%" stop-color="#d97706"/>
+                            <stop offset="100%" stop-color="#92400e"/>
+                          </linearGradient>
+                        </defs>
+                        <g transform="translate(0, 3) rotate(-15, 24, 20)">
+                          <circle cx="13" cy="20" r="9.5" fill="url(#coinGold)" opacity="0.9"/>
+                          <circle cx="13" cy="20" r="6.5" fill="none" stroke="#92400e" stroke-width="0.7" opacity="0.4"/>
+                          <rect x="10.5" y="17.5" width="5" height="5" rx="0.5" fill="#78350f" opacity="0.6"/>
+                        </g>
+                        <g>
+                          <circle cx="24" cy="22" r="11" fill="url(#coinGold)"/>
+                          <circle cx="24" cy="22" r="7.5" fill="none" stroke="#92400e" stroke-width="0.7" opacity="0.4"/>
+                          <rect x="20.5" y="18.5" width="7" height="7" rx="0.5" fill="#78350f" opacity="0.75"/>
+                          <text x="24" y="25" text-anchor="middle" fill="#fef3c7" font-size="4" font-weight="700" opacity="0.9">乾</text>
+                        </g>
+                        <g transform="translate(0, 3) rotate(15, 35, 20)">
+                          <circle cx="35" cy="20" r="9.5" fill="url(#coinGold)" opacity="0.9"/>
+                          <circle cx="35" cy="20" r="6.5" fill="none" stroke="#92400e" stroke-width="0.7" opacity="0.4"/>
+                          <rect x="32.5" y="17.5" width="5" height="5" rx="0.5" fill="#78350f" opacity="0.6"/>
+                        </g>
+                      </svg>
+                    </div>
+                    <div class="text-sm font-bold text-gray-800">传统起卦</div>
+                    <div class="mt-1 text-[11px] text-gray-400">三枚铜钱法</div>
+                  </div>
+                </button>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div class="flex flex-wrap items-center gap-3">
-          <div class="flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5">
-            <span class="text-green-500 text-xs">✓</span>
-            <span class="text-green-700 text-xs font-medium">宜</span>
-            <span class="text-xs text-green-700">动土</span>
-          </div>
-          <div class="flex items-center gap-2 rounded-full bg-rose-50 px-3 py-1.5">
-            <span class="text-red-500 text-xs">✕</span>
-            <span class="text-red-700 text-xs font-medium">忌</span>
-            <span class="text-xs text-red-700">嫁娶</span>
-          </div>
-        </div>
-      </div>
+            <div class="rounded-[20px] bg-white/80 backdrop-blur-md p-4 shadow-[0_14px_32px_rgba(15,23,42,0.05)]">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-bold text-gray-800">最近十占</span>
+                        <span class="text-xs text-gray-400">今日{{ todayCount }}卦</span>
+                    </div>
+                    <a
+                        href="javascript:void(0)"
+                        @click="goToHistory"
+                        class="text-xs font-medium text-blue-600 transition-opacity hover:opacity-80"
+                    >
+                        更多 ›
+                    </a>
+                </div>
 
-      <div
-          class="rounded-[22px] border border-slate-100/80 bg-white/65 p-2.5 shadow-[0_16px_34px_rgba(37,99,235,0.08)] backdrop-blur-md">
-        <button
-            @click="startDivination"
-            class="w-full rounded-[18px] border border-blue-500/8 bg-gradient-to-r from-blue-600 via-blue-600 to-blue-700 p-4 shadow-[0_16px_30px_rgba(37,99,235,0.24)] transition-all duration-300 active:scale-95 hover:shadow-[0_20px_38px_rgba(37,99,235,0.28)]"
-        >
-          <div class="flex items-center gap-3">
-            <div
-                class="flex h-14 w-14 items-center justify-center rounded-full bg-white/18 ring-1 ring-white/25 backdrop-blur-sm">
-              <span class="text-white text-2xl">🔮</span>
-            </div>
-            <div class="flex-1 text-left">
-              <div class="text-lg font-bold text-white">立即问卦</div>
-              <div class="mt-1 text-xs text-blue-100/95">诚心求问，卦无不应</div>
-            </div>
-            <div
-                class="flex h-9 w-9 items-center justify-center rounded-full bg-white/14 text-white/85 ring-1 ring-white/18">
-              ›
-            </div>
-          </div>
-        </button>
+                <div v-if="historyRecords.length === 0" class="rounded-[16px] bg-slate-50/80 py-7 text-center">
+                    <div class="mb-2 text-2xl opacity-30">☯</div>
+                    <div class="text-xs text-gray-400">暂无占卜记录</div>
+                </div>
 
-        <div class="mt-2.5 grid grid-cols-2 gap-2.5">
-          <button
-              @click="goToMore"
-              class="border-none rounded-[16px] bg-white/92 p-3.5 shadow-[0_10px_20px_rgba(15,23,42,0.05)] ring-1 ring-slate-100/80 transition-all duration-300 active:scale-95 hover:shadow-[0_14px_24px_rgba(15,23,42,0.07)]"
-          >
-            <div class="flex flex-col items-center">
-              <div
-                  class="mb-2 flex h-9 w-9 items-center justify-center rounded-[12px] bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600">
-                <span class="text-blue-600">📖</span>
-              </div>
-              <div class="text-xs font-bold text-gray-800">易经卦象</div>
-              <div class="mt-1 text-[11px] text-slate-400">查阅与延展</div>
-            </div>
-          </button>
-
-          <button
-              @click="startDivination"
-              class="border-none rounded-[16px] bg-white/92 p-3.5 shadow-[0_10px_20px_rgba(15,23,42,0.05)] ring-1 ring-slate-100/80 transition-all duration-300 active:scale-95 hover:shadow-[0_14px_24px_rgba(15,23,42,0.07)]"
-          >
-            <div class="flex flex-col items-center">
-              <div
-                  class="mb-2 flex h-9 w-9 items-center justify-center rounded-[12px] bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600">
-                <span class="text-blue-600">🪙</span>
-              </div>
-              <div class="text-xs font-bold text-gray-800">传统起卦</div>
-              <div class="mt-1 text-[11px] text-slate-400">进入起卦页</div>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      <div
-          class="rounded-[20px] border border-slate-100/80 bg-white/88 p-4 shadow-[0_14px_32px_rgba(15,23,42,0.06)] backdrop-blur-sm">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-amber-500 text-sm">📜</span>
-            <span class="text-sm font-bold text-gray-800">最近十占</span>
-            <span class="text-xs text-gray-500">今日2卦</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <a
-                href="javascript:void(0)"
-                @click="goToHistory"
-                class="text-xs font-medium text-blue-600 transition-opacity hover:opacity-80"
-            >
-              更多 ›
-            </a>
-          </div>
-        </div>
-
-        <div v-if="historyRecords.length === 0"
-             class="rounded-[16px] bg-slate-50/80 py-7 text-center ring-1 ring-slate-100/80">
-          <div class="mb-2 text-2xl text-gray-300">🔮</div>
-          <div class="text-xs text-gray-400">暂无占卜记录</div>
-        </div>
-
-        <div v-else class="space-y-3">
-          <div
-              v-for="record in historyRecords.slice(0, 3)"
-              :key="record.id"
-              class="rounded-[16px] bg-slate-50/80 p-3.5 ring-1 ring-slate-100/80"
-          >
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-sm font-bold text-gray-800">{{ record.hexagram_name }}</span>
-              <span class="text-xs text-gray-500">{{ formatDate(record.created_at) }}</span>
-            </div>
-            <div class="flex items-center gap-2">
+                <div v-else class="space-y-2.5">
+                    <div
+                        v-for="record in historyRecords.slice(0, 3)"
+                        :key="record.id"
+                        class="rounded-[14px] bg-slate-50/80 p-3.5 transition-all duration-200 active:scale-[0.99] hover:bg-slate-100/60 cursor-pointer"
+                        @click="goToHistoryDetail(record.id)"
+                    >
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-sm font-bold text-gray-800">{{ record.hexagram_name }}</span>
+                            <span class="text-xs text-gray-500">{{ formatDate(record.created_at) }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
                             <span
-                                :class="['px-2 py-1 rounded-full text-xs font-semibold', record.result_type === 'auto' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700']">
+                                :class="['px-2 py-0.5 rounded-full text-[10px] font-semibold', record.result_type === 'auto' ? 'bg-blue-100 text-blue-700' : 'bg-emerald-100 text-emerald-700']">
                                 {{ record.result_type === 'auto' ? '自动' : '手动' }}
                             </span>
-              <span class="text-xs text-gray-500">{{ formatTime(record.created_at) }}</span>
+                            <span class="text-xs text-gray-500">{{ formatTime(record.created_at) }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+        </main>
+    </div>
 </template>
 
 <script setup lang="ts">
-import {ref, computed, onMounted} from 'vue';
-import {useRouter} from 'vue-router';
-import {showFailToast} from 'vant';
-import {getHistory} from '../db';
-import type {HistoryRecord} from '../types';
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { showFailToast } from 'vant';
+import AppLogo from "../components/AppLogo.vue";
+import { getHistory } from '../db';
+import type { HistoryRecord } from '../types';
 
 const router = useRouter();
 const historyRecords = ref<HistoryRecord[]>([]);
+const activeAlmanacTab = ref<'now' | 'today'>('now');
+const almanacSwipeRef = ref<{ swipeTo: (index: number) => void } | null>(null);
 
 const lunarMonths = ['正月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '冬月', '腊月'];
 const lunarDays = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十',
-  '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
-  '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十'];
+    '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
+    '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十'];
 const zodiacYears = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'];
 const dayPeriods = ['子时', '丑时', '寅时', '卯时', '辰时', '巳时', '午时', '未时', '申时', '酉时', '戌时', '亥时'];
 const celestialStems = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
 const earthlyBranches = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
 
 const lunarDateText = computed(() => {
-  const now = new Date();
-  const year = now.getFullYear();
-  const zodiacIndex = (year - 4) % 12;
-  const yearStemIndex = (year - 4) % 10;
-  const monthIndex = (year - 4) % 12;
+    const now = new Date();
+    const year = now.getFullYear();
+    const zodiacIndex = (year - 4) % 12;
+    const yearStemIndex = (year - 4) % 10;
+    const monthIndex = (year - 4) % 12;
 
-  const yearStem = celestialStems[yearStemIndex];
-  const yearBranch = earthlyBranches[monthIndex];
-  const zodiacYear = zodiacYears[zodiacIndex];
+    const yearStem = celestialStems[yearStemIndex];
+    const yearBranch = earthlyBranches[monthIndex];
+    const zodiacYear = zodiacYears[zodiacIndex];
 
-  const monthIndexReal = now.getMonth();
-  const dayIndexReal = now.getDate() - 1;
+    const monthIndexReal = now.getMonth();
+    const dayIndexReal = now.getDate() - 1;
 
-  return `${yearStem}${yearBranch}${zodiacYear}年·${lunarMonths[monthIndexReal]}·${lunarDays[dayIndexReal]}·${dayPeriods[Math.floor(now.getHours() / 2)]}`;
+    return `${yearStem}${yearBranch}${zodiacYear}年 · ${lunarMonths[monthIndexReal]}${lunarDays[dayIndexReal]} · ${dayPeriods[Math.floor(now.getHours() / 2)]}`;
 });
 
-const currentFestival = computed(() => {
-  const now = new Date();
-  const month = now.getMonth() + 1;
-  const day = now.getDate();
-
-  const festivals: Record<string, string> = {
-    '1-1': '元旦',
-    '2-14': '情人节',
-    '3-8': '妇女节',
-    '3-12': '植树节',
-    '4-1': '愚人节',
-    '5-1': '劳动节',
-    '5-4': '青年节',
-    '6-1': '儿童节',
-    '7-1': '建党节',
-    '8-1': '建军节',
-    '9-10': '教师节',
-    '10-1': '国庆节',
-    '12-25': '圣诞节'
-  };
-
-  return festivals[`${month}-${day}`] || '无';
+const todayCount = computed(() => {
+    const today = new Date().toDateString();
+    return historyRecords.value.filter(r => new Date(r.created_at).toDateString() === today).length;
 });
 
-/** 加载历史记录；失败清空列表 */
+/** 切换黄历标签；入参为 'now' 或 'today'，同步 Swipe 与指示条 */
+const setActiveAlmanacTab = (tab: 'now' | 'today'): void => {
+    activeAlmanacTab.value = tab;
+    const index = tab === 'now' ? 0 : 1;
+    almanacSwipeRef.value?.swipeTo(index);
+};
+
+/** 黄历左右滑动切换；入参为当前页索引，副作用为同步标签状态 */
+const handleAlmanacSwipeChange = (index: number): void => {
+    activeAlmanacTab.value = index === 0 ? 'now' : 'today';
+};
+
 const loadHistory = async (): Promise<void> => {
-  try {
-    historyRecords.value = await getHistory();
-  } catch (error) {
-    console.error('加载历史记录失败:', error);
-    historyRecords.value = [];
-    showFailToast('加载历史失败');
-  }
+    try {
+        historyRecords.value = await getHistory();
+    } catch (error) {
+        console.error('加载历史记录失败:', error);
+        historyRecords.value = [];
+        showFailToast('加载历史失败');
+    }
 };
 
-/** 跳转到算卦页面 */
 const startDivination = (): void => {
-  router.push({name: 'divination'});
+    router.push({ name: 'divination' });
 };
 
-/** 跳转到更多页面 */
 const goToMore = (): void => {
-  router.push({name: 'more'});
+    router.push({ name: 'more' });
 };
 
-/** 跳转到历史页面 */
 const goToHistory = (): void => {
-  router.push({name: 'history'});
+    router.push({ name: 'history' });
 };
 
-/** 格式化日期 */
+const goToHistoryDetail = (id: number): void => {
+    router.push({ name: 'history', query: { id: String(id) } });
+};
+
 const formatDate = (dateString: string): string => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('zh-CN');
+    const date = new Date(dateString);
+    return date.toLocaleDateString('zh-CN');
 };
 
-/** 格式化时间 */
 const formatTime = (dateString: string): string => {
-  const date = new Date(dateString);
-  return date.toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit'});
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
 };
 
 onMounted(() => {
-  loadHistory();
+    loadHistory();
 });
 </script>
+
+<style scoped>
+.taiji-spin {
+    animation: taijiSpin 20s linear infinite;
+}
+
+@keyframes taijiSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+</style>
