@@ -211,10 +211,7 @@
                     </a>
                 </div>
 
-                <div v-if="historyRecords.length === 0" class="rounded-[16px] bg-slate-50/80 py-7 text-center">
-                    <div class="mb-2 text-2xl opacity-30">☯</div>
-                    <div class="text-xs text-gray-400">暂无占卜记录</div>
-                </div>
+                <EmptyState v-if="historyRecords.length === 0" title="暂无占卜记录" />
 
                 <div v-else class="space-y-2.5">
                     <div
@@ -246,6 +243,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { showFailToast } from 'vant';
 import AppLogo from "../components/AppLogo.vue";
+import EmptyState from "../components/EmptyState.vue";
 import { getHistory } from '../db';
 import type { HistoryRecord } from '../types';
 

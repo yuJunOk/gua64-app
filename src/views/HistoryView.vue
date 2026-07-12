@@ -23,15 +23,9 @@
         <p class="text-sm text-gray-600">加载历史记录中...</p>
       </div>
 
-      <!-- 空状态（draw-empty） -->
+      <!-- 空状态 -->
       <div v-else-if="historyRecords.length === 0" class="py-6">
-        <DrawEmpty
-          title="暂无历史记录"
-          description="开始算卦，记录将会保存在这里"
-          illustration="Taking Notes"
-          image-width="200px"
-          class="history-empty"
-        >
+        <EmptyState title="暂无历史记录">
           <button
             type="button"
             @click="goToDivination"
@@ -39,7 +33,7 @@
           >
             去算卦
           </button>
-        </DrawEmpty>
+        </EmptyState>
       </div>
 
       <!-- 历史记录列表 -->
@@ -120,6 +114,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { showSuccessToast, showFailToast } from 'vant';
 import { getHistory, deleteHistory, clearHistory } from '../db';
+import EmptyState from "../components/EmptyState.vue";
 
 const router = useRouter();
 
@@ -190,12 +185,3 @@ onMounted(() => {
 });
 </script>
 
-<style scoped lang="scss">
-.history-empty :deep(.draw-empty__title) {
-  color: #1f2937;
-}
-
-.history-empty :deep(.draw-empty__description) {
-  color: #6b7280;
-}
-</style>
