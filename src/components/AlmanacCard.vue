@@ -88,8 +88,8 @@ const lunarDateText = computed(() => {
     const yearShengXiao = lunar.getYearShengXiao();
     const monthInChinese = lunar.getMonthInChinese();
     const dayInChinese = lunar.getDayInChinese();
-    const dayPeriod = lunar.getTime().toString();
-    return `${yearInGanZhi}${yearShengXiao}年 · ${monthInChinese}月${dayInChinese} · ${dayPeriod}`;
+    const timeZhi = lunar.getTime().getZhi();
+    return `${yearInGanZhi}${yearShengXiao}年 · ${monthInChinese}月${dayInChinese} · ${timeZhi}时`;
 });
 
 const festivalText = computed(() => {
