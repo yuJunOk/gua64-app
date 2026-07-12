@@ -1,0 +1,10 @@
+[
+  { "id": 1, "name": "乾", "symbol": "111", "nature": "天" },
+  { "id": 2, "name": "坤", "symbol": "000", "nature": "地" },
+  { "id": 3, "name": "震", "symbol": "001", "nature": "雷" },
+  { "id": 4, "name": "巽", "symbol": "110", "nature": "风" },
+  { "id": 5, "name": "坎", "symbol": "010", "nature": "水" },
+  { "id": 6, "name": "离", "symbol": "101", "nature": "火" },
+  { "id": 7, "name": "艮", "symbol": "100", "nature": "山" },
+  { "id": 8, "name": "兑", "symbol": "011", "nature": "泽" }
+]
