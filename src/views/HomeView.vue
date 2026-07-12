@@ -86,7 +86,7 @@
                 </button>
 
                 <button
-                    @click="startDivination"
+                    @click="goToManualGuide"
                     class="rounded-[20px] bg-white/80 backdrop-blur-md p-4 shadow-[0_14px_32px_rgba(15,23,42,0.05)] transition-all duration-300 active:scale-[0.97] hover:shadow-[0_18px_36px_rgba(15,23,42,0.07)] hover:bg-white/90"
                 >
                   <div class="flex flex-col items-center text-center">
@@ -205,6 +205,10 @@ const goToMore = (): void => {
 
 const goToHistory = (): void => {
     router.push({ name: 'history' });
+};
+
+const goToManualGuide = (): void => {
+    router.push({ name: 'manual-guide' });
 };
 
 const goToHistoryDetail = (id: number): void => {

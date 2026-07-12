@@ -14,6 +14,7 @@ declare module 'vue' {
     AlmanacCard: typeof import('./src/components/AlmanacCard.vue')['default']
     AppLogo: typeof import('./src/components/AppLogo.vue')['default']
     CoinFlip: typeof import('./src/components/CoinFlip.vue')['default']
+    CoinIcon: typeof import('./src/components/CoinIcon.vue')['default']
     EmptyState: typeof import('./src/components/EmptyState.vue')['default']
     HexagramFigure: typeof import('./src/components/HexagramFigure.vue')['default']
     ModeToggle: typeof import('./src/components/ModeToggle.vue')['default']
@@ -28,5 +29,6 @@ declare module 'vue' {
     VanTabbar: typeof import('vant/es')['Tabbar']
     VanTabbarItem: typeof import('vant/es')['TabbarItem']
     YaoLine: typeof import('./src/components/YaoLine.vue')['default']
+    YaoSymbol: typeof import('./src/components/YaoSymbol.vue')['default']
   }
 }
