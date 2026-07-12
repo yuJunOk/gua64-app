@@ -6,33 +6,35 @@
                 <AppLogo size="2.25rem" />
                 <h1 class="text-lg font-bold text-gray-800">易经算卦</h1>
             </div>
-            <button @click="goToHistory"
-                class="rounded-full bg-blue-50/70 px-4 py-2 text-sm font-medium text-blue-700 shadow-sm transition-all duration-300 active:scale-95 hover:bg-blue-100/60">
-                历史记录
-            </button>
+            <div class="flex items-center gap-1.5 bg-blue-50 rounded-full px-2.5 py-1.5">
+                <span class="text-xs font-medium text-blue-600">{{ isManualMode ? '✍️ 手动' : '🎲 自动' }}</span>
+            </div>
         </header>
 
         <!-- 主内容区 -->
         <main class="px-4 py-6">
-            <!-- 模式切换 -->
-            <div class="mb-8 rounded-xl bg-white/74 p-2 shadow-sm backdrop-blur-md">
-                <div class="flex gap-2">
-                <button :class="['flex flex-1 items-center justify-center gap-2 rounded-[18px] px-4 py-3 text-sm font-bold transition-all duration-300',
-                    !isManualMode
-                        ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-[0_12px_24px_rgba(37,99,235,0.18)]'
-                        : 'bg-white/70 text-slate-500 shadow-[inset_0_0_0_1px_rgba(226,232,240,0.75)] hover:bg-slate-50/80']" @click="switchToAutoMode">
-                    <span>🎲</span>
-                    <span>自动算卦</span>
-                </button>
-                <button :class="['flex flex-1 items-center justify-center gap-2 rounded-[18px] px-4 py-3 text-sm font-bold transition-all duration-300',
-                    isManualMode
-                        ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-[0_12px_24px_rgba(37,99,235,0.18)]'
-                        : 'bg-white/70 text-slate-500 shadow-[inset_0_0_0_1px_rgba(226,232,240,0.75)] hover:bg-slate-50/80']" @click="switchToManualMode">
-                    <span>✍️</span>
-                    <span>手动输入</span>
-                </button>
-                </div>
-            </div>
+            <!-- FloatingBubble 模式切换 -->
+            <van-floating-bubble
+                axis="y"
+                :gap="{ x: 24, y: 80 }"
+                v-model:offset="bubbleOffset"
+                @offset-change="handleBubbleOffsetChange"
+                @click="isManualMode = !isManualMode"
+            >
+                <template #default>
+                    <div class="flex h-full w-full items-center justify-center">
+                        <svg v-if="!isManualMode" viewBox="0 0 24 24" class="h-6 w-6 text-white" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="6" y="6" width="12" height="12" rx="2" />
+                            <circle cx="10" cy="10" r="1.5" />
+                            <circle cx="14" cy="14" r="1.5" />
+                        </svg>
+                        <svg v-else viewBox="0 0 24 24" class="h-6 w-6 text-white" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 19V5M8 12l4-4 4 4" />
+                            <path d="M6 15h12" />
+                        </svg>
+                    </div>
+                </template>
+            </van-floating-bubble>
 
             <!-- 自动算卦模式 -->
             <div v-if="!isManualMode" class="space-y-6">
@@ -166,12 +168,9 @@
                     </div>
 
                     <!-- 操作按钮 -->
-                    <div class="flex gap-4">
-                        <button @click="resetDivination" class="flex-1 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-bold text-white shadow-[0_18px_35px_rgba(37,99,235,0.24)] transition-all duration-300 active:scale-95 hover:shadow-[0_22px_42px_rgba(37,99,235,0.3)]">
+                    <div>
+                        <button @click="resetDivination" class="w-full rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-bold text-white shadow-[0_18px_35px_rgba(37,99,235,0.24)] transition-all duration-300 active:scale-95 hover:shadow-[0_22px_42px_rgba(37,99,235,0.3)]">
                             重新算卦
-                        </button>
-                        <button @click="goToHistory" class="flex-1 rounded-full border border-slate-200 bg-white/90 px-6 py-3 text-sm font-bold text-slate-700 shadow-[0_12px_24px_rgba(15,23,42,0.06)] transition-all duration-300 active:scale-95 hover:border-blue-200 hover:bg-blue-50/80 hover:text-blue-700">
-                            查看历史
                         </button>
                     </div>
                 </div>
@@ -213,8 +212,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed, nextTick, watch } from 'vue';
 import { showToast, showFailToast } from 'vant';
 import CoinFlip from '../components/CoinFlip.vue';
 import HexagramFigure from '../components/HexagramFigure.vue';
@@ -229,11 +227,11 @@ import TaijiIcon from '../components/TaijiIcon.vue';
 
 const manualYaoOptions: YaoType[] = [6, 7, 8, 9];
 
-const router = useRouter();
 const { getDivinationResult } = useDivination();
 
 // 状态管理
 const isDivining = ref(false);
+const bubbleOffset = ref({ x: 24, y: window.innerHeight - 120 });
 const currentStep = ref(0);
 const totalSteps = 6;
 const coins = ref<Array<{ value: number; isFlipping: boolean }>>([
@@ -364,17 +362,27 @@ const resetDivination = () => {
     });
 };
 
-/** 切到手动录入模式；无入参无返回，副作用是重置自动算卦状态 */
-const switchToManualMode = () => {
-    isManualMode.value = true;
+/** 监听模式切换；模式变化时重置算卦状态，避免状态残留 */
+watch(isManualMode, (newMode) => {
     resetDivination();
-};
+    if (!newMode) {
+        manualYaoValues.value = [null, null, null, null, null, null];
+    }
+});
 
-/** 切回自动算卦模式；无入参无返回，副作用是清空手动输入和当前结果 */
-const switchToAutoMode = () => {
-    isManualMode.value = false;
-    resetDivination();
-    manualYaoValues.value = [null, null, null, null, null, null];
+/** 限制浮动气泡拖拽范围；避免挡住 header 和 TabBar */
+const handleBubbleOffsetChange = (offset: { x: number; y: number }) => {
+    const headerHeight = 60;
+    const tabBarHeight = 60;
+    const bubbleSize = 48;
+    const minY = headerHeight + 16;
+    const maxY = window.innerHeight - tabBarHeight - bubbleSize - 16;
+    
+    if (offset.y < minY) {
+        bubbleOffset.value = { ...offset, y: minY };
+    } else if (offset.y > maxY) {
+        bubbleOffset.value = { ...offset, y: maxY };
+    }
 };
 
 /** 校验并提交手动六爻；缺失任一爻值则阻止提交，副作用是保存一条历史记录 */
@@ -396,9 +404,6 @@ const submitManualInput = async () => {
     }
 };
 
-/** 跳转到历史记录页；无入参无返回，副作用是触发路由导航 */
-const goToHistory = () => {
-    router.push({ name: 'history' });
-};
+
 
 </script>
