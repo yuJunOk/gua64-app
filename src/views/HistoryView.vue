@@ -16,7 +16,7 @@
     </header>
 
     <!-- 主内容区 -->
-    <main class="px-4 py-6">
+    <main class="px-4 py-5 space-y-4">
       <!-- 加载状态 -->
       <div v-if="isLoading" class="rounded-xl bg-white/78 py-12 text-center shadow-sm backdrop-blur-sm">
         <div class="mb-4 text-4xl">⏳</div>
@@ -24,7 +24,7 @@
       </div>
 
       <!-- 空状态 -->
-      <div v-else-if="historyRecords.length === 0" class="py-6">
+      <div v-else-if="historyRecords.length === 0">
         <EmptyState title="暂无历史记录">
           <button
             type="button"

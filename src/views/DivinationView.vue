@@ -12,7 +12,7 @@
         </header>
 
         <!-- 主内容区 -->
-        <main class="px-4 py-6">
+        <main class="px-4 py-5 space-y-4">
             <!-- FloatingBubble 模式切换 -->
             <van-floating-bubble
                 axis="y"
