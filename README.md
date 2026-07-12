@@ -113,6 +113,7 @@ npm run preview
 | 移动端 | Capacitor |
 | 本地存储 | SQLite（`@capacitor-community/sqlite`） |
 | 辅助组件 | `draw-empty` |
+| 黄历计算 | `lunar-typescript` |
 
 ---
 

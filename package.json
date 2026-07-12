@@ -15,6 +15,7 @@
     "@capacitor/core": "^8.3.0",
     "axios": "^1.15.0",
     "draw-empty": "https://github.com/yuJunOk/draw-empty/releases/download/v0.1.0/draw-empty-0.1.0.tgz",
+    "lunar-typescript": "^1.8.6",
     "pinia": "^3.0.4",
     "vant": "^4.9.24",
     "vue": "^3.5.32",

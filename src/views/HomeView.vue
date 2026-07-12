@@ -15,78 +15,7 @@
         </header>
 
         <main class="px-4 py-5 space-y-4">
-            <div class="rounded-xl bg-white/80 backdrop-blur-sm p-5 shadow-sm">
-                <div class="flex items-start justify-between mb-3">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
-                            <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.7">
-                                <rect x="3.5" y="5" rx="2" ry="2" width="17" height="15" />
-                                <path d="M8 3.5v3" />
-                                <path d="M16 3.5v3" />
-                                <path d="M4 10.5h16" />
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="text-xs font-medium text-gray-800">{{ lunarDateText }}</div>
-                            <div class="mt-0.5 text-[11px] text-gray-400">节日：无</div>
-                        </div>
-                    </div>
-                </div>
-                <van-swipe
-                    ref="almanacSwipeRef"
-                    :loop="false"
-                    :show-indicators="false"
-                    @change="handleAlmanacSwipeChange"
-                    class="mt-1"
-                >
-                    <van-swipe-item class="pb-2">
-                        <div class="text-xs">
-                            <div class="mb-1 text-[11px] text-gray-400">此刻宜忌提示</div>
-                            <div class="flex items-center gap-2">
-                                <span class="inline-flex min-w-[1.75rem] justify-center rounded px-1.5 py-0.5 bg-emerald-50 text-[10px] font-semibold text-emerald-700">
-                                    宜
-                                </span>
-                                <span class="text-gray-700">动土</span>
-                            </div>
-                            <div class="mt-1 flex items-center gap-2">
-                                <span class="inline-flex min-w-[1.75rem] justify-center rounded px-1.5 py-0.5 bg-rose-50 text-[10px] font-semibold text-rose-600">
-                                    忌
-                                </span>
-                                <span class="text-gray-700">嫁娶</span>
-                            </div>
-                        </div>
-                    </van-swipe-item>
-                    <van-swipe-item class="pb-2">
-                        <div class="text-xs">
-                            <div class="mb-1 text-[11px] text-gray-400">今日整体宜忌</div>
-                            <div class="flex items-center gap-2">
-                                <span class="inline-flex min-w-[1.75rem] justify-center rounded px-1.5 py-0.5 bg-emerald-50 text-[10px] font-semibold text-emerald-700">
-                                    宜
-                                </span>
-                                <span class="text-gray-700">动土</span>
-                            </div>
-                            <div class="mt-1 flex items-center gap-2">
-                                <span class="inline-flex min-w-[1.75rem] justify-center rounded px-1.5 py-0.5 bg-rose-50 text-[10px] font-semibold text-rose-600">
-                                    忌
-                                </span>
-                                <span class="text-gray-700">嫁娶</span>
-                            </div>
-                        </div>
-                    </van-swipe-item>
-                </van-swipe>
-                <div class="flex items-center justify-end gap-1.5">
-                    <span
-                        class="h-1 rounded-full bg-blue-500 transition-all duration-300 cursor-pointer"
-                        :class="activeAlmanacTab === 'now' ? 'w-5 opacity-100' : 'w-2 opacity-40'"
-                        @click="setActiveAlmanacTab('now')"
-                    ></span>
-                    <span
-                        class="h-1 rounded-full bg-blue-500 transition-all duration-300 cursor-pointer"
-                        :class="activeAlmanacTab === 'today' ? 'w-5 opacity-100' : 'w-2 opacity-40'"
-                        @click="setActiveAlmanacTab('today')"
-                    ></span>
-                </div>
-            </div>
+            <AlmanacCard />
 
             <div class="space-y-2">
               <button
@@ -243,57 +172,18 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { showFailToast } from 'vant';
 import AppLogo from "../components/AppLogo.vue";
+import AlmanacCard from "../components/AlmanacCard.vue";
 import EmptyState from "../components/EmptyState.vue";
 import { getHistory } from '../db';
 import type { HistoryRecord } from '../types';
 
 const router = useRouter();
 const historyRecords = ref<HistoryRecord[]>([]);
-const activeAlmanacTab = ref<'now' | 'today'>('now');
-const almanacSwipeRef = ref<{ swipeTo: (index: number) => void } | null>(null);
-
-const lunarMonths = ['正月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '冬月', '腊月'];
-const lunarDays = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十',
-    '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
-    '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十'];
-const zodiacYears = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'];
-const dayPeriods = ['子时', '丑时', '寅时', '卯时', '辰时', '巳时', '午时', '未时', '申时', '酉时', '戌时', '亥时'];
-const celestialStems = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
-const earthlyBranches = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
-
-const lunarDateText = computed(() => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const zodiacIndex = (year - 4) % 12;
-    const yearStemIndex = (year - 4) % 10;
-    const monthIndex = (year - 4) % 12;
-
-    const yearStem = celestialStems[yearStemIndex];
-    const yearBranch = earthlyBranches[monthIndex];
-    const zodiacYear = zodiacYears[zodiacIndex];
-
-    const monthIndexReal = now.getMonth();
-    const dayIndexReal = now.getDate() - 1;
-
-    return `${yearStem}${yearBranch}${zodiacYear}年 · ${lunarMonths[monthIndexReal]}${lunarDays[dayIndexReal]} · ${dayPeriods[Math.floor(now.getHours() / 2)]}`;
-});
 
 const todayCount = computed(() => {
     const today = new Date().toDateString();
     return historyRecords.value.filter(r => new Date(r.created_at).toDateString() === today).length;
 });
-
-/** 切换黄历标签；入参为 'now' 或 'today'，同步 Swipe 与指示条 */
-const setActiveAlmanacTab = (tab: 'now' | 'today'): void => {
-    activeAlmanacTab.value = tab;
-    const index = tab === 'now' ? 0 : 1;
-    almanacSwipeRef.value?.swipeTo(index);
-};
-
-/** 黄历左右滑动切换；入参为当前页索引，副作用为同步标签状态 */
-const handleAlmanacSwipeChange = (index: number): void => {
-    activeAlmanacTab.value = index === 0 ? 'now' : 'today';
-};
 
 const loadHistory = async (): Promise<void> => {
     try {

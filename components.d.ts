@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AlmanacCard: typeof import('./src/components/AlmanacCard.vue')['default']
     AppLogo: typeof import('./src/components/AppLogo.vue')['default']
     CoinFlip: typeof import('./src/components/CoinFlip.vue')['default']
     EmptyState: typeof import('./src/components/EmptyState.vue')['default']
