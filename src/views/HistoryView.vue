@@ -113,7 +113,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { showSuccessToast, showFailToast } from 'vant';
-import { getHistory, deleteHistory, clearHistory } from '../db';
+import { getHistory, deleteHistory, clearHistory } from '../dao/historyDao';
 import EmptyState from "../components/EmptyState.vue";
 
 const router = useRouter();

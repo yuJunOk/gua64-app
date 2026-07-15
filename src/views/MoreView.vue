@@ -118,8 +118,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { showToast } from 'vant';
 
+const router = useRouter();
 const activeItem = ref('');
 
 interface MenuItem {
@@ -130,7 +132,7 @@ interface MenuItem {
 }
 
 const menuGroupKnowledge: MenuItem[] = [
-    { name: 'knowledge', label: '六十四卦', icon: '📖', subtitle: '基础卦象与说明' }
+    { name: 'hexagram-list', label: '六十四卦', icon: '📖', subtitle: '卦象详解与爻辞' }
 ];
 
 const menuGroupManagement: MenuItem[] = [
@@ -143,10 +145,12 @@ const menuGroupOther: MenuItem[] = [
     { name: 'settings', label: '应用设置', icon: '⚙️', subtitle: '应用偏好与设置' }
 ];
 
-/** 响应更多页菜单点击；入参为菜单名，当前阶段统一提示功能开发中 */
 const handleMenuClick = (name: string): void => {
+    if (name === 'hexagram-list') {
+        router.push({ name: 'hexagram-list' });
+        return;
+    }
     const messages: Record<string, string> = {
-        knowledge: '六十四卦功能开发中',
         statistics: '数据统计功能开发中',
         collection: '卦局收藏功能开发中',
         importexport: '卦局数据导入导出功能开发中',

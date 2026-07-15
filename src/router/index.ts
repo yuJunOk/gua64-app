@@ -27,6 +27,16 @@ const router = createRouter({
       path: '/manual-guide',
       name: 'manual-guide',
       component: () => import('../views/ManualGuideView.vue')
+    },
+    {
+      path: '/hexagram-list',
+      name: 'hexagram-list',
+      component: () => import('../views/HexagramListView.vue')
+    },
+    {
+      path: '/hexagram/:symbol',
+      name: 'hexagram-detail',
+      component: () => import('../views/HexagramDetailView.vue')
     }
   ]
 })

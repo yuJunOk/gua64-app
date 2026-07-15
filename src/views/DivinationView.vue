@@ -125,11 +125,11 @@
                             <h4 class="text-sm font-bold text-blue-700 mb-3">本卦：{{ divinationResult.originalHexagram.name }}</h4>
                             <HexagramFigure
                                 class="mb-2"
-                                :code="divinationResult.originalHexagram.code"
+                                :code="divinationResult.originalHexagram.symbol"
                                 :yao-data="yaoValues"
                                 highlight-moving
                             />
-                            <p class="text-gray-600 text-xs leading-relaxed text-center mt-2">{{ divinationResult.originalHexagram.desc }}</p>
+                            <p class="text-gray-600 text-xs leading-relaxed text-center mt-2">{{ divinationResult.originalHexagram.nature }}</p>
                         </div>
 
                         <!-- 变卦 -->
@@ -137,10 +137,10 @@
                             <h4 class="text-sm font-bold text-orange-600 mb-3">变卦：{{ divinationResult.changedHexagram.name }}</h4>
                             <HexagramFigure
                                 class="mb-3"
-                                :code="divinationResult.changedHexagram.code"
+                                :code="divinationResult.changedHexagram.symbol"
                                 :highlight-moving="false"
                             />
-                            <p class="text-gray-600 text-xs leading-relaxed text-center">{{ divinationResult.changedHexagram.desc }}</p>
+                            <p class="text-gray-600 text-xs leading-relaxed text-center">{{ divinationResult.changedHexagram.nature }}</p>
                         </div>
                     </div>
 
@@ -220,7 +220,7 @@ import YaoLine from '../components/YaoLine.vue';
 import { buildHexagramRows, getYaoKindLabel } from '../utils/yaoUtils';
 import { DEFAULT_COIN_SET_ID } from '../assets/coins/coinSets';
 import { useDivination } from '../composables/useDivination';
-import { saveResult } from '../db';
+import { saveResult } from '../dao/historyDao';
 import type { YaoType } from '../types';
 import AppLogo from '../components/AppLogo.vue';
 import TaijiIcon from '../components/TaijiIcon.vue';
@@ -277,7 +277,7 @@ const steps = computed(() => Array.from({ length: totalSteps }, (_, i) => i + 1)
 const originalYaoRows = computed(() => {
     if (!divinationResult.value) return [];
     const { originalHexagram } = divinationResult.value;
-    return buildHexagramRows(originalHexagram.code, yaoValues.value);
+    return buildHexagramRows(originalHexagram.symbol, yaoValues.value);
 });
 
 // 方法

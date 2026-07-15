@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import type { YaoType, DivinationResult } from '../types';
-import { findHexagramByCode } from '../data';
+import { findHexagramByCode } from '../dao/hexagramDao';
 
 export function useDivination() {
   const yaoData = ref<YaoType[]>([]);
@@ -86,17 +86,17 @@ export function useDivination() {
     const originalHexagram = findHexagramByCode(originalCode) || {
       id: 0,
       name: '未知',
-      code: originalCode,
-      desc: '未知卦象',
-      yaoCi: [],
+      symbol: originalCode,
+      nature: '未知卦',
+      category: '未知',
     };
 
     const changedHexagram = findHexagramByCode(changedCode) || {
       id: 0,
       name: '未知',
-      code: changedCode,
-      desc: '未知卦象',
-      yaoCi: [],
+      symbol: changedCode,
+      nature: '未知卦',
+      category: '未知',
     };
 
     return {

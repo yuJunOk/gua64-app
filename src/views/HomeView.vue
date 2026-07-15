@@ -47,41 +47,24 @@
 
               <div class="grid grid-cols-2 gap-2">
                 <button
-                    @click="goToMore"
+                    @click="goToHexagramList"
                     class="rounded-[20px] bg-white/80 backdrop-blur-md p-4 shadow-[0_14px_32px_rgba(15,23,42,0.05)] transition-all duration-300 active:scale-[0.97] hover:shadow-[0_18px_36px_rgba(15,23,42,0.07)] hover:bg-white/90"
                 >
                   <div class="flex flex-col items-center text-center">
-                    <div class="mb-3 w-12 h-12 rounded-[14px] bg-gradient-to-br from-emerald-50 to-emerald-100 flex items-center justify-center">
-                      <svg viewBox="0 0 48 48" class="w-8 h-8" style="filter: drop-shadow(0 2px 3px rgba(16,185,129,0.2));">
-                        <defs>
-                          <linearGradient id="bambooGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stop-color="#34d399"/>
-                            <stop offset="50%" stop-color="#10b981"/>
-                            <stop offset="100%" stop-color="#059669"/>
-                          </linearGradient>
-                        </defs>
-                        <rect x="11" y="9" width="5" height="30" rx="2.5" fill="url(#bambooGrad)"/>
-                        <rect x="21.5" y="9" width="5" height="30" rx="2.5" fill="url(#bambooGrad)"/>
-                        <rect x="32" y="9" width="5" height="30" rx="2.5" fill="url(#bambooGrad)"/>
-                        <line x1="11" y1="16" x2="16" y2="16" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
-                        <line x1="11" y1="24" x2="16" y2="24" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
-                        <line x1="11" y1="32" x2="16" y2="32" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
-                        <line x1="21.5" y1="16" x2="26.5" y2="16" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
-                        <line x1="21.5" y1="24" x2="26.5" y2="24" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
-                        <line x1="21.5" y1="32" x2="26.5" y2="32" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
-                        <line x1="32" y1="16" x2="37" y2="16" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
-                        <line x1="32" y1="24" x2="37" y2="24" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
-                        <line x1="32" y1="32" x2="37" y2="32" stroke="#065f46" stroke-width="0.8" opacity="0.5"/>
-                        <path d="M 16 9 Q 17 7 18.5 7" stroke="#059669" stroke-width="0.8" fill="none" opacity="0.7"/>
-                        <path d="M 26.5 9 Q 27.5 7 29 7" stroke="#059669" stroke-width="0.8" fill="none" opacity="0.7"/>
-                        <path d="M 37 9 Q 38 7 39.5 7" stroke="#059669" stroke-width="0.8" fill="none" opacity="0.7"/>
-                        <path d="M 11 9 Q 10 7 8.5 7" stroke="#059669" stroke-width="0.8" fill="none" opacity="0.7"/>
-                        <path d="M 21.5 9 Q 20.5 7 19 7" stroke="#059669" stroke-width="0.8" fill="none" opacity="0.7"/>
-                        <path d="M 32 9 Q 31 7 29.5 7" stroke="#059669" stroke-width="0.8" fill="none" opacity="0.7"/>
+                    <div class="mb-3 w-12 h-12 rounded-[14px] bg-gradient-to-br from-amber-50 to-amber-100 flex items-center justify-center">
+                      <svg viewBox="0 0 48 48" class="w-7 h-7">
+                        <rect x="10" y="6" width="28" height="6" rx="1" fill="#78716c"/>
+                        <rect x="10" y="15" width="28" height="6" rx="1" fill="#78716c"/>
+                        <rect x="10" y="24" width="28" height="6" rx="1" fill="#78716c"/>
+                        <rect x="10" y="33" width="28" height="6" rx="1" fill="#78716c"/>
+                        <rect x="18" y="6" width="6" height="6" rx="1" fill="#d6d3d1"/>
+                        <rect x="26" y="15" width="6" height="6" rx="1" fill="#d6d3d1"/>
+                        <rect x="18" y="24" width="6" height="6" rx="1" fill="#d6d3d1"/>
+                        <rect x="26" y="33" width="6" height="6" rx="1" fill="#d6d3d1"/>
                       </svg>
                     </div>
-                    <div class="text-sm font-bold text-gray-800">易经卦象</div>
-                    <div class="mt-1 text-[11px] text-gray-400">查阅与延展</div>
+                    <div class="text-sm font-bold text-gray-800">六十四卦</div>
+                    <div class="mt-1 text-[11px] text-gray-400">卦象详解与爻辞</div>
                   </div>
                 </button>
 
@@ -174,7 +157,7 @@ import { showFailToast } from 'vant';
 import AppLogo from "../components/AppLogo.vue";
 import AlmanacCard from "../components/AlmanacCard.vue";
 import EmptyState from "../components/EmptyState.vue";
-import { getHistory } from '../db';
+import { getHistory } from '../dao/historyDao';
 import type { HistoryRecord } from '../types';
 
 const router = useRouter();
@@ -209,6 +192,10 @@ const goToHistory = (): void => {
 
 const goToManualGuide = (): void => {
     router.push({ name: 'manual-guide' });
+};
+
+const goToHexagramList = (): void => {
+    router.push({ name: 'hexagram-list' });
 };
 
 const goToHistoryDetail = (id: number): void => {

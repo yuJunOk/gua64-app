@@ -17,7 +17,6 @@ declare module 'vue' {
     CoinIcon: typeof import('./src/components/CoinIcon.vue')['default']
     EmptyState: typeof import('./src/components/EmptyState.vue')['default']
     HexagramFigure: typeof import('./src/components/HexagramFigure.vue')['default']
-    ModeToggle: typeof import('./src/components/ModeToggle.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TabBar: typeof import('./src/components/TabBar.vue')['default']

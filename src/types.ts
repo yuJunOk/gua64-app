@@ -1,13 +1,5 @@
 export type YaoType = 6 | 7 | 8 | 9;
 
-export interface HexagramData {
-    id: number;
-    name: string;
-    code: string;
-    desc: string;
-    yaoCi: string[];
-}
-
 export interface HistoryRecord {
     id: number;
     created_at: string;
@@ -17,8 +9,8 @@ export interface HistoryRecord {
 }
 
 export interface DivinationResult {
-    originalHexagram: HexagramData;
-    changedHexagram: HexagramData;
+    originalHexagram: import('./dao/hexagramDao').Hexagram;
+    changedHexagram: import('./dao/hexagramDao').Hexagram;
     yaoData: YaoType[];
     movingYao: number[];
 }

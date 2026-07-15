@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import TabBar from './components/TabBar.vue';
-import { initDatabase } from './db';
+import { initDatabase } from './dao/database';
+import { HISTORY_TABLE } from './dao/historyDao';
 
 // 初始化数据库
 onMounted(async () => {
-    await initDatabase();
+    await initDatabase([HISTORY_TABLE]);
 });
 </script>
 
