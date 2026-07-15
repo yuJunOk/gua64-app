@@ -1,10 +1,12 @@
-export type YaoType = 6 | 7 | 8 | 9;
+import { YaoType, DivinationMode } from './enums';
+
+export type { YaoType };
 
 export interface HistoryRecord {
     id: number;
     created_at: string;
     hexagram_name: string;
-    result_type: string;
+    result_type: DivinationMode;
     yao_data: string;
 }
 

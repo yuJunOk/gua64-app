@@ -1,39 +1,9 @@
-import type { YaoType } from '../types';
+import { YaoType } from '../enums';
 
-/** 自下标 0（初爻）到 5（上爻）的爻位名 */
-export const YAO_POSITION_NAMES = [
-  '初爻',
-  '二爻',
-  '三爻',
-  '四爻',
-  '五爻',
-  '上爻',
-] as const;
+export { getYaoLabel } from '../enums/yaoType';
+export { getLabel as getPositionName } from '../enums/yaoPosition';
+export { isMovingYao } from '../enums/yaoType';
 
-export function isMovingYao(yao: YaoType): boolean {
-  return yao === 6 || yao === 9;
-}
-
-export function getYaoKindLabel(yao: YaoType): string {
-  switch (yao) {
-    case 6:
-      return '老阴';
-    case 7:
-      return '少阳';
-    case 8:
-      return '少阴';
-    case 9:
-      return '老阳';
-    default:
-      return '';
-  }
-}
-
-export function getPositionName(indexFromBottom: number): string {
-  return YAO_POSITION_NAMES[indexFromBottom] ?? `第${indexFromBottom + 1}爻`;
-}
-
-/** 自上而下展示用的六行（上爻在前） */
 export function buildHexagramRows(
   code: string,
   yaoData?: YaoType[],
@@ -51,7 +21,7 @@ export function buildHexagramRows(
     rows.push({
       bit: bits[indexFromBottom]!,
       indexFromBottom,
-      positionName: getPositionName(indexFromBottom),
+      positionName: `${indexFromBottom === 0 ? '初' : indexFromBottom === 1 ? '二' : indexFromBottom === 2 ? '三' : indexFromBottom === 3 ? '四' : indexFromBottom === 4 ? '五' : '上'}爻`,
       yaoType: yaoData?.[indexFromBottom],
       yaoCi: undefined,
     });

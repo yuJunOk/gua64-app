@@ -65,11 +65,9 @@
                                 <span class="text-sm font-bold text-gray-800">{{ hex.name }}</span>
                                 <span :class="[
                                     'px-2.5 py-0.5 rounded-full text-[10px] font-bold',
-                                    getFortune(hex.id) === '吉' ? 'bg-emerald-100/80 text-emerald-700' :
-                                    getFortune(hex.id) === '凶' ? 'bg-red-100/80 text-red-700' :
-                                    'bg-yellow-100/80 text-yellow-700'
+                                    getFortuneClass(getFortune(hex.id))
                                 ]">
-                                    {{ getFortune(hex.id) }}
+                                    {{ getFortuneLabel(getFortune(hex.id)) }}
                                 </span>
                             </div>
                             <div class="text-xs text-gray-600/80 truncate mb-1">{{ hex.nature }}</div>
@@ -91,6 +89,7 @@ import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { getAllHexagrams, getLiteratureByHexagramId, getCategories, type Hexagram } from '../dao/hexagramDao';
 import HexagramFigure from '../components/HexagramFigure.vue';
+import { Fortune, getLabel as getFortuneLabel, getCardColor as getFortuneCardColor } from '../enums/fortune';
 
 const router = useRouter();
 const searchQuery = ref('');
@@ -117,9 +116,14 @@ const filteredHexagrams = computed(() => {
     return result;
 });
 
-const getFortune = (id: number): string => {
+const getFortune = (id: number): Fortune => {
     const literature = getLiteratureByHexagramId(id);
-    return literature?.fortune || '';
+    return (literature?.fortune as Fortune) || Fortune.Ping;
+};
+
+const getFortuneClass = (fortune: Fortune): string => {
+    const colors = getFortuneCardColor(fortune);
+    return `${colors.bg}/80 ${colors.text}`;
 };
 
 const goBack = (): void => {

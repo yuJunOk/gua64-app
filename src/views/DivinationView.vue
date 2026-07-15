@@ -7,7 +7,7 @@
                 <h1 class="text-lg font-bold text-gray-800">易经算卦</h1>
             </div>
             <div class="flex items-center gap-1.5 bg-blue-50 rounded-full px-2.5 py-1.5">
-                <span class="text-xs font-medium text-blue-600">{{ isManualMode ? '✍️ 手动' : '🎲 自动' }}</span>
+                <span class="text-xs font-medium text-blue-600">{{ divinationMode === DivinationMode.Manual ? `${getModeIcon(DivinationMode.Manual)} ${getModeLabel(DivinationMode.Manual)}` : `${getModeIcon(DivinationMode.Auto)} ${getModeLabel(DivinationMode.Auto)}` }}</span>
             </div>
         </header>
 
@@ -19,11 +19,11 @@
                 :gap="{ x: 24, y: 80 }"
                 v-model:offset="bubbleOffset"
                 @offset-change="handleBubbleOffsetChange"
-                @click="isManualMode = !isManualMode"
+                @click="toggleDivinationMode"
             >
                 <template #default>
                     <div class="flex h-full w-full items-center justify-center">
-                        <svg v-if="!isManualMode" viewBox="0 0 24 24" class="h-6 w-6 text-white" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg v-if="divinationMode === DivinationMode.Auto" viewBox="0 0 24 24" class="h-6 w-6 text-white" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="6" y="6" width="12" height="12" rx="2" />
                             <circle cx="10" cy="10" r="1.5" />
                             <circle cx="14" cy="14" r="1.5" />
@@ -37,7 +37,7 @@
             </van-floating-bubble>
 
             <!-- 自动算卦模式 -->
-            <div v-if="!isManualMode" class="space-y-6">
+            <div v-if="divinationMode === DivinationMode.Auto" class="space-y-6">
                 <!-- 初始状态 -->
                 <div v-if="!isDivining && !isComplete" class="rounded-xl bg-white/78 py-10 text-center shadow-sm backdrop-blur-sm">
                     <div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-blue-100 p-3 shadow-[0_10px_24px_rgba(59,130,246,0.08)] ring-8 ring-blue-50/50">
@@ -151,11 +151,11 @@
                             <div
                                 v-for="row in originalYaoRows"
                                 :key="row.indexFromBottom"
-                                :class="['flex items-center justify-between gap-4 rounded-[14px] px-3 py-2.5 text-sm ring-1', row.yaoType && (row.yaoType === 6 || row.yaoType === 9) ? 'bg-orange-50 ring-orange-100/80' : 'bg-slate-50 ring-slate-100/80']"
+                                :class="['flex items-center justify-between gap-4 rounded-[14px] px-3 py-2.5 text-sm ring-1', row.yaoType && isMovingYao(row.yaoType) ? 'bg-orange-50 ring-orange-100/80' : 'bg-slate-50 ring-slate-100/80']"
                             >
                                 <div class="min-w-0">
                                     <span class="font-semibold text-gray-700">{{ row.positionName }}</span>
-                                    <span v-if="row.yaoType != null" class="ml-2 text-xs text-gray-500">{{ getYaoKindLabel(row.yaoType) }}</span>
+                                    <span v-if="row.yaoType != null" class="ml-2 text-xs text-gray-500">{{ getYaoLabel(row.yaoType) }}</span>
                                 </div>
                                 <YaoLine
                                     compact
@@ -177,7 +177,7 @@
             </div>
 
             <!-- 手动输入模式 -->
-            <div v-if="isManualMode" class="space-y-6">
+            <div v-if="divinationMode === DivinationMode.Manual" class="space-y-6">
                 <div class="rounded-xl bg-white/76 py-8 text-center shadow-sm backdrop-blur-sm">
                     <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-blue-100">
                         <span class="text-3xl">✍️</span>
@@ -217,15 +217,16 @@ import { showToast, showFailToast } from 'vant';
 import CoinFlip from '../components/CoinFlip.vue';
 import HexagramFigure from '../components/HexagramFigure.vue';
 import YaoLine from '../components/YaoLine.vue';
-import { buildHexagramRows, getYaoKindLabel } from '../utils/yaoUtils';
+import { buildHexagramRows, getYaoLabel } from '../utils/yaoUtils';
 import { DEFAULT_COIN_SET_ID } from '../assets/coins/coinSets';
 import { useDivination } from '../composables/useDivination';
 import { saveResult } from '../dao/historyDao';
 import type { YaoType } from '../types';
+import { YAO_TYPE_LIST, DivinationMode, isMovingYao, getDivinationModeIcon as getModeIcon, getDivinationModeLabel as getModeLabel } from '../enums';
 import AppLogo from '../components/AppLogo.vue';
 import TaijiIcon from '../components/TaijiIcon.vue';
 
-const manualYaoOptions: YaoType[] = [6, 7, 8, 9];
+const manualYaoOptions: YaoType[] = YAO_TYPE_LIST;
 
 const { getDivinationResult } = useDivination();
 
@@ -242,7 +243,7 @@ const coins = ref<Array<{ value: number; isFlipping: boolean }>>([
 const yaoValues = ref<YaoType[]>([]);
 const divinationResult = ref<any>(null);
 const manualYaoValues = ref<(YaoType | null)[]>([null, null, null, null, null, null]);
-const isManualMode = ref(false);
+const divinationMode = ref<DivinationMode>(DivinationMode.Auto);
 
 /** 当前算卦使用的硬币套装（后续可接用户设置） */
 const activeCoinSetId = ref(DEFAULT_COIN_SET_ID);
@@ -298,7 +299,7 @@ const startDivination = async () => {
             yaoValues.value.push(yao);
             await new Promise(resolve => setTimeout(resolve, 800));
         }
-        await completeDivination('auto');
+        await completeDivination(DivinationMode.Auto);
     } catch (error) {
         console.error('算卦过程出错:', error);
         isDivining.value = false;
@@ -340,7 +341,7 @@ const calculateYao = (): YaoType => {
 };
 
 /** 结束一次算卦并落库；入参为来源类型，副作用是生成结果并保存历史 */
-const completeDivination = async (type: string) => {
+const completeDivination = async (type: DivinationMode) => {
     isDivining.value = false;
     divinationResult.value = getDivinationResult(yaoValues.value);
     await saveResult({
@@ -363,12 +364,17 @@ const resetDivination = () => {
 };
 
 /** 监听模式切换；模式变化时重置算卦状态，避免状态残留 */
-watch(isManualMode, (newMode) => {
+watch(divinationMode, (newMode) => {
     resetDivination();
-    if (!newMode) {
+    if (newMode === DivinationMode.Auto) {
         manualYaoValues.value = [null, null, null, null, null, null];
     }
 });
+
+/** 切换算卦模式 */
+const toggleDivinationMode = () => {
+    divinationMode.value = divinationMode.value === DivinationMode.Auto ? DivinationMode.Manual : DivinationMode.Auto;
+};
 
 /** 限制浮动气泡拖拽范围；避免挡住 header 和 TabBar */
 const handleBubbleOffsetChange = (offset: { x: number; y: number }) => {
@@ -389,7 +395,7 @@ const handleBubbleOffsetChange = (offset: { x: number; y: number }) => {
 const submitManualInput = async () => {
     const slots = manualYaoValues.value;
     const validInput = slots.every(
-        (value): value is YaoType => value !== null && [6, 7, 8, 9].includes(value),
+        (value): value is YaoType => value !== null && YAO_TYPE_LIST.includes(value),
     );
     if (!validInput) {
         showToast('请为六爻各选一爻值');
@@ -397,7 +403,7 @@ const submitManualInput = async () => {
     }
     yaoValues.value = slots.slice() as YaoType[];
     try {
-        await completeDivination('manual');
+        await completeDivination(DivinationMode.Manual);
     } catch (error) {
         console.error('保存手动算卦结果失败:', error);
         showFailToast('保存失败，请重试');

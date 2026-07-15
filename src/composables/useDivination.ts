@@ -1,6 +1,13 @@
 import { ref } from 'vue';
 import type { YaoType, DivinationResult } from '../types';
 import { findHexagramByCode } from '../dao/hexagramDao';
+import {
+    YaoType as YaoTypeEnum,
+    YAO_TYPE_LIST,
+    toBit,
+    toChangedBit,
+    isMovingYao,
+} from '../enums';
 
 export function useDivination() {
   const yaoData = ref<YaoType[]>([]);
@@ -13,36 +20,26 @@ export function useDivination() {
   const calculateYao = (): YaoType => {
     const sum = tossCoin() + tossCoin() + tossCoin();
     switch (sum) {
-      case 6: return 6;
-      case 7: return 7;
-      case 8: return 8;
-      case 9: return 9;
-      default: return 7;
+      case 6: return YaoTypeEnum.LaoYin;
+      case 7: return YaoTypeEnum.ShaoYang;
+      case 8: return YaoTypeEnum.ShaoYin;
+      case 9: return YaoTypeEnum.LaoYang;
+      default: return YaoTypeEnum.ShaoYang;
     }
   };
 
   const generateHexagramCode = (yaoArray: YaoType[]): string => {
-    return yaoArray.map(yao => {
-      if (yao === 6 || yao === 8) return '0';
-      if (yao === 7 || yao === 9) return '1';
-      return '0';
-    }).join('');
+    return yaoArray.map(yao => toBit(yao)).join('');
   };
 
   const generateChangedHexagramCode = (yaoArray: YaoType[]): string => {
-    return yaoArray.map(yao => {
-      if (yao === 6) return '1';
-      if (yao === 9) return '0';
-      if (yao === 7) return '1';
-      if (yao === 8) return '0';
-      return '0';
-    }).join('');
+    return yaoArray.map(yao => toChangedBit(yao)).join('');
   };
 
   const findMovingYao = (yaoArray: YaoType[]): number[] => {
     const movingYao: number[] = [];
     yaoArray.forEach((yao, index) => {
-      if (yao === 6 || yao === 9) {
+      if (isMovingYao(yao)) {
         movingYao.push(6 - index);
       }
     });
@@ -69,7 +66,7 @@ export function useDivination() {
       throw new Error('必须输入6个爻值');
     }
 
-    const validYao = inputYaoData.every(yao => [6, 7, 8, 9].includes(yao));
+    const validYao = inputYaoData.every(yao => YAO_TYPE_LIST.includes(yao));
     if (!validYao) {
       throw new Error('爻值必须是6、7、8、9之一');
     }

@@ -25,11 +25,9 @@
                             <span class="text-xs text-indigo-200">{{ hexagram.category }}</span>
                             <div :class="[
                                 'ml-2 px-2.5 py-1 rounded-full text-[10px] font-bold',
-                                literature.fortune === '吉' ? 'bg-emerald-500/30 text-emerald-100' :
-                                literature.fortune === '凶' ? 'bg-red-500/30 text-red-100' :
-                                'bg-yellow-500/30 text-yellow-100'
+                                getFortuneClass(literature.fortune)
                             ]">
-                                {{ literature.fortune === '吉' ? '吉' : literature.fortune === '凶' ? '凶' : '小凶' }}
+                                {{ getFortuneLabel(literature.fortune as Fortune) }}
                             </div>
                         </div>
                     </div>
@@ -136,12 +134,9 @@
                                 </div>
                                 <span :class="[
                                     'px-2.5 py-1 rounded-full text-[10px] font-bold',
-                                    yao.fortune === '吉' ? 'bg-emerald-100 text-emerald-700' :
-                                    yao.fortune === '凶' ? 'bg-red-100 text-red-700' :
-                                    yao.fortune === '小凶' ? 'bg-yellow-100 text-yellow-700' :
-                                    'bg-gray-100 text-gray-600'
+                                    getYaoFortuneClass(yao.fortune)
                                 ]">
-                                    {{ yao.fortune }}
+                                    {{ getFortuneLabel(yao.fortune as Fortune) }}
                                 </span>
                             </div>
                             
@@ -177,6 +172,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { getHexagramBySymbol, getLiteratureBySymbol, type Hexagram, type HexagramLiterature } from '../dao/hexagramDao';
 import { getYaoDataBySymbol, type YaoData } from '../dao/yaoDao';
 import HexagramFigure from '../components/HexagramFigure.vue';
+import { Fortune, getColor as getFortuneColor, getCardColor as getFortuneCardColor, getLabel as getFortuneLabel } from '../enums/fortune';
 
 const router = useRouter();
 const route = useRoute();
@@ -189,6 +185,18 @@ const tabs = [
     { key: 'helo', label: '河洛理数' },
     { key: 'yao', label: '六爻详解' },
 ];
+
+const getFortuneClass = (fortune: string) => {
+    const f = fortune as Fortune;
+    const colors = getFortuneColor(f);
+    return `${colors.bg} ${colors.text}`;
+};
+
+const getYaoFortuneClass = (fortune: string) => {
+    const f = fortune as Fortune;
+    const colors = getFortuneCardColor(f);
+    return `${colors.bg} ${colors.text}`;
+};
 
 const hexagram = computed<Hexagram | undefined>(() => {
     return getHexagramBySymbol(symbol.value);

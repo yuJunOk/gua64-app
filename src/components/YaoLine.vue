@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { YaoType } from '../types';
-import { getYaoKindLabel, isMovingYao } from '../utils/yaoUtils';
+import { getYaoLabel, isMovingYao } from '../utils/yaoUtils';
 
 const props = withDefaults(
   defineProps<{
@@ -47,7 +47,7 @@ const lineWidth = computed(() => (props.compact ? 'w-14' : 'w-[5rem]'));
       class="flex items-center gap-1.5 text-xs text-gray-500"
     >
       <span v-if="positionName" class="font-medium text-gray-600">{{ positionName }}</span>
-      <span v-if="yaoType != null" class="text-gray-400">{{ getYaoKindLabel(yaoType) }}</span>
+      <span v-if="yaoType != null" class="text-gray-400">{{ getYaoLabel(yaoType) }}</span>
     </div>
 
     <div
