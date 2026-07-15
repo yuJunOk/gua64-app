@@ -1,6 +1,5 @@
 <template>
     <div class="min-h-full bg-gradient-to-b from-blue-50 to-white pb-6">
-        <!-- 顶部导航 -->
         <header class="sticky top-0 z-10 flex items-center justify-between bg-white/80 px-4 py-3 shadow-sm backdrop-blur-sm">
             <div class="flex items-center gap-3">
                 <AppLogo size="2.25rem" />
@@ -11,9 +10,7 @@
             </div>
         </header>
 
-        <!-- 主内容区 -->
         <main class="px-4 py-5 space-y-4">
-            <!-- FloatingBubble 模式切换 -->
             <van-floating-bubble
                 axis="y"
                 :gap="{ x: 24, y: 80 }"
@@ -36,24 +33,48 @@
                 </template>
             </van-floating-bubble>
 
-            <!-- 自动算卦模式 -->
             <div v-if="divinationMode === DivinationMode.Auto" class="space-y-6">
-                <!-- 初始状态 -->
-                <div v-if="!isDivining && !isComplete" class="rounded-xl bg-white/78 py-10 text-center shadow-sm backdrop-blur-sm">
-                    <div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-blue-100 p-3 shadow-[0_10px_24px_rgba(59,130,246,0.08)] ring-8 ring-blue-50/50">
-                        <TaijiIcon size="xl" />
+                <div v-if="!isDivining && !isComplete" class="space-y-4">
+                    <div class="rounded-xl bg-white/78 py-10 text-center shadow-sm backdrop-blur-sm">
+                        <div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-blue-100 p-3 shadow-[0_10px_24px_rgba(59,130,246,0.08)] ring-8 ring-blue-50/50">
+                            <TaijiIcon size="xl" />
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-800 mb-2">诚心问卜</h2>
+                        <p class="text-gray-600 text-sm">静心凝神，默念所求之事</p>
                     </div>
-                    <h2 class="text-xl font-bold text-gray-800 mb-2">诚心问卜</h2>
-                    <p class="text-gray-600 text-sm mb-8">静心凝神，默念所求之事</p>
+
+                    <div class="rounded-xl bg-white/88 p-5 shadow-sm">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">所问之事</label>
+                        <textarea
+                            v-model="questionInput"
+                            placeholder="请输入您想要问的事情，例如：事业发展、感情婚姻、财运健康等..."
+                            class="w-full rounded-[14px] border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-gray-700 placeholder:text-gray-400 resize-none focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                            rows="3"
+                            maxlength="200"
+                        ></textarea>
+                        <div class="text-right mt-2">
+                            <span class="text-xs text-gray-400">{{ questionInput.length }}/200</span>
+                        </div>
+                        <div class="mt-3 flex flex-wrap gap-2">
+                            <button
+                                v-for="category in QUESTION_CATEGORIES"
+                                :key="category"
+                                :class="['px-3 py-1.5 rounded-full text-xs font-medium transition-all',
+                                    questionInput === getDefaultQuestion(category) ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-100 text-gray-600 hover:bg-slate-200']"
+                                @click="questionInput = getDefaultQuestion(category)"
+                            >
+                                {{ getQuestionCategoryLabel(category) }}
+                            </button>
+                        </div>
+                    </div>
+
                     <button @click="startDivination"
-                        class="rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-10 py-3 text-sm font-bold text-white shadow-[0_18px_35px_rgba(37,99,235,0.26)] transition-all duration-300 active:scale-95 hover:shadow-[0_22px_42px_rgba(37,99,235,0.3)]">
+                        class="w-full rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-10 py-3 text-sm font-bold text-white shadow-[0_18px_35px_rgba(37,99,235,0.26)] transition-all duration-300 active:scale-95 hover:shadow-[0_22px_42px_rgba(37,99,235,0.3)]">
                         开始算卦
                     </button>
                 </div>
 
-                <!-- 算卦过程 -->
                 <div v-if="isDivining" class="space-y-6">
-                    <!-- 进度 -->
                     <div class="rounded-xl bg-white/88 p-5 shadow-sm">
                         <div class="text-center mb-4">
                             <h3 class="text-base font-bold text-gray-800">正在算卦</h3>
@@ -69,7 +90,6 @@
                         </div>
                     </div>
 
-                    <!-- 硬币动画 -->
                     <div class="rounded-xl bg-white/88 p-6 shadow-sm">
                         <div class="flex justify-center gap-5">
                             <div
@@ -95,7 +115,6 @@
                         </div>
                     </div>
 
-                    <!-- 爻值记录 -->
                     <div class="rounded-xl bg-white/88 p-5 shadow-sm">
                         <h4 class="text-sm font-bold text-gray-800 mb-3">爻值记录</h4>
                         <div class="grid grid-cols-6 gap-2">
@@ -111,16 +130,13 @@
                     </div>
                 </div>
 
-                <!-- 算卦结果 -->
                 <div v-if="isComplete && divinationResult" class="space-y-6">
-                    <!-- 结果标题 -->
                     <div class="text-center">
                         <h3 class="text-lg font-bold text-gray-800">算卦结果</h3>
+                        <p v-if="questionInput" class="text-sm text-gray-500 mt-1">所问之事：{{ questionInput }}</p>
                     </div>
 
-                    <!-- 卦象展示 -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- 本卦 -->
                         <div class="rounded-xl bg-white/88 p-5 shadow-sm">
                             <h4 class="text-sm font-bold text-blue-700 mb-3">本卦：{{ divinationResult.originalHexagram.name }}</h4>
                             <HexagramFigure
@@ -132,7 +148,6 @@
                             <p class="text-gray-600 text-xs leading-relaxed text-center mt-2">{{ divinationResult.originalHexagram.nature }}</p>
                         </div>
 
-                        <!-- 变卦 -->
                         <div class="rounded-xl bg-white/88 p-5 shadow-sm">
                             <h4 class="text-sm font-bold text-orange-600 mb-3">变卦：{{ divinationResult.changedHexagram.name }}</h4>
                             <HexagramFigure
@@ -144,7 +159,46 @@
                         </div>
                     </div>
 
-                    <!-- 六爻详情 -->
+                    <div class="rounded-xl bg-white/88 p-5 shadow-sm">
+                        <h4 class="text-sm font-bold text-gray-800 mb-3">解卦结果</h4>
+                        <div v-if="divinationResult.interpretation" class="space-y-3">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-1 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700">
+                                    {{ getScenarioLabel(divinationResult.interpretation.scenario) }}
+                                </span>
+                            </div>
+                            <div v-if="divinationResult.interpretation.primaryText" class="p-3 rounded-[14px] bg-blue-50 border border-blue-100">
+                                <p class="text-sm text-gray-800 leading-relaxed">{{ divinationResult.interpretation.primaryText }}</p>
+                            </div>
+                            <div v-if="divinationResult.interpretation.secondaryText" class="p-3 rounded-[14px] bg-orange-50 border border-orange-100">
+                                <p class="text-sm text-gray-800 leading-relaxed">{{ divinationResult.interpretation.secondaryText }}</p>
+                            </div>
+                            <div v-if="divinationResult.interpretation.yaoTexts?.length" class="space-y-2">
+                                <div v-for="yao in divinationResult.interpretation.yaoTexts" :key="yao.position" 
+                                    class="rounded-[14px] bg-slate-50 p-3 border border-slate-100">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="font-semibold text-gray-700">{{ yao.positionName }}</span>
+                                        <span :class="['px-1.5 py-0.5 rounded text-[10px] font-bold',
+                                            yao.fortune === '吉' ? 'bg-emerald-100 text-emerald-700' :
+                                            yao.fortune === '凶' ? 'bg-red-100 text-red-700' :
+                                            yao.fortune === '小凶' ? 'bg-yellow-100 text-yellow-700' :
+                                            'bg-gray-100 text-gray-600']">
+                                            {{ yao.fortune }}
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-gray-800 mb-1">{{ yao.yaoText }}</p>
+                                    <p class="text-xs text-gray-500">{{ yao.yaoTextTranslation }}</p>
+                                </div>
+                            </div>
+                            <div v-if="divinationResult.interpretation.notes?.length" class="space-y-1">
+                                <p v-for="(note, index) in divinationResult.interpretation.notes" :key="index" class="text-xs text-gray-500 flex items-start gap-1">
+                                    <span class="text-blue-500">•</span>
+                                    <span>{{ note }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="rounded-xl bg-white/88 p-5 shadow-sm">
                         <h4 class="text-sm font-bold text-gray-800 mb-3">六爻详情</h4>
                         <div class="space-y-2">
@@ -167,7 +221,6 @@
                         </div>
                     </div>
 
-                    <!-- 操作按钮 -->
                     <div>
                         <button @click="resetDivination" class="w-full rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-bold text-white shadow-[0_18px_35px_rgba(37,99,235,0.24)] transition-all duration-300 active:scale-95 hover:shadow-[0_22px_42px_rgba(37,99,235,0.3)]">
                             重新算卦
@@ -176,7 +229,6 @@
                 </div>
             </div>
 
-            <!-- 手动输入模式 -->
             <div v-if="divinationMode === DivinationMode.Manual" class="space-y-6">
                 <div class="rounded-xl bg-white/76 py-8 text-center shadow-sm backdrop-blur-sm">
                     <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-blue-100">
@@ -186,7 +238,28 @@
                     <p class="text-gray-600 text-sm">从初爻到上爻依次输入</p>
                 </div>
 
-                <!-- 爻值输入 -->
+                <div class="rounded-xl bg-white/88 p-5 shadow-sm">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">所问之事</label>
+                    <textarea
+                        v-model="questionInput"
+                        placeholder="请输入您想要问的事情..."
+                        class="w-full rounded-[14px] border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-gray-700 placeholder:text-gray-400 resize-none focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                        rows="2"
+                        maxlength="200"
+                    ></textarea>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <button
+                            v-for="category in QUESTION_CATEGORIES"
+                            :key="category"
+                            :class="['px-3 py-1.5 rounded-full text-xs font-medium transition-all',
+                                questionInput === getDefaultQuestion(category) ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-100 text-gray-600 hover:bg-slate-200']"
+                            @click="questionInput = getDefaultQuestion(category)"
+                        >
+                            {{ getQuestionCategoryLabel(category) }}
+                        </button>
+                    </div>
+                </div>
+
                 <div class="rounded-xl bg-white/88 p-5 shadow-sm">
                     <div class="space-y-3">
                         <div v-for="(_, index) in manualYaoValues" :key="index" class="flex items-center gap-3">
@@ -202,7 +275,6 @@
                     </div>
                 </div>
 
-                <!-- 提交按钮 -->
                 <button @click="submitManualInput" class="w-full rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-10 py-3 text-sm font-bold text-white shadow-[0_18px_35px_rgba(37,99,235,0.24)] transition-all duration-300 active:scale-95 hover:shadow-[0_22px_42px_rgba(37,99,235,0.3)]">
                     提交算卦
                 </button>
@@ -220,9 +292,10 @@ import YaoLine from '../components/YaoLine.vue';
 import { buildHexagramRows, getYaoLabel } from '../utils/yaoUtils';
 import { DEFAULT_COIN_SET_ID } from '../assets/coins/coinSets';
 import { useDivination } from '../composables/useDivination';
-import { saveResult } from '../dao/historyDao';
+import { saveDivination } from '../dao/divinationDao';
+import { interpretHexagram, getScenarioLabel } from '../utils/hexagramInterpreter';
 import type { YaoType } from '../types';
-import { YAO_TYPE_LIST, DivinationMode, isMovingYao, getDivinationModeIcon as getModeIcon, getDivinationModeLabel as getModeLabel } from '../enums';
+import { YAO_TYPE_LIST, DivinationMode, isMovingYao, getDivinationModeIcon as getModeIcon, getDivinationModeLabel as getModeLabel, QUESTION_CATEGORIES, getQuestionCategoryLabel, getDefaultQuestion } from '../enums';
 import AppLogo from '../components/AppLogo.vue';
 import TaijiIcon from '../components/TaijiIcon.vue';
 
@@ -230,7 +303,6 @@ const manualYaoOptions: YaoType[] = YAO_TYPE_LIST;
 
 const { getDivinationResult } = useDivination();
 
-// 状态管理
 const isDivining = ref(false);
 const bubbleOffset = ref({ x: 24, y: window.innerHeight - 120 });
 const currentStep = ref(0);
@@ -244,13 +316,12 @@ const yaoValues = ref<YaoType[]>([]);
 const divinationResult = ref<any>(null);
 const manualYaoValues = ref<(YaoType | null)[]>([null, null, null, null, null, null]);
 const divinationMode = ref<DivinationMode>(DivinationMode.Auto);
+const questionInput = ref('');
 
-/** 当前算卦使用的硬币套装（后续可接用户设置） */
 const activeCoinSetId = ref(DEFAULT_COIN_SET_ID);
 
 const coinFlipRefs: InstanceType<typeof CoinFlip>[] = [];
 
-/** 收集硬币组件实例；el 为空时清掉旧引用，副作用是更新本地 ref 列表 */
 const setCoinFlipRef = (el: unknown, index: number) => {
     if (el) {
         coinFlipRefs[index] = el as InstanceType<typeof CoinFlip>;
@@ -259,11 +330,9 @@ const setCoinFlipRef = (el: unknown, index: number) => {
     }
 };
 
-/** 判断三枚硬币组件是否都已挂载；无入参，返回布尔值，无副作用 */
 const coinFlipRefsReady = () =>
     coins.value.every((_, i) => coinFlipRefs[i] != null);
 
-/** 等铜钱组件挂载完成（首轮 isDivining 刚打开时 ref 会晚一拍） */
 const waitForCoinFlipRefs = async () => {
     for (let i = 0; i < 20; i++) {
         if (coinFlipRefsReady()) return;
@@ -271,7 +340,6 @@ const waitForCoinFlipRefs = async () => {
     }
 };
 
-// 计算属性
 const isComplete = computed(() => currentStep.value === totalSteps);
 const steps = computed(() => Array.from({ length: totalSteps }, (_, i) => i + 1));
 
@@ -281,8 +349,6 @@ const originalYaoRows = computed(() => {
     return buildHexagramRows(originalHexagram.symbol, yaoValues.value);
 });
 
-// 方法
-/** 执行完整自动算卦流程；无入参无返回，异常时中断并重置进行中状态 */
 const startDivination = async () => {
     isDivining.value = true;
     currentStep.value = 0;
@@ -307,7 +373,6 @@ const startDivination = async () => {
     }
 };
 
-/** 驱动三枚铜钱抛掷动画并写回结果；无入参无返回，副作用是更新 coins 状态 */
 const flipCoins = async () => {
     coins.value.forEach((coin) => {
         coin.isFlipping = true;
@@ -331,7 +396,6 @@ const flipCoins = async () => {
     });
 };
 
-/** 根据三枚铜钱点数求爻值；无入参返回 6/7/8/9，异常和脏值回退为 7 */
 const calculateYao = (): YaoType => {
     const sum = coins.value.reduce((acc, coin) => acc + coin.value, 0);
     if (sum === 6 || sum === 7 || sum === 8 || sum === 9) {
@@ -340,30 +404,47 @@ const calculateYao = (): YaoType => {
     return 7;
 };
 
-/** 结束一次算卦并落库；入参为来源类型，副作用是生成结果并保存历史 */
 const completeDivination = async (type: DivinationMode) => {
     isDivining.value = false;
     divinationResult.value = getDivinationResult(yaoValues.value);
-    await saveResult({
-        hexagram_name: divinationResult.value.originalHexagram.name,
+    
+    const interpretation = interpretHexagram({
+        originalHexagram: divinationResult.value.originalHexagram,
+        changedHexagram: divinationResult.value.changedHexagram,
+        yaoValues: yaoValues.value,
+        movingYao: divinationResult.value.movingYao
+    });
+    divinationResult.value.interpretation = interpretation;
+
+    const movingYaoPositions = divinationResult.value.movingYao;
+    
+    await saveDivination({
+        created_at: new Date().toISOString(),
+        divination_time: new Date().toISOString(),
+        question: questionInput.value,
+        title: divinationResult.value.originalHexagram.name,
+        original_hexagram_seq: divinationResult.value.originalHexagram.id,
+        changed_hexagram_seq: divinationResult.value.changedHexagram.id,
+        yao_values: JSON.stringify(yaoValues.value),
+        moving_yao_positions: JSON.stringify(movingYaoPositions),
         result_type: type,
-        yao_data: JSON.stringify(yaoValues.value)
+        is_collected: 0,
+        note: ''
     });
 };
 
-/** 清空当前算卦过程状态；无入参无返回，副作用是重置动画与结果数据 */
 const resetDivination = () => {
     isDivining.value = false;
     currentStep.value = 0;
     yaoValues.value = [];
     divinationResult.value = null;
+    questionInput.value = '';
     coins.value.forEach(coin => {
         coin.value = 0;
         coin.isFlipping = false;
     });
 };
 
-/** 监听模式切换；模式变化时重置算卦状态，避免状态残留 */
 watch(divinationMode, (newMode) => {
     resetDivination();
     if (newMode === DivinationMode.Auto) {
@@ -371,12 +452,10 @@ watch(divinationMode, (newMode) => {
     }
 });
 
-/** 切换算卦模式 */
 const toggleDivinationMode = () => {
     divinationMode.value = divinationMode.value === DivinationMode.Auto ? DivinationMode.Manual : DivinationMode.Auto;
 };
 
-/** 限制浮动气泡拖拽范围；避免挡住 header 和 TabBar */
 const handleBubbleOffsetChange = (offset: { x: number; y: number }) => {
     const headerHeight = 60;
     const tabBarHeight = 60;
@@ -391,7 +470,6 @@ const handleBubbleOffsetChange = (offset: { x: number; y: number }) => {
     }
 };
 
-/** 校验并提交手动六爻；缺失任一爻值则阻止提交，副作用是保存一条历史记录 */
 const submitManualInput = async () => {
     const slots = manualYaoValues.value;
     const validInput = slots.every(
@@ -409,7 +487,4 @@ const submitManualInput = async () => {
         showFailToast('保存失败，请重试');
     }
 };
-
-
-
 </script>

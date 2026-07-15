@@ -37,6 +37,11 @@ const router = createRouter({
       path: '/hexagram/:symbol',
       name: 'hexagram-detail',
       component: () => import('../views/HexagramDetailView.vue')
+    },
+    {
+      path: '/divination/:id',
+      name: 'divination-detail',
+      component: () => import('../views/DivinationDetailView.vue')
     }
   ]
 })

@@ -123,17 +123,17 @@
                     </a>
                 </div>
 
-                <EmptyState v-if="historyRecords.length === 0" title="暂无占卜记录" />
+                <EmptyState v-if="records.length === 0" title="暂无占卜记录" />
 
                 <div v-else class="space-y-2.5">
                     <div
-                        v-for="record in historyRecords.slice(0, 3)"
+                        v-for="record in records.slice(0, 3)"
                         :key="record.id"
                         class="rounded-[14px] bg-slate-50/80 p-3.5 transition-all duration-200 active:scale-[0.99] hover:bg-slate-100/60 cursor-pointer"
-                        @click="goToHistoryDetail(record.id)"
+                        @click="goToDivinationDetail(record.id)"
                     >
                         <div class="flex items-center justify-between mb-1">
-                            <span class="text-sm font-bold text-gray-800">{{ record.hexagram_name }}</span>
+                            <span class="text-sm font-bold text-gray-800">{{ getHexagramName(record.original_hexagram_seq) }}</span>
                             <span class="text-xs text-gray-500">{{ formatDate(record.created_at) }}</span>
                         </div>
                         <div class="flex items-center gap-2">
@@ -157,23 +157,28 @@ import { showFailToast } from 'vant';
 import AppLogo from "../components/AppLogo.vue";
 import AlmanacCard from "../components/AlmanacCard.vue";
 import EmptyState from "../components/EmptyState.vue";
-import { getHistory } from '../dao/historyDao';
-import type { HistoryRecord } from '../types';
+import { getAllDivinations, type DivinationRecord } from '../dao/divinationDao';
+import { getHexagramById } from '../dao/hexagramDao';
 
 const router = useRouter();
-const historyRecords = ref<HistoryRecord[]>([]);
+const records = ref<DivinationRecord[]>([]);
 
 const todayCount = computed(() => {
     const today = new Date().toDateString();
-    return historyRecords.value.filter(r => new Date(r.created_at).toDateString() === today).length;
+    return records.value.filter((r) => new Date(r.created_at).toDateString() === today).length;
 });
 
-const loadHistory = async (): Promise<void> => {
+const getHexagramName = (seq: number): string => {
+    const hexagram = getHexagramById(seq);
+    return hexagram?.name || '';
+};
+
+const loadRecords = async (): Promise<void> => {
     try {
-        historyRecords.value = await getHistory();
+        records.value = await getAllDivinations();
     } catch (error) {
-        console.error('加载历史记录失败:', error);
-        historyRecords.value = [];
+        console.error('加载卦局记录失败:', error);
+        records.value = [];
         showFailToast('加载历史失败');
     }
 };
@@ -198,8 +203,8 @@ const goToHexagramList = (): void => {
     router.push({ name: 'hexagram-list' });
 };
 
-const goToHistoryDetail = (id: number): void => {
-    router.push({ name: 'history', query: { id: String(id) } });
+const goToDivinationDetail = (id: number): void => {
+    router.push({ name: 'divination-detail', params: { id: String(id) } });
 };
 
 const formatDate = (dateString: string): string => {
@@ -213,7 +218,7 @@ const formatTime = (dateString: string): string => {
 };
 
 onMounted(() => {
-    loadHistory();
+    loadRecords();
 });
 </script>
 

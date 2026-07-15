@@ -2,11 +2,15 @@
 import { onMounted } from 'vue';
 import TabBar from './components/TabBar.vue';
 import { initDatabase } from './dao/database';
-import { HISTORY_TABLE } from './dao/historyDao';
+import { DIVINATION_TABLE } from './dao/divinationDao';
+import { COLLECTION_TABLE } from './dao/collectionDao';
+import { CATEGORY_TABLE } from './dao/categoryDao';
+import { TAG_TABLE, DIVINATION_TAG_TABLE } from './dao/tagDao';
+import { SETTINGS_TABLE } from './dao/settingsDao';
 
 // 初始化数据库
 onMounted(async () => {
-    await initDatabase([HISTORY_TABLE]);
+    await initDatabase([DIVINATION_TABLE, COLLECTION_TABLE, CATEGORY_TABLE, TAG_TABLE, DIVINATION_TAG_TABLE, SETTINGS_TABLE]);
 });
 </script>
 

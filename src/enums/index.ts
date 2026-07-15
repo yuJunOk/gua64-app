@@ -55,3 +55,11 @@ export {
     getIcon as getDivinationModeIcon,
     fromLabel as divinationModeFromLabel,
 } from './divinationMode';
+
+export {
+    QuestionCategory,
+    QUESTION_CATEGORIES,
+    getQuestionCategoryLabel,
+    getQuestionCategoryIcon,
+    getDefaultQuestion,
+} from './questionCategory';
